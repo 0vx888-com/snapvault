@@ -1,0 +1,21 @@
+import { chromium } from "playwright";
+const out = process.argv[2];
+const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1280, height: 820 } });
+p.on("dialog", (d) => d.accept()); p.on("pageerror", (e) => console.log("ERR", e.message));
+// 生成示例图片
+await p.setContent(`<div style="width:600px;height:750px;background:linear-gradient(135deg,#ff2d75,#6a00ff);display:flex;align-items:center;justify-content:center;color:#fff;font:bold 54px sans-serif;text-align:center">独家幕后<br>📸 SnapVault<br>Demo</div>`);
+await p.setViewportSize({ width: 600, height: 750 }); await p.screenshot({ path: out + "/sample.png" });
+await p.setViewportSize({ width: 1280, height: 820 });
+await p.goto("http://localhost:5173/");
+await p.click('[data-tab="creator"]');
+await p.setInputFiles("#file", out + "/sample.png");
+await p.fill("#title", "今晚的独家幕后"); await p.fill("#price", "2"); await p.fill("#secs", "6");
+await p.screenshot({ path: out + "/01-创作者上传.png" });
+await p.click("button[type=submit]"); await p.waitForFunction(() => document.querySelector("#log").textContent.includes("TapeSend"));
+await p.screenshot({ path: out + "/02-加密上架完成.png" });
+await p.click('[data-tab="fan"]'); await p.screenshot({ path: out + "/03-粉丝广场锁定.png" });
+await p.click("[data-buy]"); await p.waitForSelector("#viewer:not(.hidden)"); await p.waitForTimeout(1500);
+await p.screenshot({ path: out + "/04-解密限时查看水印.png" });
+await p.waitForSelector("#viewer.hidden", { state: "attached", timeout: 15000 }); await p.waitForTimeout(300);
+await p.screenshot({ path: out + "/05-已焚毁过期.png" });
+console.log("ok"); await b.close();

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SnapVault · 阅后即焚私密内容</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header>
+  <div class="logo">👻 SnapVault <small>阅后即焚 · X Layer × TapeOut</small></div>
+  <nav><button data-tab="fan" class="tab on">粉丝广场</button><button data-tab="creator" class="tab">我是创作者</button><button data-tab="chat" class="tab">私聊</button></nav>
+  <div class="wallet"><span id="mode" class="pill">演示模式（离线）</span><button id="connect">连接钱包</button></div>
+</header>
+<main>
+  <section id="fan" class="page">
+    <h2>解锁限时内容</h2><p class="sub">付款后通过（模拟）TapeSend 收到解密密钥，内容只显示几秒，然后从内存中焚毁。</p>
+    <div id="grid" class="grid"></div>
+  </section>
+  <section id="creator" class="page hidden">
+    <h2>发布私密内容</h2><p class="sub">图片在你的浏览器里用 AES-GCM 加密，平台只拿到密文。</p>
+    <form id="form" class="card form">
+      <label>图片<input type="file" id="file" accept="image/*" required></label>
+      <label>标题<input id="title" maxlength="40" placeholder="例如：今晚的独家幕后" required></label>
+      <div class="row"><label>价格<input id="price" type="number" step="0.01" min="0.01" value="1"></label>
+      <label>币种<select id="token"><option value="USDT">USDT</option><option value="OKB">OKB</option></select></label></div>
+      <div class="row"><label>可看秒数<input id="secs" type="number" min="3" value="8"></label>
+      <label>限量（0=不限）<input id="max" type="number" min="0" value="0"></label></div>
+      <button type="submit" class="primary">🔒 加密并上架</button>
+      <pre id="log" class="log"></pre>
+    </form>
+  </section>
+  <section id="chat" class="page hidden"></section>
+</main>
+<div id="viewer" class="viewer hidden"><div class="vwrap"><img id="vimg"><div id="wm" class="wm"></div>
+<div class="bar"><div id="prog"></div></div><div id="count" class="count"></div></div></div>
+<script type="module" src="app.js"></script>
+</body></html>
