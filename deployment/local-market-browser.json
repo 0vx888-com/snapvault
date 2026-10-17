@@ -1,0 +1,57 @@
+{
+  "environment": "local Hardhat 31337, existing marketplace and chat; container fixture; no real funds",
+  "checks": [
+    "创作者广场保留现有风格并展示资料卡",
+    "关注筛选可用",
+    "昵称搜索生效",
+    "发送后仍保留自定义阅后即焚和时长设置",
+    "会话内发布后回到原聊天并插入锁定图片卡片",
+    "私聊专属图片不出现在公开广场",
+    "取消购买不产生订单",
+    "购买成功不会立即消耗展示时间",
+    "AES-GCM 解密图片可实际显示",
+    "刷新不会重置图片倒计时",
+    "购买与再次访问不重复创建订单",
+    "群成员分别购买、各自计时",
+    "公开作品进入最新内容列表",
+    "关闭限时的付费图片可在购买期限内重复查看",
+    "移动端无横向溢出",
+    "订单均由本地链确认并自动投递，非模拟解锁",
+    "浏览器不持久保存图片原密钥和密文",
+    "服务端拒绝非会话成员查看专属作品"
+  ],
+  "orders": [
+    {
+      "contentId": "1",
+      "buyer": "0xDem0FaN000000000000000000000000000000001",
+      "creator": "0xCreAt0r00000000000000000000000000000001",
+      "accessUntil": 1792247240000,
+      "viewUntil": 1792160827355,
+      "delivery": "ready",
+      "deliveryTx": "0x94d23a733b405d7efec22c753718243f7f9df51ee99427846f133fde41c9a708",
+      "localChain": true
+    },
+    {
+      "contentId": "2",
+      "buyer": "0xDem0FaN000000000000000000000000000000001",
+      "creator": "0xCreAt0r00000000000000000000000000000001",
+      "accessUntil": 1792247249000,
+      "viewUntil": 1792160841781,
+      "delivery": "ready",
+      "deliveryTx": "0xb3304063bbb1b02f61d6d6f46c4f2a1ad40bdee183e75a26ee2398cc480fa3dc",
+      "localChain": true
+    },
+    {
+      "contentId": "3",
+      "buyer": "0xDem0FaN000000000000000000000000000000001",
+      "creator": "0xCreAt0r00000000000000000000000000000001",
+      "accessUntil": 1792247264000,
+      "viewUntil": 1792160853196,
+      "delivery": "ready",
+      "deliveryTx": "0x823c9b64d880be57a45c26c80ccd39fbe9f17d4341af4a33bf993b7fa1333b9d",
+      "localChain": true
+    }
+  ],
+  "browserErrors": [],
+  "verifiedAt": "2026-10-16T14:27:28.498Z"
+}

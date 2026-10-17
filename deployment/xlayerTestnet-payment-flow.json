@@ -1,0 +1,65 @@
+{
+  "verifiedAt": "2026-10-16T12:53:04.808Z",
+  "chainId": 1952,
+  "scope": "Test OKB payment probe only; no content or TapeSend delivery",
+  "state": {
+    "configured": true,
+    "chainId": 1952,
+    "creator": "0x1538Ac2d29d03615D2336A2227900aAb334D9402",
+    "buyer": "0x6e87af3cc0907207505e3c45A1037385329009C9",
+    "priceTestOKB": "0.00001",
+    "productionDeliveryReady": false,
+    "deployment": {
+      "address": "0xAA3073796d24D6CBF1bDcbB11e081B940BbCD20A",
+      "transactionHash": "0x136718e0f89938e744430a012ba14c6e0a48880b42da28eae0c7dcde048f6e49",
+      "blockNumber": 43695774,
+      "gasUsed": "1660360"
+    },
+    "sold": 1,
+    "active": true,
+    "feeBps": 1000,
+    "creatorWithdrawable": "0.0",
+    "purchased": true,
+    "purchases": [
+      {
+        "transactionHash": "0xe64b02543e1a5bdb5f675252a221ff9a2962ba45f0764c1d420a587741a892a6",
+        "blockNumber": 43696156,
+        "priceTestOKB": "0.00001",
+        "feeTestOKB": "0.000001"
+      }
+    ],
+    "withdrawals": [
+      {
+        "transactionHash": "0xad41d4a7fd8955606907f1ce8c8001ed7d7629b455d831a1dfcb9951b0a1854a",
+        "blockNumber": 43696299,
+        "amountTestOKB": "0.00001"
+      }
+    ]
+  },
+  "payment": {
+    "hash": "0xe64b02543e1a5bdb5f675252a221ff9a2962ba45f0764c1d420a587741a892a6",
+    "from": "0x6e87af3cc0907207505e3c45A1037385329009C9",
+    "to": "0xAA3073796d24D6CBF1bDcbB11e081B940BbCD20A",
+    "value": "10000000000000",
+    "data": "0xefef39a10000000000000000000000000000000000000000000000000000000000000001",
+    "blockNumber": 43696156,
+    "status": 1,
+    "gasUsed": "90102",
+    "gasPrice": "40000001",
+    "executionFeeTestOKB": "0.000003604080090102"
+  },
+  "withdrawal": {
+    "hash": "0xad41d4a7fd8955606907f1ce8c8001ed7d7629b455d831a1dfcb9951b0a1854a",
+    "from": "0x1538Ac2d29d03615D2336A2227900aAb334D9402",
+    "to": "0xAA3073796d24D6CBF1bDcbB11e081B940BbCD20A",
+    "data": "0x51cff8d90000000000000000000000000000000000000000000000000000000000000000",
+    "blockNumber": 43696299,
+    "status": 1,
+    "gasUsed": "33443",
+    "gasPrice": "40000001",
+    "executionFeeTestOKB": "0.000001337720033443",
+    "amountTestOKB": "0.00001"
+  },
+  "finalContractBalanceWei": "0",
+  "paymentFlowComplete": true
+}

@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-16T12:25:22.847Z",
+  "chainId": 1952,
+  "contract": "SnapVaultPaymentProbe",
+  "creator": "0x1538ac2d29d03615d2336a2227900aab334d9402",
+  "buyer": "0x6e87af3cc0907207505e3c45a1037385329009c9",
+  "nonceA": 0,
+  "estimatedGas": "1674705",
+  "estimatedExecutionFeeTestOKB": "0.000066988201674705",
+  "valueTestOKB": "0",
+  "broadcast": false
+}

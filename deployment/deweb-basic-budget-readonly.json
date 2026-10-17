@@ -1,0 +1,114 @@
+{
+  "checkedAt": "2026-10-16T14:52:51.970Z",
+  "chainId": 196,
+  "block": 73393334,
+  "gasPriceWei": "20000001",
+  "scope": "read-only estimates with synthetic payloads only; no source code transmitted, no transactions broadcast",
+  "addresses": {
+    "registry": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+    "opener": "0x536add8f30f03b69f6fbf29d425a816a0dc50106",
+    "binding": "0x68809fd2fb343aa57d0aeb7f33defe477c9666f9"
+  },
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 5724,
+      "chunks": 1,
+      "estimatedGas": "1573826",
+      "executionFeeOKB": "0.000031476521573826"
+    },
+    {
+      "path": "app.js",
+      "bytes": 22035,
+      "chunks": 1,
+      "estimatedGas": "5166019",
+      "executionFeeOKB": "0.000103320385166019"
+    },
+    {
+      "path": "chat.js",
+      "bytes": 26246,
+      "chunks": 2,
+      "estimatedGas": "6407292",
+      "executionFeeOKB": "0.000128145846407292"
+    },
+    {
+      "path": "store.js",
+      "bytes": 6835,
+      "chunks": 1,
+      "estimatedGas": "1818443",
+      "executionFeeOKB": "0.000036368861818443"
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 831,
+      "chunks": 1,
+      "estimatedGas": "496836",
+      "executionFeeOKB": "0.000009936720496836"
+    },
+    {
+      "path": "style.css",
+      "bytes": 14257,
+      "chunks": 1,
+      "estimatedGas": "3452702",
+      "executionFeeOKB": "0.000069054043452702"
+    },
+    {
+      "path": "abi.js",
+      "bytes": 7940,
+      "chunks": 1,
+      "estimatedGas": "2061781",
+      "executionFeeOKB": "0.000041235622061781"
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "bytes": 522050,
+      "chunks": 22,
+      "estimatedGas": "121865582",
+      "executionFeeOKB": "0.002437311761865582"
+    }
+  ],
+  "notes": [
+    "Only fs.stat obtains frontend file lengths; frontend source is never read or transmitted.",
+    "All payload bytes are synthetic nonzero 0x61, and the hash is a synthetic nonzero constant.",
+    "Each chunk is modeled as a new putFile; adds more first-file overhead than appendChunk, so this is a planning model, not a deployment invoice.",
+    "Optional ethers wallet dependency is included as a conservative publishing scenario; production code is not yet finalized."
+  ],
+  "totalBytes": 605918,
+  "totalChunks": 30,
+  "estimatedGas": "142842481",
+  "executionFeeOKB": "0.002856849762842481",
+  "openFeeOKB": "0.08",
+  "monthlyFeeOKB": "0.0",
+  "okbUSDT": {
+    "last": "119.13",
+    "ts": "1792162381090"
+  },
+  "budget": {
+    "baseWebsiteContainers": 1,
+    "ordinaryUserContainers": 0,
+    "baseProtocolFeesOKB": {
+      "opening": "0.08",
+      "tapeout": "0.0013",
+      "mintProtocol": "0.00066",
+      "exampleUnitMintPriceRange": [
+        "0",
+        "0.00066"
+      ]
+    },
+    "frontendSyntheticExecutionEstimateOKB": "0.002856849762842481",
+    "baseChainPlanningReserveOKB": "0.10",
+    "baseChainPlanningReserveUSD": 11.913,
+    "backendExampleMinimumUSDPerMonth": 5,
+    "baseFirstMonthPlanningUSD": 16.913,
+    "pinataFreeQuotaConditional": true,
+    "optionalTapeSend": "A separate sender and a new receiving buyer may add about 0.164–0.166 OKB plus gas; existing valid containers can be reused; not charged to ordinary users",
+    "excludes": [
+      "content price transfer",
+      "domain purchase",
+      "bridge or withdrawal charges",
+      "backend and IPFS quota overages",
+      "future gas-price increases"
+    ],
+    "approvedSpend": false
+  }
+}

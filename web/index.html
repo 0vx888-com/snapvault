@@ -1,33 +1,54 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SnapVault · 阅后即焚私密内容</title><link rel="stylesheet" href="style.css"></head>
+<title>SnapVault · 分享瞬间，靠近彼此</title><meta name="description" content="发现喜欢的创作者，在私聊与群聊里分享日常、发送限时消息，体验独家图片解锁。当前为不扣款的产品预览。"><meta name="theme-color" content="#171a17"><link rel="icon" type="image/svg+xml" href="assets/mark-tape.svg"><link rel="stylesheet" href="style.css"></head>
 <body>
-<header>
-  <div class="logo">👻 SnapVault <small>阅后即焚 · X Layer × TapeOut</small></div>
-  <nav><button data-tab="fan" class="tab on">粉丝广场</button><button data-tab="creator" class="tab">我是创作者</button><button data-tab="chat" class="tab">私聊</button></nav>
-  <div class="wallet"><span id="mode" class="pill">演示模式（离线）</span><button id="connect">连接钱包</button></div>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+<header class="app-header">
+  <div class="logo"><img src="assets/mark-tape.svg" alt="" width="36" height="36"><span>SnapVault<small>分享瞬间，靠近彼此</small></span></div>
+
+  <div class="wallet"><span id="mode" class="pill">产品预览 · 不扣款</span><label class="identity-label">演示身份<select id="identity" aria-label="切换演示身份"></select></label><button id="connect" class="secondary">钱包接入说明</button><details class="dev-tools"><summary>开发入口</summary><div><a id="local-market-link" href="http://127.0.0.1:5184/index.html?delivery=local">完整本地交付 ↗</a><a href="http://127.0.0.1:5180/live.html" target="_blank" rel="noopener noreferrer">链上联调 ↗</a></div></details></div>
 </header>
-<main>
+<aside class="app-navigation" aria-label="应用菜单">  <nav aria-label="主要导航"><button data-tab="fan" class="tab on"><span class="nav-icon" aria-hidden="true">◫</span><span>发现广场</span></button><button data-tab="chat" class="tab"><span class="nav-icon" aria-hidden="true">◯</span><span>消息</span><small>私聊 / 群聊</small></button><button data-tab="creator" class="tab"><span class="nav-icon" aria-hidden="true">＋</span><span>创作中心</span></button></nav><div class="nav-intro"><span class="nav-spark">✳</span><b>你的日常，值得分享。</b><p>一张照片，一句问候。<br>从这里认识彼此。</p><button class="primary" data-go-create>＋ 开始创作</button></div><div class="nav-foot"><span>SnapVault / 本地预览</span><small>分享由你决定。</small></div></aside><main id="main-content">
   <section id="fan" class="page">
-    <h2>解锁限时内容</h2><p class="sub">付款后通过（模拟）TapeSend 收到解密密钥，内容只显示几秒，然后从内存中焚毁。</p>
+    <div class="preview-note" role="note"><span class="status-dot"></span><span>产品预览：人物与聊天为演示数据，购买不扣款。正式钱包、多人同步与内容交付仍在接入。</span><button id="about-preview" class="text-button">了解进度 ↗</button></div>
+    <section class="discovery-hero" aria-label="发现创作者"><div class="hero-copy"><p class="eyebrow">A LITTLE CLOSER, EVERY DAY.</p><h1>发现彼此，<span>分享心动。</span></h1><p>喜欢的创作者，没见过的日常。都在这里。</p></div><button class="primary" id="try-demo">体验图片解锁 <span aria-hidden="true">↗</span></button></section>
+    <div class="story-strip" id="creator-stories" aria-label="创作者快捷入口"></div>
+    <div class="fan-body"><div class="discovery-main">
+    <div class="section-heading"><div><h2>值得认识的创作者 <span class="heading-dot">✦</span></h2><p class="sub">从喜欢的内容开始，认识有趣的人。</p></div><button class="text-button" data-go-create>成为创作者 ↗</button></div>
+    <div class="discovery-tools"><div class="segments" aria-label="广场分类"><button data-feed="creators" class="on">发现创作者</button><button data-feed="latest">最新内容</button><button data-feed="following">已关注</button><button data-feed="purchased">我的购买</button></div><input id="search" type="search" placeholder="搜索昵称、UID 或公开内容" aria-label="搜索创作者或内容"></div>
+    <div id="discovery-summary" class="muted"></div>
+    <div id="creators-grid" class="creator-grid"></div>
     <div id="grid" class="grid"></div>
+    <section id="creator-profile" class="card profile-panel hidden" aria-label="创作者主页"></section></div><aside class="discovery-aside" aria-label="分享灵感"><article class="moment-card"><div class="photo-tile photo-sea" role="img" aria-label="AI 生成的海边示例图片"></div><div class="moment-caption"><span>JUST A MOMENT</span><h3>把今天的好心情，<br>留给懂你的人。</h3><button class="light-button" id="open-chat">去聊一聊 ↗</button></div></article><article class="creator-invite"><span class="invite-icon">✷</span><h3>创作，从你开始。</h3><p>把日常变成作品，<br>把喜欢变成连接。</p><button class="text-button" data-go-create>发布第一张图片 →</button></article><p class="sample-credit">图片为 AI 生成的界面示例。<br>不代表真实创作者或已售商品。</p></aside></div>
   </section>
   <section id="creator" class="page hidden">
-    <h2>发布私密内容</h2><p class="sub">图片在你的浏览器里用 AES-GCM 加密，平台只拿到密文。</p>
+    <div class="page-intro"><p class="eyebrow">YOUR CREATOR SPACE</p><h2>把独家内容，送到对的人面前</h2></div><p class="sub">发布到广场，或只发给一个人、一群人。当前为本地演示，图片和密钥保存在本浏览器。</p>
+    <div id="compose-context" class="context-banner hidden"></div>
     <form id="form" class="card form">
       <label>图片<input type="file" id="file" accept="image/*" required></label>
       <label>标题<input id="title" maxlength="40" placeholder="例如：今晚的独家幕后" required></label>
       <div class="row"><label>价格<input id="price" type="number" step="0.01" min="0.01" value="1"></label>
       <label>币种<select id="token"><option value="USDT">USDT</option><option value="OKB">OKB</option></select></label></div>
-      <div class="row"><label>可看秒数<input id="secs" type="number" min="3" value="8"></label>
+      <div class="row"><label>可看秒数<input id="secs" type="number" min="3" max="3600" value="10" required></label>
       <label>限量（0=不限）<input id="max" type="number" min="0" value="0"></label></div>
+      <label class="inline-label"><input type="checkbox" id="content-burn" checked> 首次打开后限时展示</label>
+      <p class="field-note">付款后 24 小时内可打开；限时从首次打开开始。关闭限时后，可在这 24 小时内重复查看。</p>
+      <label>发布位置<select id="publish-target"><option value="public">公开到创作者广场</option></select></label>
+      <label class="inline-label"><input type="checkbox" id="show-preview"> 允许公开模糊缩略图（默认仅显示占位图）</label>
       <button type="submit" class="primary">🔒 加密并上架</button>
       <pre id="log" class="log"></pre>
     </form>
+    <section class="creator-work"><h3>我的内容</h3><p class="muted">同一商品在广场和聊天共用购买记录。可把公开作品分享到你参加的会话。</p><div id="my-contents" class="grid"></div></section>
+    <section class="card profile-editor"><h3>我的创作者资料</h3><label>昵称<input id="profile-name" maxlength="20"></label><label>简介<input id="profile-bio" maxlength="100"></label><button id="save-profile" class="secondary">保存资料</button><p id="profile-feedback" role="status"></p></section>
   </section>
   <section id="chat" class="page hidden"></section>
 </main>
-<div id="viewer" class="viewer hidden"><div class="vwrap"><img id="vimg"><div id="wm" class="wm"></div>
+<footer class="app-footer"><span>SnapVault <span class="footer-dot">·</span> 分享由你决定。</span><span>当前产品预览 <span class="footer-dot">/</span> 正式前端计划发布到 X Layer DeWEB</span><button class="text-button" id="preview-details">预览说明</button></footer>
+<dialog id="preview-dialog" class="purchase-dialog"><form method="dialog"><button class="dialog-close" aria-label="关闭预览说明">×</button></form><p class="eyebrow">BUILDING IN PUBLIC</p><h2>先体验，再一起完善。</h2><p>这是可部署的静态产品预览。你可以切换演示身份、私聊与群聊、设置阅后即焚，并体验图片发布、模拟购买和解密。</p><p>这些记录保存在当前浏览器。免费聊天尚未接入真实多人服务；钱包登录、免容器交付和公共图片存储仍在开发。当前不会扣款，也不会请求你的钱包签名。</p><p>正式产品的付款与分账使用 X Layer，前端发布到 DeWEB。图片存储将单独接入，尚未上传真实内容到 IPFS。</p><p class="field-note">阅后即焚是限时展示，无法阻止截图或收回已保存的内容。</p></dialog>
+<div id="viewer" class="viewer hidden" role="dialog" aria-modal="true" aria-label="查看图片"><div class="vwrap"><div class="viewer-heading"><span id="view-title"></span><button id="close-viewer" class="secondary">关闭</button></div><img id="vimg" alt="已解锁内容"><div id="wm" class="wm"></div>
 <div class="bar"><div id="prog"></div></div><div id="count" class="count"></div></div></div>
+<dialog id="purchase-dialog" class="purchase-dialog"><form method="dialog"><button class="dialog-close" aria-label="关闭购买窗口" value="cancel">×</button></form><h2>解锁这张独家图片</h2><div id="purchase-detail"></div><p class="demo-notice">本地演示：不会连接钱包、扣款或发送链上交易。密钥交付尚未接入 TapeSend。</p><p id="purchase-error" class="error" role="alert"></p><button id="confirm-purchase" class="primary">模拟付款并解锁</button><button id="cancel-purchase" class="secondary">取消</button></dialog>
+<dialog id="share-dialog" class="purchase-dialog"><form method="dialog"><button class="dialog-close" aria-label="关闭分享窗口" value="cancel">×</button></form><h2>发送到会话</h2><div id="share-list" class="share-list"></div><p id="share-error" class="error" role="alert"></p></dialog>
+<div id="toast" class="toast hidden" role="status"></div>
 <script type="module" src="app.js"></script>
 </body></html>

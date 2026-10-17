@@ -1,0 +1,21 @@
+{
+  "network": "xlayerTestnet",
+  "chainId": 1952,
+  "contractName": "SnapVaultPaymentProbe",
+  "purpose": "test-coins payment/accounting/withdrawal only; no content or TapeSend",
+  "creator": "0x1538ac2d29d03615d2336a2227900aab334d9402",
+  "buyer": "0x6e87af3cc0907207505e3c45a1037385329009c9",
+  "deployment": {
+    "address": "0xAA3073796d24D6CBF1bDcbB11e081B940BbCD20A",
+    "transactionHash": "0x136718e0f89938e744430a012ba14c6e0a48880b42da28eae0c7dcde048f6e49",
+    "blockNumber": 43695774,
+    "gasUsed": "1660360"
+  },
+  "verified": {
+    "receiptStatus": 1,
+    "creator": "0x1538Ac2d29d03615D2336A2227900aAb334D9402",
+    "buyer": "0x6e87af3cc0907207505e3c45A1037385329009C9",
+    "feeBps": 1000,
+    "runtimeCodeHash": "0x7dd5cfd5b0da1d5ad4ea9515dafba75d0ee5fe29ff259f6c22a6462c3099e6a8"
+  }
+}

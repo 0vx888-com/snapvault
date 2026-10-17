@@ -1,0 +1,45 @@
+{
+  "updatedAt": "2026-10-18",
+  "status": "contract-verified-awaiting-explicit-service-credential-transfer-approval",
+  "frontend": "approved lime/charcoal tape identity",
+  "railway": {
+    "projectId": "b8f93089-284c-4212-86f8-8590bf8385a2",
+    "serviceId": "90e8bffd-041d-4f86-8041-7abe8c8ffb07",
+    "domainReserved": "https://snapvault-api-production.up.railway.app",
+    "deploymentCount": 0,
+    "volumeId": "40f394cb-c2a7-4ec5-bb76-2753569101fc",
+    "mountPath": "/data",
+    "trialDaysRemaining": 30,
+    "remainingCreditUSD": 5,
+    "paymentMethodPresent": false,
+    "serviceCredentialsUploaded": false,
+    "backendRunning": false
+  },
+  "contract": {
+    "chainId": 1952,
+    "deployed": true,
+    "creator": "0x1538ac2d29d03615d2336a2227900aab334d9402",
+    "operator": "0x010699a0E280A4325652f6D26bE2275E23A21506",
+    "estimatedTestOKB": "0.000043881382194069",
+    "preview": "http://127.0.0.1:5188/",
+    "address": "0x0cCBD7252303EA920f5Bb9c970d3D2e2782cE900",
+    "transactionHash": "0x747a1865c1cad08d9cca9a1351e9c1e9626daba5fd332f9e922222d505a0b144",
+    "blockNumber": 43802727,
+    "verified": true,
+    "actualFeeTestOKB": "0.000087025402175635"
+  },
+  "deweb": {
+    "published": false,
+    "targetChainId": 196,
+    "bundle": "dist/wallet",
+    "bytes": 1164982,
+    "chunks": 62,
+    "externalAPIRequiresGatewayPermission": true,
+    "mainnetSpendApproved": false
+  },
+  "checks": {
+    "hostingAndDeliveryTestsPassed": 6
+  },
+  "moneySpent": false,
+  "next": "Human authorization required to transfer platform service keystore and password to Railway snapvault-api variables; auto-review rejected because this transfer was not explicitly authorized. No user-wallet keys involved. No secrets transmitted. DeWEB remains unpublished; mainnet fees unapproved."
+}

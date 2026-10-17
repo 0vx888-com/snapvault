@@ -1,0 +1,374 @@
+{
+  "checkedAt": "2026-10-16T14:35:52.486Z",
+  "chainId": 196,
+  "block": 73392316,
+  "gasPriceWei": "20000001",
+  "addresses": {
+    "factory": "0x1f09daefa827f02cbb40967cc91b259763760761",
+    "opener": "0x536add8f30f03b69f6fbf29d425a816a0dc50106",
+    "registry": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+    "binding": "0x68809fd2fb343aa57d0aeb7f33defe477c9666f9",
+    "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee"
+  },
+  "reads": {
+    "opener": {
+      "FEE()": {
+        "wei": "80000000000000000",
+        "native": "0.08"
+      },
+      "EXEC_FEE()": {
+        "error": "missing revert data"
+      },
+      "BATCH_FEE()": {
+        "error": "missing revert data"
+      },
+      "codeHash": "0xf0c334d8d72983af1c38694dac7a1c83348c0c000cbb987467d2aedee06999fd"
+    },
+    "binding": {
+      "monthlyFee()": {
+        "wei": "0",
+        "native": "0.0"
+      },
+      "codeHash": "0x5e41d8905a1e7ccfc8c297c3a33d08d1712e4876f9c6eefc0e5991409dd38c1d"
+    },
+    "factory": {
+      "cpuCount()": {
+        "wei": "344",
+        "native": "0.000000000000000344"
+      },
+      "protocolFee()": {
+        "wei": "660000000000000",
+        "native": "0.00066"
+      },
+      "deployFee()": {
+        "wei": "6600000000000000",
+        "native": "0.0066"
+      },
+      "codeHash": "0x5cddc08137fc81eb8ba1d37902e77553152c2f639b6bf6f601ecb094e2cae5c8"
+    },
+    "registry": {
+      "feePerByte()": {
+        "error": "execution reverted (no data present; likely require(false) occurred"
+      },
+      "uploadFee()": {
+        "error": "missing revert data"
+      },
+      "codeHash": "0x5e41d8905a1e7ccfc8c297c3a33d08d1712e4876f9c6eefc0e5991409dd38c1d"
+    },
+    "hub": {
+      "MAX_PAYLOAD()": {
+        "wei": "16000",
+        "native": "0.000000000000016"
+      },
+      "codeHash": "0xcd75f98719e56feb6f178560dab068f0828e8dafd0e9e753b2f6242ab4a05e1a"
+    }
+  },
+  "cpu0": {
+    "address": "0x839bdD6fa7A66416A609A735e11DE5411B98574e",
+    "TAPEOUT_FEE()": "1300000000000000",
+    "nextId()": "103",
+    "transistors()": "0xbe0eeE424C49d44592e4D498740F5B031Ef8e26D",
+    "transistor": {
+      "mintPrice": "0",
+      "protocolFee": "660000000000000",
+      "supplyCap": "100000",
+      "minted": "100000"
+    }
+  },
+  "hub": {
+    "payments()": "0x13b8AFa4Fd1b29B09D23A57A75ba8D3078d44858",
+    "circuitBeacon()": "0xf70d1ed4f62CF3780157B0b421b7E2F45bD0991C",
+    "circuitImplementation()": "0x977f217887E085D298Cb3819cDAD5A0ee35F29B2"
+  },
+  "sampleContainers": [
+    {
+      "id": 1,
+      "opened": true,
+      "owner": "0x571d447f4f24688eC35Ccf07f1D6993655F6aF15",
+      "container": "0xE2E5FfD861C8a0b50Ce21A7bcbDD6Bb5aaC250aB"
+    },
+    {
+      "id": 2,
+      "opened": true,
+      "owner": "0x571d447f4f24688eC35Ccf07f1D6993655F6aF15",
+      "container": "0x25B20D3eA6b207506340eab2Eb0f45Edc800F6b3"
+    },
+    {
+      "id": 3,
+      "opened": false,
+      "owner": "0x571d447f4f24688eC35Ccf07f1D6993655F6aF15",
+      "container": "0x5f71fE4573757dA6aaDaebFBed0cc2e3A0C12628"
+    },
+    {
+      "id": 4,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0xAB2c50AcFA3aB73970afAC894642b5E888D09346"
+    },
+    {
+      "id": 5,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x7bdf9D95006C7d23752649B916D2D0e2Fb654fAf"
+    },
+    {
+      "id": 6,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x2b8477c36bbd4e30082229265221f7a011843DA1"
+    },
+    {
+      "id": 7,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x9DF560548A0Ae237c81ACf5b0a1be92335f49A1E"
+    },
+    {
+      "id": 8,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x25023B4220eDc0edd151e6e1EDeCB7E2d6AF02Eb"
+    },
+    {
+      "id": 9,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x27fC4c70daa14FB6E6EEFB09d5090904A38C1afC"
+    },
+    {
+      "id": 10,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x2b65B6cC5396251BEe4967490983FEcf27A765A5"
+    },
+    {
+      "id": 11,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0xb3D6b075d10638652fDf5Ce36Df111486678d7Fa"
+    },
+    {
+      "id": 12,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0xC845Aae023385AC3736aA7f11A1AcC441Db8BaB9"
+    },
+    {
+      "id": 13,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x53d6260904D687C10B1b8BBeeBAC2e05c33d069b"
+    },
+    {
+      "id": 14,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x1C9717eF8010EA67F9Ddea92e0e4d0f46AE6c551"
+    },
+    {
+      "id": 15,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x116a027365A368daE17Bf0E1d4e5E5b07299a00b"
+    },
+    {
+      "id": 16,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x9684302CEbE704aDc855dC08e62Efb86be9638F0"
+    },
+    {
+      "id": 17,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0xB1b01816e2ed1E529043d119390aEC809157fE63"
+    },
+    {
+      "id": 18,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0xF2479f1277840a12DB42Ad411b05F60E2C84C809"
+    },
+    {
+      "id": 19,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x5C3F0F13B088949DdD1dcc78487d63554cc0B7Aa"
+    },
+    {
+      "id": 20,
+      "opened": false,
+      "owner": "0xa2E4592EbbD0A08CF49DC306358b064587ab3362",
+      "container": "0x74700DD16d212Dc93cE74A5efF2325E7337d8F26"
+    }
+  ],
+  "estimates": [
+    {
+      "type": "TapeSend send",
+      "payloadBytes": 500,
+      "gas": "176888",
+      "executionFeeOKB": "0.000003537760176888",
+      "note": "read-only estimate from a real opened-container holder; not a broadcast; repeated ab bytes, not encrypted-content compression profile"
+    },
+    {
+      "type": "TapeSend send",
+      "payloadBytes": 1000,
+      "gas": "189468",
+      "executionFeeOKB": "0.000003789360189468",
+      "note": "read-only estimate from a real opened-container holder; not a broadcast; repeated ab bytes, not encrypted-content compression profile"
+    },
+    {
+      "type": "TapeSend send",
+      "payloadBytes": 16000,
+      "gas": "670871",
+      "executionFeeOKB": "0.000013417420670871",
+      "note": "read-only estimate from a real opened-container holder; not a broadcast; repeated ab bytes, not encrypted-content compression profile"
+    },
+    {
+      "type": "SnapVaultCheckout deployment",
+      "gas": "1972943",
+      "executionFeeOKB": "0.000039458861972943",
+      "note": "read-only constructor estimate; not deployed"
+    }
+  ],
+  "okbUSDT": {
+    "last": "119.61",
+    "ts": "1792161495933"
+  },
+  "candidateProcessors": [
+    {
+      "index": 1,
+      "cpu": "0x0565EA48CA41Ae559d8d491dbb0a9ec945DB551b",
+      "transistors": "0x3246190603A426aD4f3Ca91Da28C4Ba4681E26be",
+      "tapeoutFee": "0.0013",
+      "mintPrice": "660000000000000",
+      "protocolFee": "660000000000000",
+      "supplyCap": "100000",
+      "minted": "100000"
+    },
+    {
+      "index": 2,
+      "cpu": "0xE0EF4FffD869cBD24b2F83E6d2d83109937E05ff",
+      "transistors": "0xe9a171b6CB5bCE21A9E433A255533d33d82e977f",
+      "tapeoutFee": "0.0013",
+      "mintPrice": "10000000000000000",
+      "protocolFee": "660000000000000",
+      "supplyCap": "100000",
+      "minted": "181"
+    },
+    {
+      "index": 3,
+      "cpu": "0x006B107B889347dEDd52019Fae9daa60fCe47947",
+      "transistors": "0x738C74047A59b2981A46C4F054271A13070F009f",
+      "tapeoutFee": "0.0013",
+      "mintPrice": "1000000000000",
+      "protocolFee": "660000000000000",
+      "supplyCap": "100000",
+      "minted": "100000"
+    },
+    {
+      "index": 340,
+      "cpu": "0x9de448A1CE9537d24199B3b5355239d73aA6F591",
+      "transistors": "0x729F874FF12faAdd73e8F921D65d23516717b145",
+      "tapeoutFee": "0.0013",
+      "mintPrice": "0",
+      "protocolFee": "660000000000000",
+      "supplyCap": "10000",
+      "minted": "106"
+    },
+    {
+      "index": 341,
+      "cpu": "0x5BdE463d103361541a013f6fb01AE35a701Db03b",
+      "transistors": "0xa10AaE32607653FCEaC01F934dd9f3DF62A90Cd2",
+      "tapeoutFee": "0.0013",
+      "mintPrice": "660000000000000",
+      "protocolFee": "660000000000000",
+      "supplyCap": "100000",
+      "minted": "1"
+    },
+    {
+      "index": 342,
+      "cpu": "0x8811bFe339e752f7012488363c69dcdF643cF044",
+      "transistors": "0x29d632daEa32490178ACC7db2969257df50FAf3d",
+      "tapeoutFee": "0.0013",
+      "mintPrice": "660000000000000",
+      "protocolFee": "660000000000000",
+      "supplyCap": "100000",
+      "minted": "0"
+    },
+    {
+      "index": 343,
+      "cpu": "0x7089b657D4D804df8cf8ACed6aC48FD3c7F4A64f",
+      "transistors": "0xF14293F74E3D8B6fA5a06D13546f798C39F42bf4",
+      "tapeoutFee": "0.0013",
+      "mintPrice": "660000000000000",
+      "protocolFee": "660000000000000",
+      "supplyCap": "100000",
+      "minted": "1"
+    }
+  ],
+  "realisticSend": {
+    "payloadBytes": 414,
+    "gas": "174597",
+    "executionFeeOKB": "0.000003491940174597",
+    "l1DataFeeEstimateWei": "0",
+    "l1DataFeeEstimateOKB": "0.0",
+    "oracle": "0x420000000000000000000000000000000000000F"
+  },
+  "crossChecks": [
+    {
+      "url": "https://rpc.xlayer.tech",
+      "chainId": 196,
+      "block": 73392316,
+      "openFee": "0.08",
+      "monthlyFee": "0.0"
+    },
+    {
+      "url": "https://xlayer.drpc.org",
+      "chainId": 196,
+      "block": 73392316,
+      "openFee": "0.08",
+      "monthlyFee": "0.0"
+    }
+  ],
+  "npm": {
+    "@tapekit/send": {
+      "status": 404,
+      "result": "Not Found"
+    },
+    "@tapekit/kernel": {
+      "status": 404,
+      "result": "Not Found"
+    }
+  },
+  "scope": "Read-only mainnet research; no signatures, transactions, account creation, uploads or purchases",
+  "estimatesBlockPolicy": "eth_estimateGas and oracle quotes use latest state; protocol fees cross-checked at block 73392316",
+  "budget": {
+    "assumptions": "One platform sender + one new buyer; existing processor; one minimal NAND per NFT; no custom processor, no DeWEB frontend upload; public HTTPS frontend and encrypted IPFS image storage",
+    "containerOpeningOKB": "0.16",
+    "twoTapeoutFeesOKB": "0.0026",
+    "twoMintProtocolFeesOKB": "0.00132",
+    "transistorUnitCostOKB": "0 if available zero-mint-price processor; 0.00132 for two units at 0.00066 each",
+    "protocolSubtotalRangeOKB": [
+      "0.16392",
+      "0.16524"
+    ],
+    "suggestedChainReserveOKB": "0.18",
+    "suggestedChainReserveUSD": 21.529799999999998,
+    "hostingUSDPerMonthMinimum": 5,
+    "pinataFreeStorageGB": 1,
+    "pinataFreeBandwidthGB": 10,
+    "pinataFreeFileCount": 500,
+    "pinataPaidExampleUSDPerMonth": 20,
+    "firstMonthPlanningUSD": 26.529799999999998,
+    "excludes": [
+      "content sale price (buyer-to-creator transfer)",
+      "exchange withdrawal or bridging fees",
+      "custom domain purchase",
+      "hosting overages",
+      "new buyers beyond one",
+      "optional DeWEB on-chain frontend upload"
+    ],
+    "notAnApprovedSpend": true
+  }
+}

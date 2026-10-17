@@ -1,0 +1,47 @@
+import {createServer} from 'node:http';
+import {readFileSync} from 'node:fs';
+import {resolve,extname,sep} from 'node:path';
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml'};
+export function walletHttp({service,root,port,rpc=null,allowedHosts=[]}){
+ const origin=`http://127.0.0.1:${port}`;
+ const server=createServer(async(req,res)=>{
+  const suppliedOrigin=req.headers.origin;
+  const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'};
+  const send=(code,d)=>{res.writeHead(code,{...headers,'Content-Type':'application/json'});res.end(JSON.stringify(d));};
+  try{
+   if(req.method==='GET'&&req.url==='/healthz'&&(req.headers.host==='healthcheck.railway.app'||req.headers.host===`127.0.0.1:${port}`||allowedHosts.includes(req.headers.host))){const config=await service.config();return send(200,{status:'ok',chainId:config.chainId,testnetOnly:true});}
+   if(req.headers.host!==`127.0.0.1:${port}`&&!allowedHosts.includes(req.headers.host))throw Object.assign(Error('Host 不允许'),{status:403});
+   if(suppliedOrigin&&!service.origins.includes(suppliedOrigin))throw Object.assign(Error('网站来源不允许'),{status:403});
+   if(suppliedOrigin){headers['Access-Control-Allow-Origin']=suppliedOrigin;headers['Access-Control-Allow-Headers']='Content-Type, Authorization';headers['Access-Control-Allow-Methods']='GET, POST, OPTIONS';}
+   if(req.method==='OPTIONS'){res.writeHead(204,headers);return res.end();}
+   const url=new URL(req.url,origin);
+   if(url.pathname==='/app-config.json'&&req.method==='GET')return send(200,{mode:'wallet',apiBase:''});
+   if(url.pathname==='/api/wallet/config'&&req.method==='GET')return send(200,await service.config());
+   if(url.pathname.startsWith('/api/wallet/blob/')&&req.method==='GET'){
+    const hash=url.pathname.split('/').at(-1);if(!/^[a-f0-9]{64}$/.test(hash))throw Error('密文路径无效');res.writeHead(200,{...headers,'Content-Type':'application/octet-stream'});return res.end(service.blob(hash));
+   }
+   if(url.pathname.startsWith('/api/')||url.pathname==='/rpc'){
+    if(req.method!=='POST')return send(405,{error:'仅支持 POST'});
+    // Wallet extensions omit Origin on local RPC; authenticated app endpoints require one.
+    if(url.pathname!=='/rpc'&&!suppliedOrigin)return send(403,{error:'缺少网站来源'});
+    let size=0,chunks=[];for await(const chunk of req){size+=chunk.length;if(size>3_500_000)throw Error('请求超过 3.5 MB');chunks.push(chunk);}
+    const b=JSON.parse(Buffer.concat(chunks).toString()||'{}');
+    if(url.pathname==='/rpc'){
+     if(!rpc||(await service.config()).chainId!==31337)return send(403,{error:'本地测试 RPC 未启用'});
+     service.limit('rpc:'+req.socket.remoteAddress,600);
+     const allowed=new Set(['eth_chainId','net_version','eth_blockNumber','eth_getBalance','eth_getCode','eth_call','eth_estimateGas','eth_gasPrice','eth_feeHistory','eth_maxPriorityFeePerGas','eth_getTransactionCount','eth_getTransactionReceipt','eth_getTransactionByHash','eth_getBlockByNumber','eth_getBlockByHash','eth_getLogs','eth_sendRawTransaction']);
+     const calls=Array.isArray(b)?b:[b];if(!calls.length||calls.length>20)throw Error('RPC 批量请求无效');
+     const results=[];for(const c of calls){if(!allowed.has(c.method))throw Error('不允许此 RPC 方法');try{results.push({jsonrpc:'2.0',id:c.id,result:await rpc(c.method,c.params||[])});}catch(e){results.push({jsonrpc:'2.0',id:c.id,error:{code:-32000,message:e.message}});}}
+     return send(200,Array.isArray(b)?results:results[0]);
+    }
+    const action=url.pathname.slice('/api/wallet/'.length);if(!url.pathname.startsWith('/api/wallet/'))return send(404,{error:'接口不存在'});
+    return send(200,await service.handle(action,b,req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin));
+   }
+   if(req.method!=='GET')return send(405,{error:'仅支持 GET'});
+   const web=resolve(root,'web'),file=resolve(web,'.'+decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname));if(!file.startsWith(web+sep))throw Error('路径无效');
+   res.writeHead(200,{...headers,'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(readFileSync(file));
+  }catch(e){send(e.status||400,{error:e.message});}
+ });
+ server.requestTimeout=20000;server.headersTimeout=10000;
+ return server;
+}

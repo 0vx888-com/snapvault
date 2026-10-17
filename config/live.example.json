@@ -1,0 +1,12 @@
+{
+  "chainId": 1952,
+  "rpc": "https://testrpc.xlayer.tech/terigon",
+  "vault": "部署后的 SnapVaultCheckout 地址",
+  "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+  "implementation": "官方测试网尚无已确认实现；不要填写主网实现冒充测试网",
+  "implementationHash": "通过只读核对得到的实现 runtime keccak256",
+  "circuits": "自动发送账户持有的 TapeOut 处理器地址",
+  "tokenId": "容器 NFT ID",
+  "fromBlock": 0,
+  "confirmations": 2
+}

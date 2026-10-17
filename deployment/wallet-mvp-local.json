@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "checks": [
+    "普通钱包签名登录，无容器、无用户私钥",
+    "不同浏览器账户收到免费文字＋图片，无链上消息费用",
+    "免费图文阅后即焚：刷新后同一服务端截止时间",
+    "免费限时消息过期后服务拒绝再次读取",
+    "创作者原聊天内上传、链上上架、发送同一付费图片卡",
+    "未付款和非会话成员不能领取密钥",
+    "取消付款没有订单",
+    "普通钱包本地链实付后免容器交付，不提前启动倒计时",
+    "RSA-OAEP 买家公钥交付、哈希核验、AES-GCM 图片解密显示",
+    "付费图片刷新不重置倒计时",
+    "到期不能重开，不重复扣款",
+    "真实群聊中其他成员未打开时不消耗自己的阅后即焚时间",
+    "群聊免费图文与私聊共用真实服务",
+    "群聊已查看成员到期关闭，其他成员独立查看",
+    "真实模式没有将内容密钥、密文和私聊身份密钥写进 localStorage",
+    "手机布局无横向溢出"
+  ],
+  "browserErrors": [],
+  "environment": "local Hardhat 31337 only",
+  "ui": "http://127.0.0.1:5186/wallet-local/index.html",
+  "publiclyDeployed": false,
+  "mainnetSpending": false,
+  "walletProvider": "isolated EIP-1193 adapter with known public Hardhat keys; human OKX Wallet not exercised",
+  "additionalChecks": {
+    "contractsAndServices": 20,
+    "uiModel": 7,
+    "legacyFrontend": 15
+  },
+  "deweb": "static bundle and separate-origin test only; no SiteRegistry upload",
+  "storage": "encrypted server files; no IPFS upload"
+}

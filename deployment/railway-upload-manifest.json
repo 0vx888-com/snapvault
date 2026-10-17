@@ -1,0 +1,198 @@
+{
+  "target": "Railway public X Layer testnet backend",
+  "uploaded": false,
+  "privateDataIncluded": false,
+  "mainnetEnabled": false,
+  "files": [
+    {
+      "path": "Dockerfile",
+      "bytes": 660,
+      "sha256": "fe9964d6ac00c2a3970eaff6d4687bbb809a8265bed0692d4b6fe80fa1d6b905"
+    },
+    {
+      "path": "railway.json",
+      "bytes": 308,
+      "sha256": "bdbecb73454a08aa4fad9afd250c5118415382a825b0ab39b4acd44896afcfaa"
+    },
+    {
+      "path": ".dockerignore",
+      "bytes": 156,
+      "sha256": "d590635dab434b7bee3f404892b23b44a47fe08c48ca285910cb604d0c047b85"
+    },
+    {
+      "path": "package.json",
+      "bytes": 1771,
+      "sha256": "e17c1427303296f7be3116b53fc2b0089fdfdffd8d28a9df6763944f1ef6ddd9"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 305398,
+      "sha256": "b8cc92667e72b60a302e9914fb161efbe626e82ef314dda2387c65c031c40a57"
+    },
+    {
+      "path": "hardhat.config.js",
+      "bytes": 1179,
+      "sha256": "2a9cac8782c95f24b97ef45b25a56e5aaa4c5931ea7bc231d90912cdab422bc6"
+    },
+    {
+      "path": "server/wallet-start.mjs",
+      "bytes": 3325,
+      "sha256": "a06c8618a02408bdc1cb8f3f4306d476cd5334b0d7cd69121bca2408a18f27ae"
+    },
+    {
+      "path": "server/wallet-http.mjs",
+      "bytes": 4503,
+      "sha256": "a7fa5118f031e91790465194081f15324a01e2ddc41671966b8f05d97d70cddf"
+    },
+    {
+      "path": "server/wallet-service.mjs",
+      "bytes": 15075,
+      "sha256": "555864974f4054b03b33c4067a556ef6f9c8ef09391eb68fc60d3958bf1262f3"
+    },
+    {
+      "path": "web/index.html",
+      "bytes": 9635,
+      "sha256": "e4d9880c068a31b5d9fe26ce5f0dc2000a5496d068007a58404a72e6348f4660"
+    },
+    {
+      "path": "web/style.css",
+      "bytes": 34094,
+      "sha256": "777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07"
+    },
+    {
+      "path": "web/app.js",
+      "bytes": 29479,
+      "sha256": "24afb9ed67e73deef4f722ab12ef3637fcde2cb34babe202e545d7ea0de937ac"
+    },
+    {
+      "path": "web/chat.js",
+      "bytes": 26839,
+      "sha256": "778370fe43e3195bdf6029236b35f09e583fb85c1939cdbf4fe7f32c84da3fab"
+    },
+    {
+      "path": "web/store.js",
+      "bytes": 7388,
+      "sha256": "d3b825166eded51fa923d8d804820ac1614c146462f6f1df012330286ce8bfbe"
+    },
+    {
+      "path": "web/local-delivery.js",
+      "bytes": 894,
+      "sha256": "594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436"
+    },
+    {
+      "path": "web/wallet.js",
+      "bytes": 7178,
+      "sha256": "3c1b081cf45729d909ff12cd5154bcf66003c025fe0f4b41d65134c536aab17c"
+    },
+    {
+      "path": "web/wallet-chat.js",
+      "bytes": 11023,
+      "sha256": "e3c5402909e775f083ab566fdd222c8d81391421b9f643c704777c8cdf453c12"
+    },
+    {
+      "path": "web/app-config.json",
+      "bytes": 29,
+      "sha256": "d6452d80b55e44f5c9636d0321b34a7abb784cc405bc5d81acb6a1e6ca4daaa5"
+    },
+    {
+      "path": "web/vendor/ethers.min.js",
+      "bytes": 522050,
+      "sha256": "b016b0c3898c78fd8156466eb1ff1f42c9df951c2f0d64c9bdf799fe745b0a6c"
+    },
+    {
+      "path": "web/vendor/ethers-LICENSE.md",
+      "bytes": 1075,
+      "sha256": "44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "path": "web/assets/mark.svg",
+      "bytes": 282,
+      "sha256": "0806bf896dc03dcd6e494724303ddab13e95e968bcf9b80a91eafa0a09c1abc0"
+    },
+    {
+      "path": "web/assets/studio.svg",
+      "bytes": 864,
+      "sha256": "25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+    },
+    {
+      "path": "web/assets/sketch.svg",
+      "bytes": 807,
+      "sha256": "53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+    },
+    {
+      "path": "contracts/SnapVault.sol",
+      "bytes": 6180,
+      "sha256": "408ede43388a2419bf8f79054b05f3062dce7d9414ff365a4ab4890d3edeff7b"
+    },
+    {
+      "path": "contracts/SnapVaultPaymentProbe.sol",
+      "bytes": 1036,
+      "sha256": "8618542f6a23a0b0d69684486b7e4e894194c1ca504be733a20419f538b133a8"
+    },
+    {
+      "path": "contracts/MockUSDT.sol",
+      "bytes": 352,
+      "sha256": "f565aeeb7cf4061183ffbfac0a19edafe49982d43ea26f4208dd64f16528e891"
+    },
+    {
+      "path": "contracts/SnapVaultCheckout.sol",
+      "bytes": 2998,
+      "sha256": "b5b746bd103be3ce41ef980d33e98dff6f8c7a1d7701b3567f81cb719d078162"
+    },
+    {
+      "path": "contracts/SnapVaultDirect.sol",
+      "bytes": 1855,
+      "sha256": "687201de3cd89f19cce7b7127f148e34e7ff4fa22eb4b21acbf355a21c290b68"
+    },
+    {
+      "path": "contracts/test/TapeOutFixture.sol",
+      "bytes": 829,
+      "sha256": "7e3bec22b83ce192ef7159aa8550584d55a9460dd40e3ed5106bde5bbd33c06d"
+    },
+    {
+      "path": "contracts/vendor/tapekit/DeWebAdmin.sol",
+      "bytes": 7451,
+      "sha256": "f9cb707036a4cdfdee081e210c450141c85cb0c5e01379d1a0f7f792df03c338"
+    },
+    {
+      "path": "contracts/vendor/tapekit/LICENSE",
+      "bytes": 1072,
+      "sha256": "49dfa6c15db4cd2b953d5f88e67428b8f04721f13eedd68f00ccdc7259f341a8"
+    },
+    {
+      "path": "contracts/vendor/tapekit/DeWebHub.sol",
+      "bytes": 21635,
+      "sha256": "7aaebf25a4ebaac845be19477fd7177fc04d6a7a08df64124af933cb6cc6d3d6"
+    },
+    {
+      "path": "contracts/vendor/tapekit/DeWebProxy.sol",
+      "bytes": 2100,
+      "sha256": "cf000e58345950f89f4cd0c2db845b111899ae45068ced69d3116f54c20488da"
+    },
+    {
+      "path": "contracts/vendor/tapekit/DeWebBoot.sol",
+      "bytes": 835,
+      "sha256": "db710485fd8d388532dfdef49a929fd6f4a4b8eb77b7ad49f9e3148fba1c4f26"
+    },
+    {
+      "path": "contracts/vendor/tapekit/DeWebAdminBoot.sol",
+      "bytes": 6314,
+      "sha256": "786d94e08f6df6675eb45022ca3ebdfd139c3879d9cc430a73d21208619d5f9b"
+    },
+    {
+      "path": "web/assets/mark-social.svg",
+      "bytes": 293,
+      "sha256": "4e458b51f8f7e17fce6bd1dcc41f4a28e769d99edd5d4bd7bfaffa979916dc47"
+    },
+    {
+      "path": "web/assets/mark-tape.svg",
+      "bytes": 635,
+      "sha256": "3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+    },
+    {
+      "path": "web/assets/social-photos.jpg",
+      "bytes": 512682,
+      "sha256": "9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+    }
+  ]
+}

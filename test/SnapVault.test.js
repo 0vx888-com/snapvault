@@ -20,6 +20,8 @@ describe("SnapVault", () => {
     expect(await v.balances(treasury.address, ethers.ZeroAddress)).to.equal(ethers.parseEther("0.1"));
     expect(await v.hasAccess(1, fan.address)).to.equal(true);
     await time.increase(61);
+    expect(await v.hasAccess(1, fan.address)).to.equal(true); // 首次打开前不会因 60 秒展示时长而过期
+    await time.increase(24 * 3600);
     expect(await v.hasAccess(1, fan.address)).to.equal(false);
   });
 
@@ -57,5 +59,36 @@ describe("SnapVault", () => {
 
   it("无余额提现回滚", async () => {
     await expect(v.connect(fan).withdraw(ethers.ZeroAddress)).to.be.revertedWithCustomError(v, "NothingToWithdraw");
+  });
+
+  it('重复购买不得再次收费、计销量或分账；过期后也不悄悄重复出售同一查看权', async () => {
+    await v.connect(creator).list(ethers.ZeroAddress, 100, 5, 0, H, 'ipfs://x');
+    await v.connect(fan).purchase(1, { value: 100 });
+    await expect(v.connect(fan).purchase(1, { value: 100 })).to.be.revertedWithCustomError(v, 'AlreadyPurchased');
+    expect((await v.contents(1)).sold).to.equal(1);
+    expect(await v.balances(creator.address, ethers.ZeroAddress)).to.equal(90);
+    await time.increase(24 * 3600 + 1);
+    await expect(v.connect(fan).purchase(1, { value: 100 })).to.be.revertedWithCustomError(v, 'AlreadyPurchased');
+  });
+
+  it('作者不能购买自己的图片；两位买家拥有独立的购买期限', async () => {
+    await v.connect(creator).list(ethers.ZeroAddress, 100, 5, 0, H, 'ipfs://x');
+    await expect(v.connect(creator).purchase(1, { value: 100 })).to.be.revertedWithCustomError(v, 'CreatorCannotPurchase');
+    await v.connect(fan).purchase(1, { value: 100 });
+    await time.increase(30);
+    await v.connect(fan2).purchase(1, { value: 100 });
+    expect(await v.accessUntil(1, fan2.address)).to.be.greaterThan(await v.accessUntil(1, fan.address));
+    expect(await v.hasAccess(999, fan.address)).to.equal(false);
+  });
+
+  it('发布普通展示选项，兼容旧 list 默认限时；下架不撤销已有购买资格', async () => {
+    await v.connect(creator).listWithOptions(ethers.ZeroAddress, 100, 10, 0, H, 'ipfs://x', false);
+    expect(await v.ephemeral(1)).to.equal(false);
+    await v.connect(fan).purchase(1, { value: 100 });
+    await v.connect(creator).delist(1);
+    expect(await v.hasAccess(1, fan.address)).to.equal(true);
+    await expect(v.connect(fan2).purchase(1, { value: 100 })).to.be.revertedWithCustomError(v, 'Inactive');
+    await v.connect(creator).list(ethers.ZeroAddress, 100, 10, 0, H, 'ipfs://y');
+    expect(await v.ephemeral(2)).to.equal(true);
   });
 });

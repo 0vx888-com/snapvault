@@ -7,7 +7,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @title SnapVault - 私密付费内容（阅后即焚）的链上付款与访问记录
-/// @notice 合约只负责：定价、收款分账、记录访问过期时间。
+/// @notice 合约负责定价、收款分账与购买权限。首次打开后的展示倒计时由交付服务负责。
 ///         内容密文存链下/DeWEB，解密密钥由链下服务监听 Purchase 事件后经 TapeSend 投递（TODO）。
 contract SnapVault is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
@@ -16,7 +16,7 @@ contract SnapVault is Ownable, ReentrancyGuard {
         address creator;
         address token;      // address(0) = 原生币 OKB
         uint256 price;
-        uint64 viewSeconds; // 购买后可访问时长
+        uint64 viewSeconds; // 首次打开后的展示时长，由客户端/交付服务执行
         uint32 maxSupply;   // 0 = 不限量
         uint32 sold;
         bool active;
@@ -25,12 +25,14 @@ contract SnapVault is Ownable, ReentrancyGuard {
     }
 
     uint16 public constant MAX_FEE_BPS = 3000;
+    uint64 public constant PURCHASE_ACCESS_SECONDS = 24 hours;
     uint16 public feeBps;
     address public treasury;
     uint256 public nextId = 1;
 
     mapping(uint256 => Content) public contents;
     mapping(uint256 => mapping(address => uint64)) public accessUntil;
+    mapping(uint256 => bool) public ephemeral; // 展示选项，不保证买家不能保存密钥或明文
     mapping(address => mapping(address => uint256)) public balances; // creator => token => amount
 
     event Listed(uint256 indexed id, address indexed creator, address token, uint256 price, uint64 viewSeconds, uint32 maxSupply, bytes32 blobHash, string blobURI);
@@ -38,6 +40,7 @@ contract SnapVault is Ownable, ReentrancyGuard {
     event Purchase(uint256 indexed id, address indexed fan, address indexed creator, address token, uint256 price, uint256 fee, uint64 accessUntil);
     event Withdraw(address indexed creator, address indexed token, uint256 amount);
     event FeeUpdated(uint16 feeBps, address treasury);
+    event DisplayRule(uint256 indexed id, bool ephemeral, uint64 viewSeconds);
 
     error BadParams();
     error NotCreator();
@@ -45,6 +48,8 @@ contract SnapVault is Ownable, ReentrancyGuard {
     error SoldOut();
     error WrongValue();
     error NothingToWithdraw();
+    error AlreadyPurchased();
+    error CreatorCannotPurchase();
 
     constructor(address _treasury, uint16 _feeBps) Ownable(msg.sender) {
         if (_treasury == address(0) || _feeBps > MAX_FEE_BPS) revert BadParams();
@@ -62,10 +67,24 @@ contract SnapVault is Ownable, ReentrancyGuard {
     function list(address token, uint256 price, uint64 viewSeconds, uint32 maxSupply, bytes32 blobHash, string calldata blobURI)
         external returns (uint256 id)
     {
+        return _list(token, price, viewSeconds, maxSupply, blobHash, blobURI, true);
+    }
+
+    function listWithOptions(address token, uint256 price, uint64 viewSeconds, uint32 maxSupply, bytes32 blobHash, string calldata blobURI, bool burn)
+        external returns (uint256 id)
+    {
+        return _list(token, price, viewSeconds, maxSupply, blobHash, blobURI, burn);
+    }
+
+    function _list(address token, uint256 price, uint64 viewSeconds, uint32 maxSupply, bytes32 blobHash, string memory blobURI, bool burn)
+        internal returns (uint256 id)
+    {
         if (price == 0 || viewSeconds == 0 || blobHash == bytes32(0)) revert BadParams();
         id = nextId++;
         contents[id] = Content(msg.sender, token, price, viewSeconds, maxSupply, 0, true, blobHash, blobURI);
+        ephemeral[id] = burn;
         emit Listed(id, msg.sender, token, price, viewSeconds, maxSupply, blobHash, blobURI);
+        emit DisplayRule(id, burn, viewSeconds);
     }
 
     function delist(uint256 id) external {
@@ -74,9 +93,15 @@ contract SnapVault is Ownable, ReentrancyGuard {
         emit Delisted(id);
     }
 
-    function purchase(uint256 id) external payable nonReentrant {
+    function purchase(uint256 id) external payable virtual nonReentrant {
+        _purchase(id);
+    }
+
+    function _purchase(uint256 id) internal {
         Content storage c = contents[id];
+        if (accessUntil[id][msg.sender] != 0) revert AlreadyPurchased();
         if (!c.active) revert Inactive();
+        if (msg.sender == c.creator) revert CreatorCannotPurchase();
         if (c.maxSupply != 0 && c.sold >= c.maxSupply) revert SoldOut();
         uint256 price = c.price;
         if (c.token == address(0)) {
@@ -89,13 +114,14 @@ contract SnapVault is Ownable, ReentrancyGuard {
         c.sold += 1;
         balances[c.creator][c.token] += price - fee;
         balances[treasury][c.token] += fee;
-        uint64 until = uint64(block.timestamp) + c.viewSeconds;
+        // 购买资格与首次打开后的 5/10/30 秒展示是两件事。
+        uint64 until = uint64(block.timestamp) + PURCHASE_ACCESS_SECONDS;
         accessUntil[id][msg.sender] = until;
         emit Purchase(id, msg.sender, c.creator, c.token, price, fee, until);
     }
 
     function hasAccess(uint256 id, address fan) external view returns (bool) {
-        return accessUntil[id][fan] >= block.timestamp;
+        return accessUntil[id][fan] != 0 && accessUntil[id][fan] >= block.timestamp;
     }
 
     function withdraw(address token) external nonReentrant {

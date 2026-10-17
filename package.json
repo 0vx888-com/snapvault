@@ -7,14 +7,43 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "python3 -m http.server 5173 --bind 127.0.0.1 --directory web",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:model": "node --test scripts/ui-model.test.mjs",
+    "test:ui": "node scripts/ui-flow.spec.mjs",
+    "prepare:deployment": "hardhat compile && node scripts/prepare-deployment.js",
+    "deploy:local": "hardhat run scripts/deploy.js",
+    "dev:live": "node server/start.mjs",
+    "test:live-ui": "node scripts/live-ui.spec.mjs",
+    "check:tapesend": "node scripts/check-tapesend.mjs",
+    "test:payment-ui": "node scripts/payment-ui.spec.mjs",
+    "test:delivery-browser": "SNAPVAULT_BROWSER_TEST=1 hardhat test test/Delivery.test.js",
+    "dev:local-market": "hardhat run scripts/local-market.cjs",
+    "test:local-market-ui": "node scripts/local-market-ui.spec.mjs",
+    "dev:wallet": "hardhat run scripts/wallet-local.cjs",
+    "start:wallet-testnet": "node server/wallet-start.mjs",
+    "build:app": "node scripts/build-app.mjs",
+    "build:preview": "node scripts/build-app.mjs --preview",
+    "test:wallet": "hardhat test test/Wallet.test.js",
+    "test:wallet-ui": "node scripts/wallet-ui.spec.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@nomicfoundation/hardhat-network-helpers": "1.1.2",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@openzeppelin/contracts": "^5.6.1",
-    "hardhat": "^2.29.1"
+    "chai": "4.5.0",
+    "ethers": "6.17.0",
+    "hardhat": "^2.29.1",
+    "playwright": "1.62.1",
+    "solc": "0.8.28"
+  },
+  "dependencies": {
+    "@noble/ciphers": "2.4.0",
+    "@noble/curves": "2.4.0",
+    "@noble/hashes": "2.4.0"
   }
 }

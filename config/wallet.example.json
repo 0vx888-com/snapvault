@@ -1,0 +1,10 @@
+{
+  "chainId": 1952,
+  "rpc": "https://testrpc.xlayer.tech/terigon",
+  "vault": "REPLACE_WITH_X_LAYER_TESTNET_SNAPVAULT_DIRECT_ADDRESS",
+  "deploymentBlock": 0,
+  "origins": ["https://REPLACE_WITH_ACTUAL_DEWEB_HOST"],
+  "hosts": ["REPLACE_WITH_API_HOST"],
+  "confirmations": 3,
+  "dataDir": "/data/snapvault"
+}

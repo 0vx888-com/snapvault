@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-16T12:54:30.158Z",
+  "source": "TapeOutProtocol/TapeKit@40994bd65baedbda4df72cb0985031a5f082f606",
+  "sdkEnabledChainIds": [
+    56,
+    8453,
+    196
+  ],
+  "checks": [
+    {
+      "network": "xlayerTestnet",
+      "rpc": "https://testrpc.xlayer.tech/terigon",
+      "chainId": 1952,
+      "block": 43696424,
+      "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+      "hubHasCode": false,
+      "factory": "0x1f09daefa827f02cbb40967cc91b259763760761",
+      "factoryHasCode": false,
+      "implementation": "0x0000000000000000000000000000000000000000",
+      "implementationHash": null
+    },
+    {
+      "network": "xlayer",
+      "rpc": "https://rpc.xlayer.tech",
+      "chainId": 196,
+      "block": 73386231,
+      "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+      "hubHasCode": true,
+      "factory": "0x1f09daefa827f02cbb40967cc91b259763760761",
+      "factoryHasCode": true,
+      "implementation": "0xdcc57797089ebd9f26e686379a4323f353a3f9c6",
+      "implementationHash": "0xf97f9432aefd6f305f610fbe6c789a8f4facfc251fcaf39e06d8c1f2c2881b61"
+    }
+  ],
+  "note": "No code at known testnet addresses does not prove absence at every possible address. No official 1952 deployment was found in the pinned SDK. No transaction broadcast."
+}

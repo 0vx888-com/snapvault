@@ -1,0 +1,14 @@
+{
+  "operator": "0x010699a0E280A4325652f6D26bE2275E23A21506",
+  "chainId": 1952,
+  "purpose": "SnapVault testnet direct-delivery quote signer; never funded",
+  "treasury": "0x1538ac2d29d03615d2336a2227900aab334d9402",
+  "feeBps": 1000,
+  "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+  "address": "0x0cCBD7252303EA920f5Bb9c970d3D2e2782cE900",
+  "transactionHash": "0x747a1865c1cad08d9cca9a1351e9c1e9626daba5fd332f9e922222d505a0b144",
+  "blockNumber": 43802727,
+  "gasUsed": "2175635",
+  "publicTestnet": true,
+  "mainnetSpending": false
+}
