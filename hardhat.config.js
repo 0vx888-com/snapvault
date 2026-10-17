@@ -8,7 +8,7 @@ subtask(TASK_COMPILE_SOLIDITY_GET_SOLC_BUILD).setAction(async ({ solcVersion }, 
   return { compilerPath: require.resolve('solc/soljson.js'), isSolcJs: true, version: solcVersion, longVersion: solc.version() };
 });
 // 私钥只从环境变量读，仓库里不放任何密钥
-const accounts = process.env.DEPLOYER_KEY ? [process.env.DEPLOYER_KEY] : [];
+const accounts = []; // Public transactions are signed only in the browser wallet.
 module.exports = {
   solidity: { version: "0.8.28", settings: { optimizer: { enabled: true, runs: 200 }, evmVersion: 'paris' } },
   networks: {

@@ -1,0 +1,15 @@
+{
+  "chainId": 196,
+  "mainnetEnabled": false,
+  "mainnetAcknowledgement": "",
+  "owner": null,
+  "treasury": null,
+  "operator": null,
+  "senderC": null,
+  "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+  "feeBps": 1000,
+  "confirmations": 6,
+  "approvedDeploymentBudgetWei": null,
+  "maxGasPriceWei": null,
+  "evidence": {"testnetRecord": "testnet-new-acceptance.json", "dewebRecord": "deweb-wallet-proof.json"}
+}

@@ -8,7 +8,7 @@ async function main(){
  const vault=await ethers.deployContract('SnapVaultDirect',[operator.address,1000,operator.address,operator.address]);await vault.waitForDeployment();
  const port=Number(process.env.WALLET_PORT||5185),origin=`http://127.0.0.1:${port}`;
  const dir=process.env.WALLET_DATA_DIR||fs.mkdtempSync(path.join(os.tmpdir(),'snapvault-wallet-'));
- const service=new WalletService({provider:ethers.provider,vault,operator,dir,origins:[origin,'http://127.0.0.1:5186'],confirmations:1});
+ const service=new WalletService({allowLocalKeyFile:true,provider:ethers.provider,vault,operator,dir,origins:[origin,'http://127.0.0.1:5186'],confirmations:1});
  const original=service.login.bind(service);service.login=async(...args)=>{const result=await original(...args);await hre.network.provider.send('hardhat_setBalance',[result.address,'0x56bc75e2d63100000']);return result;};
  const server=walletHttp({service,root:path.resolve(__dirname,'..'),port,rpc:(method,params)=>hre.network.provider.send(method,params)});
  await new Promise(r=>server.listen(port,'127.0.0.1',r));console.log(`WALLET_LOCAL_READY ${origin}/index.html?delivery=wallet`);console.log('Local 31337 only. Wallet login is a real signature. Test balance has no value. Persistent encrypted data:',dir);

@@ -1,0 +1,10 @@
+{
+  "chainId": 196,
+  "operator": "0xb402779Ed008DE2BeF8dA503EBE75fbAe4679309",
+  "senderC": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+  "owner": null,
+  "treasury": null,
+  "funded": false,
+  "uploadedToRailway": false,
+  "purpose": "New independent production service identities; no user wallet secrets; owner/treasury pending user public addresses"
+}

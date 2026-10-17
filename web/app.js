@@ -1,4 +1,4 @@
-import {wallet,connect,disconnect,initWallet,refresh as walletRefresh,publishWallet,purchaseWallet,openWallet,walletAction,setupNetwork} from './wallet.js';
+import {wallet,connect,disconnect,initWallet,refresh as walletRefresh,publishWallet,purchaseWallet,openWallet,walletAction,setupNetwork,withdrawWallet} from './wallet.js';
 import {local,localCall,localRefresh} from './local-delivery.js';
 import { initChat, Friends } from './chat.js';
 import { PEOPLE, identity, setIdentity, profile, profiles, uidOf, saveProfile, follows, toggleFollow,
@@ -7,6 +7,7 @@ const $ = s => document.querySelector(s);
 const b64 = buf => { let s = ''; const a = new Uint8Array(buf); for (let i = 0; i < a.length; i += 8192) s += String.fromCharCode(...a.subarray(i, i + 8192)); return btoa(s); };
 const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 const hex = buf => [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2, '0')).join('');
+let tapeLink=null;const incoming=new URLSearchParams(location.hash.slice(1));if(incoming.has('key')||incoming.has('claim')){history.replaceState(null,'',location.pathname+location.search);if(/^[0-9]+$/.test(incoming.get('id')||'')&&/^0x[0-9a-fA-F]{64}$/.test(incoming.get('key')||'')&&/^0x[0-9a-fA-F]{64}$/.test(incoming.get('claim')||''))tapeLink={id:incoming.get('id'),key:incoming.get('key'),claim:incoming.get('claim')};}
 let feed = 'creators', profileAddress = null, chat, pendingPurchase = null, purchasing = false, viewing = null, viewTask = 0, toastTimer;
 const money = c => `${c.price} ${c.token}`;
 function toast(text) { $('#toast').textContent = text; $('#toast').classList.remove('hidden'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').classList.add('hidden'), 4000); }
@@ -33,7 +34,7 @@ function paidCard(id, who = identity(), variant = 'grid') {
   const label = state === 'creator' ? '预览我的图片' : state === 'expired' ? '展示已结束' : state === 'delivering' ? '付款已确认 · 密钥交付中' : state === 'ready' ? '已购买 · 点击查看' : state === 'viewing' ? '继续查看' : soldout ? '已售罄' : `🔒 ${money(c)} 解锁`;
   const disabled = state === 'delivering' || state === 'expired' || (state === 'locked' && soldout);
   const image = c.thumb && c.showPreview ? `<img src="${c.thumb}" alt="创作者允许的模糊预览" class="ph">` : '<div class="ph placeholder-art"></div>';
-  return `<article class="${variant === 'chat' ? 'paid-chat-card' : 'card content-card'}" data-product-id="${c.id}"><div class="thumb">${image}<div class="lock"><span class="lock-icon">${state === 'expired' ? '⌛' : '🔒'}</span><span>${c.burn ? `打开后展示 ${c.secs} 秒` : '购买后 24 小时内可看'}</span></div></div><div class="meta"><b>${esc(c.title)}</b><button class="creator-link" data-profile="${c.creator}">${p.av} ${esc(p.name)}</button><div class="muted">${c.scope === 'public' ? '公开作品' : '会话专属'} · 已售 ${c.sold || 0}${c.max ? '/' + c.max : ''}</div><button class="${disabled ? 'primary done' : 'primary'}" data-content-action="${state === 'locked' ? 'buy' : 'view'}" data-content-id="${c.id}" ${disabled ? 'disabled' : ''}>${label}</button>${who === c.creator ? `<button class="secondary" data-content-action="share" data-content-id="${c.id}">发送到聊天</button>` : ''}<small class="card-demo">${wallet.enabled ? (wallet.config?.chainId===31337?'本地链 · 免容器交付':'X Layer 测试网 · 免容器交付') : local.enabled ? '本地链 31337 · 测试付款 / 自动交付' : '本地演示 · 不扣款'}</small></div></article>`;
+  return `<article class="${variant === 'chat' ? 'paid-chat-card' : 'card content-card'}" data-product-id="${c.id}"><div class="thumb">${image}<div class="lock"><span class="lock-icon">${state === 'expired' ? '⌛' : '🔒'}</span><span>${c.burn ? `打开后展示 ${c.secs} 秒` : '购买后 24 小时内可看'}</span></div></div><div class="meta"><b>${esc(c.title)}</b><button class="creator-link" data-profile="${c.creator}">${p.av} ${esc(p.name)}</button><div class="muted">${c.scope === 'public' ? '公开作品' : '会话专属'} · 已售 ${c.sold || 0}${c.max ? '/' + c.max : ''}</div><button class="${disabled ? 'primary done' : 'primary'}" data-content-action="${state === 'locked' ? 'buy' : 'view'}" data-content-id="${c.id}" ${disabled ? 'disabled' : ''}>${label}</button>${who === c.creator ? `<button class="secondary" data-content-action="share" data-content-id="${c.id}">发送到聊天</button>` : ''}<small class="card-demo">${wallet.enabled ? (wallet.config?.chainId===31337?'本地链 · 免容器交付':(wallet.config?.mainnet?'X Layer 主网 · 自动交付':'X Layer 测试网 · 免容器交付')) : local.enabled ? '本地链 31337 · 测试付款 / 自动交付' : '本地演示 · 不扣款'}</small></div></article>`;
 }
 function renderProfile() {
   const panel = $('#creator-profile'); panel.classList.toggle('hidden', !profileAddress);
@@ -81,7 +82,7 @@ async function publish(e) {
       const result=await (wallet.enabled?publishWallet:body=>localCall('publish',body))({who:creator,image:b64(await file.arrayBuffer()),meta:{title,price,secs,max,mime:file.type,scope:conv?conv.type:'public',convId:conv?.id||null,audience:conv?[...conv.members]:[],burn:$('#content-burn').checked}});
       if(identity()!==creator)throw Error('身份已变化，上架已提交，请切回原身份查看');
       if(wallet.enabled)await walletRefresh();else await localRefresh(creator);const product=result.product;
-      $('#log').textContent='测试上架成功 #'+product.id+'\n'+product.publishTx+'\n密文由测试服务保存，密钥按链上订单加密交付。未使用真钱。';
+      $('#log').textContent=(wallet.config?.mainnet?'上架成功 #':'测试上架成功 #')+product.id+'\n'+product.publishTx+'\n密文由测试服务保存，密钥按链上订单加密交付。未使用真钱。';
       $('#file').value='';$('#title').value='';
       if(conv){await chat.sendPaidCard(product.id,conv.id);go('chat');}else{feed='latest';document.querySelectorAll('[data-feed]').forEach(b=>b.classList.toggle('on',b.dataset.feed===feed));go('fan');}
       render();toast('已发布 · 本地链测试');return;
@@ -105,12 +106,13 @@ async function publish(e) {
   } catch (error) { $('#log').textContent = '❌ ' + error.message; }
   finally { submit.disabled = false; }
 }
-function openPurchase(id) {
+async function openPurchase(id) {
   const c = content(id); if (!eligible(c)) return toast('当前身份没有购买权限');
   if (c.creator === identity() || order(id)) return view(id).catch(e => toast(e.message));
+  if(wallet.enabled){try{const route=await walletAction('delivery-route');$('#purchase-route').textContent=route.available?'本单付款后由平台 C 自动通过官方 TapeSend 发送查看链接。':route.reason;}catch(e){return toast(e.message);}}else $('#purchase-route').textContent='本地演示交付。';
   pendingPurchase = { id: c.id, buyer: identity() }; $('#purchase-error').textContent = '';
-  $('#purchase-detail').innerHTML = `<h3>${esc(c.title)}</h3><p>创作者：${esc(profile(c.creator).name)}</p><strong class="purchase-price">${money(c)}</strong><p>${c.burn ? `首次打开后展示 ${c.secs} 秒` : '购买后 24 小时内重复查看'}，请在付款后 24 小时内打开。</p><p class="muted">平台费 10%（演示）。买家：${esc(profile(identity()).name)}</p>`;
-  $('#confirm-purchase').disabled = false; $('#confirm-purchase').textContent = wallet.enabled?'钱包确认测试付款':local.enabled?'确认本地测试付款':'模拟付款并解锁'; $('#purchase-dialog').showModal();
+  $('#purchase-detail').innerHTML = `<h3>${esc(c.title)}</h3><p>创作者：${esc(profile(c.creator).name)}</p><strong class="purchase-price">${money(c)}</strong><p>${c.burn ? `首次打开后展示 ${c.secs} 秒` : '购买后 24 小时内重复查看'}，请在付款后 24 小时内打开。</p><p class="muted">平台费 ${wallet.enabled?((wallet.config?.feeBps??1000)/100)+'%':'10%（演示）'}。买家：${esc(profile(identity()).name)}</p>`;
+  $('#confirm-purchase').disabled = false; $('#confirm-purchase').textContent = wallet.enabled?(wallet.config?.mainnet?'钱包确认付款（真实 OKB）':'钱包确认测试付款'):local.enabled?'确认本地测试付款':'模拟付款并解锁'; $('#purchase-dialog').showModal();
 }
 async function confirmPurchase() {
   if (purchasing || !pendingPurchase) return;
@@ -118,9 +120,9 @@ async function confirmPurchase() {
   try {
     if (identity() !== request.buyer) throw new Error('身份已变化，请重新确认订单');
     if(wallet.enabled){await purchaseWallet(request.id);}else if(local.enabled){await localCall('purchase',{who:request.buyer,id:request.id});if(identity()!==request.buyer)throw Error('身份已变化；付款已提交，请切回原身份查看');await localRefresh(request.buyer);}else await purchaseDemo(request.id, request.buyer); $('#purchase-dialog').close(); pendingPurchase = null;
-    toast((wallet.enabled||local.enabled)?'测试链付款已确认，正在自动交付密钥；可查看后点击图片开始计时。':'演示购买成功，点击卡片查看图片；此时才开始倒计时。'); render();
+    toast((wallet.enabled||local.enabled)?(wallet.config?.mainnet?'链上付款已确认，正在自动交付；打开图片后开始计时。':'测试链付款已确认，正在自动交付密钥；可查看后点击图片开始计时。'):'演示购买成功，点击卡片查看图片；此时才开始倒计时。'); render();
   } catch (e) { $('#purchase-error').textContent = e.message; }
-  finally { purchasing = false; $('#confirm-purchase').disabled = false; $('#confirm-purchase').textContent = wallet.enabled?'钱包确认测试付款':local.enabled?'确认本地测试付款':'模拟付款并解锁'; }
+  finally { purchasing = false; $('#confirm-purchase').disabled = false; $('#confirm-purchase').textContent = wallet.enabled?(wallet.config?.mainnet?'钱包确认付款（真实 OKB）':'钱包确认测试付款'):local.enabled?'确认本地测试付款':'模拟付款并解锁'; }
 }
 function closeViewer() {
   viewTask++; if (viewing) { clearInterval(viewing.timer); URL.revokeObjectURL(viewing.url); viewing = null; }
@@ -261,7 +263,14 @@ if(wallet.enabled){
  '本模式使用真实钱包签名登录，聊天与图片通过站内服务同步。普通用户和创作者均无需开通容器。',
  '付费图片需在本地链或 X Layer 测试网确认交易，随后将内容密钥加密给已登录浏览器。当前不开放主网收款。',
  '测试服务会接触消息和内容密钥，不宣称平台无法读取。生产服务、正式 DeWEB 和公共内容存储尚未上线。'][i]||'');
- try{await initWallet();$('#mode').textContent=wallet.config.chainId===31337?'本地链 · 无真钱':'X Layer 测试网';$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';}catch(e){$('#mode').textContent='服务未就绪';toast(e.message);}
- setInterval(()=>walletRefresh().catch(e=>{$('#mode').textContent=e.message;}),2500);
+ try{await initWallet();const mainnet=wallet.config.mainnet;$('#mode').textContent=wallet.config.networkName||(wallet.config.chainId===31337?'本地链 · 无真钱':'X Layer 测试网');$('#wallet-network').textContent='切换'+(mainnet?'主网':'测试网络');$('#token').innerHTML='<option value="OKB">'+(wallet.config.symbol||'测试 OKB')+'</option>';if(mainnet){$('#try-demo').textContent='发布图片 ↗';$('#creator > .sub').textContent='普通钱包发布内容，付款使用 X Layer 主网 OKB。';$('.preview-note span:nth-child(2)').textContent='X Layer 主网：聊天发图免费，付费图片与提现会产生真实 OKB 交易。已有可用容器时优先 TapeSend，无容器走普通交付。';$('#purchase-dialog .demo-notice').textContent='本单使用真实 OKB。请核对金额、合约和当前交付方式；付款、提现均由你在钱包确认。';$('#preview-dialog h2').textContent='SnapVault · X Layer';}$('#wallet-earnings').classList.remove('hidden');$('#delivery-settings').classList.remove('hidden');$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';}catch(e){$('#mode').textContent='服务未就绪';toast(e.message);}
+ setInterval(()=>{if(!document.hidden)walletRefresh().catch(e=>{$('#mode').textContent=e.message;});},10000);
+ window.addEventListener('snapvault:delivery-route',e=>toast(e.detail));
+ $('#save-delivery').onclick=async()=>{try{await walletAction('delivery-settings',{circuits:$('#delivery-circuits').value.trim(),tokenId:$('#delivery-token').value.trim()});const route=await walletAction('delivery-route');$('#delivery-feedback').textContent=route.available?'已核对，付款后通过官方 TapeSend 交付。':route.reason;}catch(e){$('#delivery-feedback').textContent=e.message;}};
+ $('#refresh-earnings').onclick=async()=>{try{const e=await walletAction('earnings');$('#earnings-amount').textContent='可提现 '+e.amount+' '+(wallet.config.symbol||'OKB');}catch(e){$('#earnings-feedback').textContent=e.message;}};
+ $('#withdraw-earnings').onclick=async()=>{try{const tx=await withdrawWallet();$('#earnings-feedback').textContent='提现已确认：'+tx;$('#refresh-earnings').click();}catch(e){$('#earnings-feedback').textContent=e.message;}};
  window.addEventListener('snapvault:identity',()=>{closeViewer();$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';});
 }
+
+// TAP-10 link contains key ONLY in its fragment; never send it over HTTP/storage.
+if(tapeLink&&wallet.enabled){const section=document.createElement('section');section.className='card profile-editor';const title=document.createElement('h3');title.textContent='TapeSend 已购内容';const note=document.createElement('p');note.className='field-note';note.textContent='查看链接请勿转发。点击打开后开始计时，无法阻止截图或保存。';const button=document.createElement('button');button.className='primary';button.textContent='打开已购图片';const status=document.createElement('p');status.className='error';section.append(title,note,button,status);document.querySelector('main').prepend(section);button.onclick=async()=>{button.disabled=true;try{const opened=await (await import('./wallet.js')).call('claim-open',{id:tapeLink.id,claim:tapeLink.claim});const res=await fetch(new URL((wallet.base||'')+opened.uri,location.href));if(!res.ok)throw Error('密文读取失败');const bytes=new Uint8Array(await res.arrayBuffer());if('0x'+hex(await crypto.subtle.digest('SHA-256',bytes))!==opened.hash)throw Error('图片完整性核验失败');const key=await crypto.subtle.importKey('raw',Uint8Array.from(tapeLink.key.slice(2).match(/../g),x=>parseInt(x,16)),'AES-GCM',false,['decrypt']);const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},key,bytes.slice(12));closeViewer();const until=opened.viewUntil||opened.accessUntil,url=URL.createObjectURL(new Blob([plain],{type:opened.mime}));viewing={url,timer:null};$('#view-title').textContent=opened.title;$('#vimg').src=url;$('#wm').textContent='SnapVault · 已购内容';$('#viewer').classList.remove('hidden');const duration=Math.max(1,until-Date.now());viewing.timer=setInterval(()=>{const left=until-Date.now();$('#count').textContent=Math.max(0,Math.ceil(left/1000))+' 秒';$('#prog').style.width=Math.max(0,left/duration*100)+'%';if(left<=0)closeViewer();},200);status.textContent='图片解密成功。';}catch(e){status.textContent=e.message;}finally{button.disabled=false;}};}

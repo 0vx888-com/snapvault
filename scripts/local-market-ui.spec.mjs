@@ -38,7 +38,7 @@ try {
   await cp.locator('[data-feed="creators"]').click(); await cp.locator('#search').fill('Mia');
   check(await cp.locator('.creator-card').count() === 1 && (await cp.locator('.creator-card').innerText()).includes('Mia'), '昵称搜索生效');
   await cp.locator('#search').fill(''); await select(cp, creator); await chat(cp); await openConv(cp, '演示粉丝');
-  await cp.locator('#chat-burn').check(); await cp.locator('#chat-secs').selectOption('30'); await cp.locator('#chat-shot').selectOption('forbid');
+  await cp.locator('#chat-burn').check(); await cp.locator('#chat-secs').selectOption('30'); await cp.locator('.chat-settings summary').click(); await cp.locator('#chat-shot').selectOption('forbid'); await cp.locator('.chat-settings summary').click();
   await cp.locator('#chat-text').fill('保留原有自定义阅后即焚'); await cp.locator('#chat-form button[type="submit"], #chat-form .primary').click();
   await cp.locator('#chat-list').getByText('阅后即焚 · 30 秒', { exact: false }).waitFor();
   check(await cp.locator('#chat-burn').isChecked() && await cp.locator('#chat-secs').inputValue() === '30', '发送后仍保留自定义阅后即焚和时长设置');

@@ -21,3 +21,7 @@ state.enc
 config/mainnet.json
 config/mainnet-operator-public.json
 .snapvault-backups/
+
+*.password
+*.env
+config/runtime-*.json

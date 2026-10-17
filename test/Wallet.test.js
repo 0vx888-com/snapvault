@@ -9,7 +9,7 @@ describe('免容器普通钱包交付',function(){
   [creator,buyer,other]=await ethers.getSigners();operator=ethers.Wallet.fromPhrase('test test test test test test test test test test test junk');
   vault=await ethers.deployContract('SnapVaultDirect',[creator.address,1000,creator.address,operator.address]);
   dir=fs.mkdtempSync(path.join(os.tmpdir(),'sv-wallet-test-'));
-  service=new WalletService({provider:ethers.provider,vault,operator,dir,origins:[origin],confirmations:1});
+  service=new WalletService({allowLocalKeyFile:true,provider:ethers.provider,vault,operator,dir,origins:[origin],confirmations:1});
  });
  afterEach(()=>fs.rmSync(dir,{recursive:true,force:true}));
  async function login(signer){const pair=crypto.generateKeyPairSync('rsa',{modulusLength:2048}),publicKey=pair.publicKey.export({format:'jwk'});const q=await service.challenge({address:signer.address,publicKey},origin),signature=await signer.signMessage(q.message),s=await service.login({nonce:q.nonce,signature},origin);return {...s,pair,q,signature};}
@@ -43,7 +43,7 @@ describe('免容器普通钱包交付',function(){
   await expect(service.handle('open',{id:1},c.token,origin)).to.be.rejectedWith('尚未确认');
   const result=await service.handle('open',{id:1},b.token,origin),key=crypto.privateDecrypt({key:b.pair.privateKey,padding:crypto.constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(result.encryptedKey,'base64'));
   expect(key.toString('hex')).to.equal(service.state.assets[asset.hash].key);expect(result).not.to.have.property('key');
-  const replacement=new WalletService({provider:ethers.provider,vault,operator,dir,origins:[origin],confirmations:1});service=replacement;const newDevice=await login(buyer);const reopened=await service.handle('open',{id:1},newDevice.token,origin);expect(reopened.viewUntil).to.equal(result.viewUntil);
+  const replacement=new WalletService({allowLocalKeyFile:true,provider:ethers.provider,vault,operator,dir,origins:[origin],confirmations:1});service=replacement;const newDevice=await login(buyer);const reopened=await service.handle('open',{id:1},newDevice.token,origin);expect(reopened.viewUntil).to.equal(result.viewUntil);
   service.state.opens['1:'+buyer.address.toLowerCase()]=Date.now()-1;service.save();await expect(service.handle('open',{id:1},newDevice.token,origin)).to.be.rejectedWith('结束展示');
   const disk=fs.readFileSync(path.join(dir,'state.enc'),'utf8');expect(disk).not.to.include(key.toString('hex'));expect(disk).not.to.include('免容器图片');
  });

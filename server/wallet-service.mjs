@@ -3,6 +3,9 @@
 import {randomBytes,createCipheriv,createDecipheriv,createHash,publicEncrypt,createPublicKey,constants} from 'node:crypto';
 import {mkdirSync,existsSync,readFileSync,writeFileSync,renameSync} from 'node:fs';
 import {resolve} from 'node:path';
+import {networkPolicy} from './network-policy.mjs';
+import {secretKey,BackupManager} from './backup.mjs';
+import {WalletTapeSend} from './wallet-tapesend.mjs';
 import {getAddress,verifyMessage,sha256,parseEther,formatEther,ZeroAddress,keccak256,Signature} from 'ethers';
 
 const digest=x=>createHash('sha256').update(x).digest('hex');
@@ -16,18 +19,29 @@ function checkedImage(image,mime){
  if(real!==mime)fail('图片文件内容与格式不符');return bytes;
 }
 export class WalletService {
- constructor({provider,vault,operator,dir,origins,confirmations=1,deploymentBlock=0}){
-  Object.assign(this,{provider,vault,operator,dir,origins,confirmations,deploymentBlock});mkdirSync(dir,{recursive:true,mode:0o700});
-  const keyFile=resolve(dir,'master.key');if(!existsSync(keyFile))writeFileSync(keyFile,randomBytes(32),{mode:0o600,flag:'wx'});
-  this.master=readFileSync(keyFile);this.file=resolve(dir,'state.enc');this.state=existsSync(this.file)?JSON.parse(this.unseal(JSON.parse(readFileSync(this.file,'utf8')))): {version:1,profiles:{},friends:[],convs:[],messages:[],assets:{},products:{},opens:{},chain:null};
-  this.nonces=new Map();this.sessions=new Map();this.pending=Promise.resolve();this.limits=new Map();
+ constructor({provider,vault,operator,dir,origins,confirmations=1,deploymentBlock=0,chainId=31337,mainnetEnabled=false,mainnetAcknowledgement,owner,treasury,allowLocalKeyFile=false,masterKey=process.env.SNAPVAULT_MASTER_KEY,backupKey=process.env.SNAPVAULT_BACKUP_KEY,backupDir,backupPutURL,tapeSend,sender,allowStateMigration=false}){
+  const policy=networkPolicy({chainId,mainnetEnabled,mainnetAcknowledgement,owner,treasury,operator:operator.address,confirmations,tapeSend},{local:allowLocalKeyFile});
+  Object.assign(this,{provider,vault,operator,dir,origins,confirmations,deploymentBlock,chainId,policy,tapeSend,owner,treasury});mkdirSync(dir,{recursive:true,mode:0o700});
+  if(masterKey)this.master=secretKey(masterKey,'SNAPVAULT_MASTER_KEY');
+  else if(allowLocalKeyFile&&chainId===31337){const keyFile=resolve(dir,'master.key');if(!existsSync(keyFile))writeFileSync(keyFile,randomBytes(32),{mode:0o600,flag:'wx'});this.master=readFileSync(keyFile);}
+  else throw Error('SNAPVAULT_MASTER_KEY is required; never generate a replacement for existing production data');
+  this.file=resolve(dir,'state.enc');this.state=existsSync(this.file)?JSON.parse(this.unseal(JSON.parse(readFileSync(this.file,'utf8')))): {version:2,profiles:{},friends:[],convs:[],messages:[],assets:{},products:{},opens:{}};
+  this.identity=chainId+':'+vault.target.toLowerCase();if(this.state.identity&&this.state.identity!==this.identity)throw Error('Data directory belongs to another chain/contract');if(!this.state.identity&&this.state.version===1&&!allowStateMigration)throw Error('Legacy data requires explicit backup and migration');this.state.identity=this.identity;this.state.version=2;
+  this.state.orderIndex ||= {cursor:deploymentBlock-1,anchor:null,orders:{}};this.state.tapeJobs ||= {};
+  this.nonces=new Map();this.sessions=new Map();this.pending=Promise.resolve();this.limits=new Map();this.scanTask=null;this.scanAt=0;
+  if(backupKey){const key=secretKey(backupKey,'SNAPVAULT_BACKUP_KEY');if(key.equals(this.master))throw Error('Backup key must differ from master key');this.backup=new BackupManager({dir:backupDir||resolve(dir,'backups'),key,putURL:backupPutURL});}
+  if(policy.mainnet&&(!this.backup||!backupPutURL))throw Error('Mainnet requires encrypted OFF-SITE backups');
+  if(tapeSend?.enabled&&sender)this.transport=new WalletTapeSend({service:this,config:tapeSend,sender});
+  if(policy.mainnet&&!this.transport)throw Error('Mainnet TapeSend sender C must be configured separately');
+  this.save();
  }
+ async flushBackup(){if(this.backup)return this.backup.write({file:this.file,master:this.master,identity:this.identity});if(this.policy.mainnet)throw Error('Mainnet backup unavailable');}
  seal(data,key=this.master){const iv=randomBytes(12),c=createCipheriv('aes-256-gcm',key,iv),ct=Buffer.concat([c.update(data),c.final()]);return {iv:iv.toString('base64'),ct:ct.toString('base64'),tag:c.getAuthTag().toString('base64')};}
  unseal(e,key=this.master){const d=createDecipheriv('aes-256-gcm',key,Buffer.from(e.iv,'base64'));d.setAuthTag(Buffer.from(e.tag,'base64'));return Buffer.concat([d.update(Buffer.from(e.ct,'base64')),d.final()]);}
  save(){writeFileSync(this.file+'.tmp',JSON.stringify(this.seal(Buffer.from(JSON.stringify(this.state)))),{mode:0o600});renameSync(this.file+'.tmp',this.file);}
  serial(fn){const task=this.pending.catch(()=>{}).then(fn);this.pending=task;return task;}
  limit(key,max=90){const now=Date.now(),old=this.limits.get(key),v=old&&old.until>now?old:{n:0,until:now+60000};if(++v.n>max)fail('操作太频繁，请稍后再试',429);this.limits.set(key,v);if(this.limits.size>10000)for(const[k,r]of this.limits)if(r.until<now)this.limits.delete(k);}
- async config(){const chainId=Number((await this.provider.getNetwork()).chainId);if(![31337,1952].includes(chainId))fail('当前版本仅允许本地链和 X Layer 测试网，主网收款已禁用',503);return {chainId,vault:this.vault.target,abi:this.vault.interface.fragments.map(f=>f.format('full')),containerRequired:false,freeChat:true,storage:'encrypted-server-files',confirmations:this.confirmations,local:chainId===31337};}
+ async config(){if(Number((await this.provider.getNetwork()).chainId)!==this.chainId)fail('RPC/config chain mismatch',503);if(!this.feeInfo||Date.now()-this.feeInfo.at>30000)this.feeInfo={at:Date.now(),bps:Number(await this.vault.feeBps())};return {feeBps:this.feeInfo.bps,chainId:this.chainId,vault:this.vault.target,abi:this.vault.interface.fragments.map(f=>f.format('full')),containerRequired:false,freeChat:true,storage:'encrypted-server-files',confirmations:this.confirmations,...this.policy,tapeSendEnabled:!!this.transport,tapeSendReason:this.chainId===1952?'测试网尚无官方 Hub，使用普通交付':!this.transport?'本地未配置 TapeSend':'有可用容器时优先 TapeSend，无容器时普通交付',refundPolicy:'owner-funded-full-refund'};}
  auth(token,origin){const s=this.sessions.get(token);if(!s||s.until<Date.now()||s.origin!==origin)fail('请连接钱包并签名登录',401);return s;}
  async challenge(b,origin){
   if(!this.origins.includes(origin))fail('网站来源不允许',403);this.limit('login:'+b.address,12);const account=address(b.address),{chainId,vault}=await this.config();
@@ -48,22 +62,46 @@ export class WalletService {
  visible(p,who){return p.scope==='public'||p.creator===who||p.audience.includes(who);}
  async product(id,who){const p=this.state.products[id];if(!p||!this.visible(p,who))fail('无权访问此作品',403);const c=await this.vault.contents(id);if(c.creator.toLowerCase()!==p.creator||c.blobHash!==p.hash||c.blobURI!==p.uri)fail('作品链上记录不一致',409);return {p,c};}
  async stateFor(who){
+  await this.syncOrders();
   const products=[],orders=[];for(const[id,p]of Object.entries(this.state.products)){
    if(!this.visible(p,who))continue;const {c}=await this.product(id,who);products.push({...p,id,sold:Number(c.sold)});
-   if(!who)continue;const access=Number(await this.vault.accessUntil(id,who))*1000;if(access)orders.push({contentId:id,buyer:who,creator:p.creator,accessUntil:access,viewUntil:this.state.opens[`${id}:${who}`]||null,delivery:await this.confirmed(id,who)?'ready':'pending'});
+   if(!who)continue;const access=Number(await this.vault.accessUntil(id,who))*1000;if(access)orders.push({contentId:id,buyer:who,creator:p.creator,accessUntil:access,viewUntil:this.state.opens[`${id}:${who}`]||null,delivery:await this.confirmed(id,who)&&((this.state.orderIndex.orders[id+':'+who]?.route!=='tapesend')||this.state.tapeJobs[this.jobRef(id,who)]?.status==='sent')?'ready':'pending',route:this.state.orderIndex.orders[id+':'+who]?.route||'ordinary',deliveryTx:this.state.tapeJobs[this.jobRef(id,who)]?.tx||null});
   }
   const convs=this.state.convs.filter(c=>c.members.includes(who));
   return {contents:products,orders,profiles:this.state.profiles,friends:this.state.friends.filter(f=>[f.from,f.to].includes(who)),convs,messages:this.state.messages.filter(m=>convs.some(c=>c.id===m.conv)).map(({payload,...m})=>({...m,viewUntil:m.opens?.[who]||null,expired:!!(m.burn&&m.opens?.[who]&&m.opens[who]<=Date.now())})),chainId:(await this.config()).chainId};
  }
- async confirmed(id,who){
-  const latest=await this.provider.getBlockNumber(),end=latest-this.confirmations+1;for(let from=this.deploymentBlock;from<=end;from+=100){const logs=await this.vault.queryFilter(this.vault.filters.DirectRequested(id,who),from,Math.min(from+99,end));if(logs.length)return true;}return false;
+ jobRef(id,buyer){return keccak256(Buffer.from(`${this.chainId}:${this.vault.target.toLowerCase()}:${id}:${buyer.toLowerCase()}`));}
+ async syncOrders(force=false){if(this.scanTask)return this.scanTask;if(!force&&Date.now()-this.scanAt<5000)return;this.scanTask=this._syncOrders().then(()=>{this.scanAt=Date.now()}).finally(()=>{this.scanTask=null});return this.scanTask;}
+ async _syncOrders(){
+  const index=this.state.orderIndex,tip=Number(BigInt(await this.provider.send('eth_blockNumber',[])));let end=tip-this.confirmations+1;if(this.policy.mainnet){const safe=await this.provider.getBlock('safe');if(!safe)throw Error('Safe block unavailable; no confirmed delivery');end=Math.min(end,safe.number);}
+  if(index.cursor>tip){index.cursor=this.deploymentBlock-1;index.anchor=null;index.orders={};this.save();}
+  if(index.cursor>end)return;
+  if(index.anchor&&index.cursor>=this.deploymentBlock){const block=await this.provider.getBlock(index.cursor);if(!block||block.hash!==index.anchor){index.cursor=this.deploymentBlock-1;index.anchor=null;index.orders={};}}
+  const topics=['DirectRequested','DeliveryRequested','DeliveryRefunded'].map(name=>{try{return this.vault.interface.getEvent(name)?.topicHash}catch{return null}}).filter(Boolean);if(!topics.length)return;
+  let pages=0,changed=false;for(let from=Math.max(this.deploymentBlock,index.cursor+1);from<=end&&pages<10;from+=100,pages++){
+   const to=Math.min(from+99,end),logs=await this.provider.getLogs({address:this.vault.target,topics:[topics],fromBlock:from,toBlock:to});
+   for(const log of logs){const e=this.vault.interface.parseLog(log),id=e.args.id.toString(),buyer=(e.args.buyer||e.args.fan).toLowerCase(),key=id+':'+buyer;
+    if(e.name==='DeliveryRefunded'){index.orders[key]={...(index.orders[key]||{}),refunded:true};const job=this.state.tapeJobs[this.jobRef(id,buyer)];if(job){job.status='refunded';delete job.raw;}continue;}
+    index.orders[key]={id,buyer,route:e.name==='DeliveryRequested'?'tapesend':'ordinary',blockNumber:log.blockNumber,transactionHash:log.transactionHash,refunded:false};
+    if(e.name==='DeliveryRequested'){const ref=this.jobRef(id,buyer);this.state.tapeJobs[ref] ||= {id,buyer,circuits:e.args.circuits,tokenId:e.args.tokenId.toString(),key:e.args.key,endpoint:e.args.endpoint,status:'queued',purchaseTx:log.transactionHash};}
+   }
+   index.cursor=to;index.anchor=(await this.provider.getBlock(to)).hash;changed=true;
+  }if(changed)this.save();
  }
+ async confirmed(id,who){await this.syncOrders(this.policy.local&&!this.state.orderIndex.orders[id+':'+who.toLowerCase()]);const order=this.state.orderIndex.orders[id+':'+who.toLowerCase()];return !!order&&!order.refunded;}
+ async scanDeliveries(){await this.syncOrders(true);if(!this.transport)return;return this.serial(async()=>{for(const job of Object.values(this.state.tapeJobs)){if(['sent','refunded','failed'].includes(job.status))continue;try{await this.transport.deliver(job);if(job.error){job.error=null;this.save();}}catch{job.error='交付暂不可用，请联系平台核对或退款';this.save();}}});}
+ async claimOpen(b){if(!/^0x[0-9a-fA-F]{64}$/.test(b.claim||''))fail('查看凭证无效',403);const hash=sha256(Buffer.from(b.claim.slice(2),'hex')),job=Object.values(this.state.tapeJobs).find(j=>j.id===String(b.id)&&j.claimHash===hash);if(!job||job.status!=='sent')fail('查看凭证无效或交付未确认',403);if(!await this.confirmed(job.id,job.buyer))fail('订单未确认或已退款',403);const {p}=await this.product(job.id,job.buyer);const accessUntil=Number(await this.vault.accessUntil(job.id,job.buyer))*1000;if(accessUntil<=Date.now())fail('购买资格已过期',410);const ref=job.id+':'+job.buyer;let viewUntil=null;if(p.burn){viewUntil=this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();await this.flushBackup();}}return {uri:'/api/wallet/blob/'+p.hash.slice(2),hash:p.hash,mime:p.mime,title:p.title,accessUntil,viewUntil};}
+ async deliveryRoute(who){if(this.chainId===1952)return {available:false,reason:'测试网尚无官方 TapeSend Hub，本单使用普通交付'};if(!this.transport)return {available:false,reason:'当前本地环境未配置 TapeSend，本单使用普通交付'};return this.transport.recipient(who,this.state.profiles[who]?.delivery);}
  async handle(action,b,token,origin){
   await this.config();if(action==='challenge')return this.challenge(b,origin);if(action==='login')return this.login(b,origin);
-  if(action==='state'&&!token)return this.stateFor(null);
+  if(action==='state'&&!token){this.limit('anonymous:global',600);return this.stateFor(null);}
+  if(action==='claim-open')return this.serial(()=>this.claimOpen(b));
   const s=this.auth(token,origin),who=s.account;this.limit(who);
   if(action==='logout'){this.sessions.delete(token);return {ok:true};}
   if(action==='state')return this.stateFor(who);
+  if(action==='delivery-settings'){let binding=null;if(b.circuits){const circuits=address(b.circuits),tokenId=String(b.tokenId);if(!/^[1-9][0-9]{0,76}$/.test(tokenId))fail('容器电路编号无效');binding={circuits,tokenId};}this.state.profiles[who]={...this.state.profiles[who],delivery:binding};this.save();return {ok:true};}
+  if(action==='delivery-route'){return this.deliveryRoute(who);}
+  if(action==='earnings')return {amount:formatEther(await this.vault.balances(who,ZeroAddress)),token:ZeroAddress};
   if(action==='profile'){const name=String(b.name||'').trim(),bio=String(b.bio||'').trim();if(!name||name.length>20||bio.length>100)fail('昵称或简介长度无效');this.state.profiles[who]={...this.state.profiles[who],name,bio,creator:true};this.save();return {ok:true};}
   if(action==='friend'){
    const to=address(b.to);if(to===who||!this.state.profiles[to])fail('对方需要先登录 SnapVault');
@@ -95,7 +133,7 @@ export class WalletService {
    this.limit('upload:'+who,8);if(Object.keys(this.state.assets).length>=300)fail('测试存储已满');const bytes=checkedImage(b.image,b.mime),m=b.meta||{},secs=Number(m.secs),max=Number(m.max),price=parseEther(String(m.price||'0'));
    if(!m.title?.trim()||m.title.length>40||price<=0n||price>parseEther('100')||!Number.isInteger(secs)||secs<3||secs>3600||!Number.isInteger(max)||max<0||max>1000000||typeof m.burn!=='boolean')fail('作品参数无效');
    const conv=m.convId?this.member(m.convId,who):null,key=randomBytes(32),iv=randomBytes(12),cipher=createCipheriv('aes-256-gcm',key,iv),ct=Buffer.concat([cipher.update(bytes),cipher.final()]),blob=Buffer.concat([iv,ct,cipher.getAuthTag()]),hash=sha256(blob);
-   const asset={creator:who,key:key.toString('hex'),blob:blob.toString('base64'),mime:b.mime,hash,uri:'svblob:'+hash.slice(2),meta:{title:m.title.trim(),price:formatEther(price),token:'测试 OKB',secs,max,burn:m.burn,scope:conv?.type||'public',convId:conv?.id||null,audience:conv?[...conv.members]:[],createdAt:Date.now()}};
+   const asset={creator:who,key:key.toString('hex'),blob:blob.toString('base64'),mime:b.mime,hash,uri:'svblob:'+hash.slice(2),meta:{title:m.title.trim(),price:formatEther(price),token:this.policy.symbol,secs,max,burn:m.burn,scope:conv?.type||'public',convId:conv?.id||null,audience:conv?[...conv.members]:[],createdAt:Date.now()}};
    this.state.assets[hash]=asset;this.save();return {hash,uri:asset.uri,price:price.toString(),secs,max,burn:m.burn};
   }
   if(action==='register')return this.serial(async()=>{
@@ -105,14 +143,16 @@ export class WalletService {
   if(action==='quote'){
    const {p,c}=await this.product(String(b.id),who);if(p.creator===who)fail('不能购买自己的作品');if(!c.active)fail('作品未上架');if(c.maxSupply&&c.sold>=c.maxSupply)fail('已售罄');
    if(await this.vault.accessUntil(b.id,who)!==0n)fail('已有订单，请直接查看');const a=this.state.assets[c.blobHash];if(!a?.key||sha256(Buffer.from(a.blob,'base64'))!==c.blobHash)fail('内容交付尚未就绪，不发起付款',503);
+   if((await this.vault.deliveryOperator()).toLowerCase()!==this.operator.address.toLowerCase())fail('Operator 已轮换，服务需更新配置',503);await this.flushBackup();const route=await this.deliveryRoute(who);if(route.available)return this.transport.quote(String(b.id),who,route);
    const deadline=Number((await this.provider.getBlock('latest')).timestamp)+120,d=await this.vault.directDigest(b.id,who,s.keyHash,deadline),signature=Signature.from(this.operator.signingKey.sign(d)).serialized;
-   return {id:String(b.id),keyHash:s.keyHash,deadline,signature,price:c.price.toString()};
+   return {method:'purchaseDirect',route:'ordinary',notice:route.reason,id:String(b.id),keyHash:s.keyHash,deadline,signature,price:c.price.toString()};
   }
   if(action==='open')return this.serial(async()=>{
    const {p,c}=await this.product(String(b.id),who),preview=p.creator===who,accessUntil=preview?Date.now()+86400000:Number(await this.vault.accessUntil(b.id,who))*1000;
    if(!preview&&(!accessUntil||accessUntil<=Date.now()||!await this.confirmed(b.id,who)))fail('订单尚未确认或已过期',403);
+   if(!preview&&this.state.orderIndex.orders[String(b.id)+':'+who]?.route==='tapesend'&&this.state.tapeJobs[this.jobRef(b.id,who)]?.status!=='sent')fail('TapeSend 正在自动交付，请稍后查看官方收件箱',409);
    const ref=`${b.id}:${who}`;let viewUntil=null;if(p.burn){viewUntil=preview?Date.now()+p.secs*1000:this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();}}
-   const a=this.state.assets[c.blobHash],encryptedKey=publicEncrypt({key:createPublicKey({key:s.publicKey,format:'jwk'}),padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(a.key,'hex')).toString('base64');
+   await this.flushBackup();const a=this.state.assets[c.blobHash],encryptedKey=publicEncrypt({key:createPublicKey({key:s.publicKey,format:'jwk'}),padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(a.key,'hex')).toString('base64');
    return {encryptedKey,hash:p.hash,mime:a.mime,uri:'/api/wallet/blob/'+p.hash.slice(2),accessUntil,viewUntil,preview};
   });
   fail('接口不存在',404);

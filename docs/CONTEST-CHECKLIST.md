@@ -1,3 +1,5 @@
+> 2026-10-18 更新：最新发布/交付架构以 [DEPLOYMENT.md](DEPLOYMENT.md) 为准。TapeSend 已要求接入正式交付，普通无容器交付为明确提示的回退；本文旧预算与“可选”描述只作历史记录，不是当前上线证明。
+
 # 参赛要求核对与部署阶段
 
 核验日期：2026-10-16。官方来源：https://web3.okx.com/zh-hans/xlayer/build-x-series （TapeOut Accelerate，页面“参赛要求”“常见问题”“活动条款”）。规则如更新，应重新核对。

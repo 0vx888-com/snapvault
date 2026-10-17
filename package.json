@@ -26,7 +26,12 @@
     "build:app": "node scripts/build-app.mjs",
     "build:preview": "node scripts/build-app.mjs --preview",
     "test:wallet": "hardhat test test/Wallet.test.js",
-    "test:wallet-ui": "node scripts/wallet-ui.spec.mjs"
+    "test:wallet-ui": "node scripts/wallet-ui.spec.mjs",
+    "test:all": "node scripts/test-all.mjs",
+    "dev:mainnet-deploy": "node scripts/serve-mainnet-deploy.mjs",
+    "dev:deweb-publish": "node scripts/serve-deweb-publish.mjs",
+    "prepare:service-wallets": "node scripts/prepare-service-wallets.mjs",
+    "backup:wallet": "node scripts/backup-state.mjs"
   },
   "keywords": [],
   "author": "",

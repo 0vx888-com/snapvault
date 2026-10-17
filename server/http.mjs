@@ -3,7 +3,7 @@ import {createServer} from 'node:http';
 import {readFileSync} from 'node:fs';
 import {resolve,extname,sep} from 'node:path';
 import {paymentProbe} from './payment-probe.mjs';
-export function createIntegrationServer({root,port,service=null,config=null,setupReason='交付服务未配置',local=null}) {
+export function createIntegrationServer({root,port,service=null,config=null,setupReason='交付服务未配置',local=null,paymentHandler=paymentProbe,readonlyRPC=null}) {
  const origin=`http://127.0.0.1:${port}`;
 const json=(res,status,obj)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'});res.end(JSON.stringify(obj));};
 async function body(req){let size=0,chunks=[];for await(const chunk of req){size+=chunk.length;if(size>3_000_000)throw new Error('请求超过 3 MB');chunks.push(chunk);}return JSON.parse(Buffer.concat(chunks).toString()||'{}');}
@@ -21,13 +21,14 @@ const server=createServer(async(req,res)=>{
    const payload=await body(req),calls=Array.isArray(payload)?payload:[payload];
    const allowed=new Set(['eth_chainId','eth_blockNumber','eth_getBlockByNumber','eth_getBlockByHash','eth_getTransactionCount','eth_getBalance','eth_gasPrice','eth_maxPriorityFeePerGas','eth_estimateGas','eth_call','eth_getCode','eth_getTransactionReceipt','eth_getTransactionByHash','eth_getLogs','eth_feeHistory']);
    if(!calls.length||calls.length>20||calls.some(c=>!c||c.jsonrpc!=='2.0'||!allowed.has(c.method)||!Array.isArray(c.params)))throw new Error('只读测试网 RPC：不允许签名或广播方法');
+   if(readonlyRPC){json(res,200,await readonlyRPC(payload));return;}
    const upstream=await fetch('https://testrpc.xlayer.tech/terigon',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:AbortSignal.timeout(15000)});
    if(!upstream.ok)throw new Error('官方测试网 RPC 返回 '+upstream.status);
    json(res,200,await upstream.json());return;
   }
   if(url.pathname==='/api/payment-test'){
    if(req.method!=='GET'&&req.method!=='POST')throw new Error('不支持此请求');
-   const b=req.method==='POST'?await body(req):{};json(res,200,await paymentProbe(root,b.transactionHash));return;
+   const b=req.method==='POST'?await body(req):{};json(res,200,await paymentHandler(root,b.transactionHash));return;
   }
   if(url.pathname==='/api/status'){
    let ready=false,reason=setupReason; if(service){try{await service.ready();ready=true;reason='本地官方协议联调已就绪';}catch(error){reason=error.message;}}

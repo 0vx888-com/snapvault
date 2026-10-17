@@ -6,7 +6,7 @@ if(new URL(base).hostname!=='127.0.0.1')throw Error('This test only permits loop
 const offset=100+Math.floor(Date.now()/1000)%100000;
 const {chromium}=await import(root+'/node_modules/playwright/index.mjs');
 const {HDNodeWallet,JsonRpcProvider,NonceManager,getBytes}=await import(root+'/node_modules/ethers/lib.esm/index.js');
-const provider=new JsonRpcProvider('http://127.0.0.1:5185/rpc',31337,{staticNetwork:true});
+const provider=new JsonRpcProvider(new URL('/rpc',base).href,31337,{staticNetwork:true});
 const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'}),errors=[],checks=[];
 const check=(v,m)=>{assert.ok(v,m);checks.push(m);console.log('PASS',m);};
 const image={name:'sample.png',mimeType:'image/png',buffer:await readFile(root+'/screenshots/sample.png')};
@@ -63,5 +63,7 @@ try{
  check(await b.page.locator('#chat-list').getByText('🔥 已焚毁',{exact:true}).isVisible(),'群聊已查看成员到期关闭，其他成员独立查看');
  const leak=await b.page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith('key:')||k.startsWith('blob:')||k.startsWith('chat:id:')));check(leak.length===0,'真实模式没有将内容密钥、密文和私聊身份密钥写进 localStorage');
  await a.page.locator('nav [data-tab=fan]').click();await a.page.screenshot({path:'/private/tmp/snapvault-wallet-square.png',fullPage:true});await b.page.screenshot({path:'/private/tmp/snapvault-wallet-chat.png',fullPage:true});await b.page.setViewportSize({width:390,height:844});check(await b.page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'手机布局无横向溢出');await b.page.screenshot({path:'/private/tmp/snapvault-wallet-mobile.png',fullPage:true});
- assert.deepEqual(errors,[]);await writeFile('/private/tmp/snapvault-wallet-e2e-result.json',JSON.stringify({status:'PASS',checks,browserErrors:errors},null,2));console.log('ALL PASS',checks.length);
+ assert.deepEqual(errors,[]);await a.page.locator('nav [data-tab="creator"]').click();await a.page.locator('#withdraw-earnings').click();await a.page.locator('#earnings-feedback').filter({hasText:'提现已确认'}).waitFor();check((await api(a.page,'earnings')).amount==='0.0','创作者通过现有前端真实本地链提现，到账后余额清零');
+ await writeFile('/private/tmp/snapvault-wallet-e2e-result.json',JSON.stringify({status:'PASS',checks,browserErrors:errors},null,2));
+ console.log('ALL PASS',checks.length);
 }catch(e){console.error(e);for(const ctx of browser.contexts())for(const p of ctx.pages()){console.log((await p.locator('body').innerText()).slice(-3500));}process.exitCode=1;}finally{await browser.close();await provider.destroy();}

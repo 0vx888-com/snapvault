@@ -2,7 +2,7 @@ import {wallet,call,walletAction} from './wallet.js';
 import {identity,profile,uidOf,escapeHtml as esc} from './store.js';
 export async function initWalletChat(root,hooks){
  let cur=sessionStorage.getItem('sv:wallet-conv'),me=identity(),revision=0,friendOpen=false,newOpen=false;
- const drafts=new Map(),opened=new Map();
+ const drafts=new Map(),opened=new Map(),deadlines=new Map();
  const tell=e=>hooks.notify?.(e.message||String(e));
  const label=c=>c.type==='dm'?profile(c.members.find(a=>a!==identity())||identity()).name:c.name;
  const convs=()=>wallet.data.convs||[],messages=()=>wallet.data.messages||[];
@@ -24,10 +24,10 @@ export async function initWalletChat(root,hooks){
  function payloadHTML(p){return `${p.text?`<div>${esc(p.text)}</div>`:''}${p.image?`<img class="chat-photo" src="data:${p.image.mime};base64,${p.image.data}" alt="聊天图片">`:''}`;}
  async function openMessage(id){
   const who=identity(),data=await call('message-open',{id});if(identity()!==who)return;
-  opened.set(id,data);await render();
+  opened.set(id,data);if(data.viewUntil)deadlines.set(id,data.viewUntil);await render();
  }
  async function render(){
-  const rev=++revision,who=identity();if(me!==who){me=who;cur=null;opened.clear();drafts.clear();root.querySelector('#xc-frbox').classList.add('hidden');root.querySelector('#xc-newbox').classList.add('hidden');friendOpen=newOpen=false;}
+  const rev=++revision,who=identity();if(me!==who){me=who;cur=null;opened.clear();deadlines.clear();drafts.clear();root.querySelector('#xc-frbox').classList.add('hidden');root.querySelector('#xc-newbox').classList.add('hidden');friendOpen=newOpen=false;}
   root.querySelector('#wallet-chat-me').textContent=who?`${profile(who).name} · ${who.slice(0,6)}…${who.slice(-4)}`:'连接钱包后开始聊天';
   root.querySelector('#xc-list').innerHTML=convs().map(c=>{const m=messages().filter(m=>m.conv===c.id).at(-1);return `<div class="xc-item ${c.id===cur?'on':''}" data-conv="${c.id}"><div class="xc-av">${c.type==='dm'?'💬':'👥'}</div><div class="xc-mid"><div class="xc-row"><b>${esc(label(c))}</b></div><div class="xc-prev">${m?(m.kind==='paid-image'?'付费图片':m.burn?'阅后即焚消息':'新消息 / 图片'):'打个招呼吧'}</div></div></div>`;}).join('');
   const pane=root.querySelector('#xc-pane'),c=convs().find(c=>c.id===cur);
@@ -38,7 +38,7 @@ export async function initWalletChat(root,hooks){
   for(const m of messages().filter(m=>m.conv===c.id)){
    const mine=m.from===who;if(m.kind==='paid-image'){rows.push(`<div class="msg ${mine?'me':''} paid-message">${hooks.renderPaidCard(m.contentId,who,'chat')}</div>`);continue;}
    let p=opened.get(m.id),body='';if(p?.viewUntil&&p.viewUntil<=Date.now()){opened.delete(m.id);p=null;}
-   if(m.burn){if(mine)body=`<i class="muted">阅后即焚 · ${m.secs} 秒</i>`;else if(m.expired||(m.viewUntil&&m.viewUntil<=Date.now()))body='<i class="muted">🔥 已焚毁</i>';else if(p)body=payloadHTML(p)+`<small class="count">${Math.max(0,Math.ceil((p.viewUntil-Date.now())/1000))} 秒后结束展示</small>`;else body=`<button class="tapburn" data-message-open="${m.id}">🔥 ${m.viewUntil?'继续查看':'点击查看'}（${m.secs} 秒）</button>`;}
+   if(m.burn){if(mine)body=`<i class="muted">阅后即焚 · ${m.secs} 秒</i>`;else if(m.expired||(deadlines.has(m.id)&&deadlines.get(m.id)<=Date.now())||(m.viewUntil&&m.viewUntil<=Date.now()))body='<i class="muted">🔥 已焚毁</i>';else if(p)body=payloadHTML(p)+`<small class="count">${Math.max(0,Math.ceil((p.viewUntil-Date.now())/1000))} 秒后结束展示</small>`;else body=`<button class="tapburn" data-message-open="${m.id}">🔥 ${m.viewUntil?'继续查看':'点击查看'}（${m.secs} 秒）</button>`;}
    else {if(!p){try{p=await call('message-open',{id:m.id});if(identity()!==who)return;opened.set(m.id,p);}catch{p={text:'消息暂时不可用，稍后重试'};}}body=payloadHTML(p);}
    rows.push(`<div class="msg ${mine?'me':''}">${c.type==='group'?`<small class="muted">${esc(profile(m.from).name)}</small>`:''}<div class="bubble ${m.shot==='forbid'?'noshot':''}">${body}</div><small class="muted">${new Date(m.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})}</small></div>`);
   }

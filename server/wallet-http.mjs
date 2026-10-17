@@ -1,21 +1,23 @@
 import {createServer} from 'node:http';
 import {readFileSync} from 'node:fs';
 import {resolve,extname,sep} from 'node:path';
+import {isIP} from 'node:net';
+import {APP_FILES} from '../scripts/app-files.mjs';
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml'};
-export function walletHttp({service,root,port,rpc=null,allowedHosts=[]}){
+export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedProxy=false}){
  const origin=`http://127.0.0.1:${port}`;
  const server=createServer(async(req,res)=>{
   const suppliedOrigin=req.headers.origin;
   const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'};
   const send=(code,d)=>{res.writeHead(code,{...headers,'Content-Type':'application/json'});res.end(JSON.stringify(d));};
   try{
-   if(req.method==='GET'&&req.url==='/healthz'&&(req.headers.host==='healthcheck.railway.app'||req.headers.host===`127.0.0.1:${port}`||allowedHosts.includes(req.headers.host))){const config=await service.config();return send(200,{status:'ok',chainId:config.chainId,testnetOnly:true});}
+   if(req.method==='GET'&&req.url==='/healthz'&&(req.headers.host==='healthcheck.railway.app'||req.headers.host===`127.0.0.1:${port}`||allowedHosts.includes(req.headers.host))){const config=await service.config();return send(200,{status:'ok',chainId:config.chainId,testnetOnly:config.chainId!==196});}
    if(req.headers.host!==`127.0.0.1:${port}`&&!allowedHosts.includes(req.headers.host))throw Object.assign(Error('Host 不允许'),{status:403});
    if(suppliedOrigin&&!service.origins.includes(suppliedOrigin))throw Object.assign(Error('网站来源不允许'),{status:403});
    if(suppliedOrigin){headers['Access-Control-Allow-Origin']=suppliedOrigin;headers['Access-Control-Allow-Headers']='Content-Type, Authorization';headers['Access-Control-Allow-Methods']='GET, POST, OPTIONS';}
    if(req.method==='OPTIONS'){res.writeHead(204,headers);return res.end();}
    const url=new URL(req.url,origin);
-   if(url.pathname==='/app-config.json'&&req.method==='GET')return send(200,{mode:'wallet',apiBase:''});
+   if(url.pathname==='/app-config.json'&&req.method==='GET'){const c=await service.config();return send(200,{mode:'wallet',apiBase:'',allowedChainIds:[c.chainId],allowMainnet:c.chainId===196&&c.mainnet===true});}
    if(url.pathname==='/api/wallet/config'&&req.method==='GET')return send(200,await service.config());
    if(url.pathname.startsWith('/api/wallet/blob/')&&req.method==='GET'){
     const hash=url.pathname.split('/').at(-1);if(!/^[a-f0-9]{64}$/.test(hash))throw Error('密文路径无效');res.writeHead(200,{...headers,'Content-Type':'application/octet-stream'});return res.end(service.blob(hash));
@@ -34,11 +36,14 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[]}){
      const results=[];for(const c of calls){if(!allowed.has(c.method))throw Error('不允许此 RPC 方法');try{results.push({jsonrpc:'2.0',id:c.id,result:await rpc(c.method,c.params||[])});}catch(e){results.push({jsonrpc:'2.0',id:c.id,error:{code:-32000,message:e.message}});}}
      return send(200,Array.isArray(b)?results:results[0]);
     }
+    const forwarded=trustedProxy?String(req.headers['x-forwarded-for']||'').split(',').at(-1)?.trim():null;const client=isIP(forwarded||'')?forwarded:req.socket.remoteAddress;
+    if(!req.headers.authorization&&['/api/wallet/state','/api/wallet/challenge','/api/wallet/login','/api/wallet/claim-open'].includes(url.pathname))service.limit('public:'+client,120);
     const action=url.pathname.slice('/api/wallet/'.length);if(!url.pathname.startsWith('/api/wallet/'))return send(404,{error:'接口不存在'});
     return send(200,await service.handle(action,b,req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin));
    }
    if(req.method!=='GET')return send(405,{error:'仅支持 GET'});
-   const web=resolve(root,'web'),file=resolve(web,'.'+decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname));if(!file.startsWith(web+sep))throw Error('路径无效');
+   const requested=decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname);if(!APP_FILES.includes(requested.slice(1))&&!['/app-config.json','/deweb-manifest.json'].includes(requested))return send(404,{error:'页面不存在'});
+   const web=resolve(root,'web'),file=resolve(web,'.'+requested);if(!file.startsWith(web+sep))throw Error('路径无效');
    res.writeHead(200,{...headers,'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(readFileSync(file));
   }catch(e){send(e.status||400,{error:e.message});}
  });

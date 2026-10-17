@@ -4,7 +4,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const root = path.join(__dirname, '..');
 const artifact = JSON.parse(fs.readFileSync(path.join(root, 'artifacts/contracts/SnapVault.sol/SnapVault.json')));
-const bundle = { contractName: artifact.contractName, compiler: require('solc').version(), evmVersion: 'paris', optimizerRuns: 200, constructor: { treasury: 'nonzero address', feeBps: 'integer 0..3000; default 1000 = 10%' }, sourceSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'contracts/SnapVault.sol'))).digest('hex'), abi: artifact.abi, bytecode: artifact.bytecode };
+const bundle = { contractName: artifact.contractName, compiler: require('solc').version(), evmVersion: 'paris', optimizerRuns: 200, constructor: { treasury: 'nonzero address', feeBps: 'integer 0..1500; default 1000 = 10%' }, sourceSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'contracts/SnapVault.sol'))).digest('hex'), abi: artifact.abi, bytecode: artifact.bytecode };
 fs.mkdirSync(path.join(root, 'deployment'), { recursive: true });
 fs.writeFileSync(path.join(root, 'deployment/SnapVault.json'), JSON.stringify(bundle, null, 2) + '\n');
 fs.writeFileSync(path.join(root, 'web/abi.js'), 'export const SNAPVAULT_ABI = ' + JSON.stringify(artifact.abi) + ';\n');
@@ -17,3 +17,7 @@ fs.copyFileSync(path.join(root,'deployment/SnapVaultCheckout.json'),path.join(ro
 
 const probe = JSON.parse(fs.readFileSync(path.join(root, 'artifacts/contracts/SnapVaultPaymentProbe.sol/SnapVaultPaymentProbe.json')));
 for (const location of ['deployment','web/deployment']) fs.writeFileSync(path.join(root,location,'SnapVaultPaymentProbe.json'),JSON.stringify({abi:probe.abi,bytecode:probe.bytecode},null,2)+'\n');
+
+// Canonical browser-deployment artifact: the delivery-authorized Direct contract.
+const direct=JSON.parse(fs.readFileSync(path.join(root,'artifacts/contracts/SnapVaultDirect.sol/SnapVaultDirect.json')));
+fs.writeFileSync(path.join(root,'deployment/SnapVaultDirect.json'),JSON.stringify({contractName:'SnapVaultDirect',abi:direct.abi,bytecode:direct.bytecode,artifactHash:require('ethers').keccak256(direct.bytecode)},null,2)+'\n');

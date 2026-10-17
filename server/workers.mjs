@@ -1,0 +1,1 @@
+export function startWorkers(service,{scanMs=5000,backupMs=300000,onError=()=>{}}={}){const scan=setInterval(()=>service.scanDeliveries().catch(()=>onError('delivery')),scanMs),backup=setInterval(()=>service.flushBackup().catch(()=>onError('backup')),backupMs);scan.unref();backup.unref();return ()=>{clearInterval(scan);clearInterval(backup)};}

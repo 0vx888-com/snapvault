@@ -11,7 +11,8 @@ interface IDeliveryHub {
 /// A quote attests readiness, not guaranteed delivery. No automatic refunds or audit.
 contract SnapVaultCheckout is SnapVault {
     address public immutable deliveryHub;
-    address public immutable deliveryOperator;
+    address public deliveryOperator;
+    event OperatorUpdated(address indexed previousOperator, address indexed newOperator);
     bytes32 public constant QUOTE_TYPEHASH = keccak256("DeliveryQuote(uint256 id,address buyer,address circuits,uint256 tokenId,bytes32 key,uint256 deadline)");
     mapping(uint256 => mapping(address => bytes32)) public recipient;
     event DeliveryRequested(uint256 indexed id, address indexed buyer, address circuits, uint256 tokenId, bytes32 endpoint, bytes32 key);
@@ -21,6 +22,12 @@ contract SnapVaultCheckout is SnapVault {
         if (hub_ == address(0) || operator_ == address(0)) revert BadParams();
         deliveryHub = hub_; deliveryOperator = operator_;
     }
+    function setOperator(address newOperator) external onlyOwner {
+        if (newOperator == address(0)) revert BadParams();
+        emit OperatorUpdated(deliveryOperator, newOperator);
+        deliveryOperator = newOperator;
+    }
+
     // Legacy checkout cannot bypass delivery authorization.
     function purchase(uint256) external payable override { revert DeliveryNotReady(); }
     function quoteDigest(uint256 id, address buyer, address circuits, uint256 tokenId, bytes32 key, uint256 deadline) public view returns (bytes32) {

@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "environment": "isolated local chains and browser contexts; no user wallets or mainnet transactions",
+  "results": [
+    {
+      "name": "all contracts/services + both official Hub browser flows",
+      "status": "PASS"
+    },
+    {
+      "name": "browser order model",
+      "status": "PASS"
+    },
+    {
+      "name": "existing demo social UI",
+      "status": "PASS"
+    },
+    {
+      "name": "wallet social UI + paid image + withdrawal",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy automatic delivery marketplace UI",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy wallet readiness and isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "payment probe no-wallet safety (isolated RPC fixture)",
+      "status": "PASS"
+    }
+  ],
+  "publicTestnetV2Verified": false,
+  "mainnetVerified": false,
+  "mainnetSpending": false,
+  "coreTestsPassed": 43,
+  "orderModelTestsPassed": 7,
+  "walletUIChecksPassed": 17,
+  "syntaxFilesChecked": 51,
+  "diffCheck": "PASS",
+  "credentialLiteralScan": "PASS",
+  "browserErrors": []
+}

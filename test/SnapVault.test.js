@@ -9,6 +9,7 @@ describe("SnapVault", () => {
     [owner, treasury, creator, fan, fan2] = await ethers.getSigners();
     v = await ethers.deployContract("SnapVault", [treasury.address, 1000]);
     usdt = await ethers.deployContract("MockUSDT");
+    await v.setTokenAllowed(await usdt.getAddress(), true);
     await usdt.mint(fan.address, 1_000_000_000n);
   });
 
@@ -51,7 +52,7 @@ describe("SnapVault", () => {
   });
 
   it("手续费上限与权限", async () => {
-    await expect(v.setFee(3001, treasury.address)).to.be.revertedWithCustomError(v, "BadParams");
+    await expect(v.setFee(1501, treasury.address)).to.be.revertedWithCustomError(v, "BadParams");
     await expect(v.connect(fan).setFee(500, fan.address)).to.be.reverted;
     await v.setFee(500, treasury.address);
     expect(await v.feeBps()).to.equal(500);

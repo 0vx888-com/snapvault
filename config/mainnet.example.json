@@ -1,0 +1,31 @@
+{
+  "chainId": 196,
+  "mainnetEnabled": false,
+  "mainnetAcknowledgement": "",
+  "rpc": "https://rpc.xlayer.tech",
+  "vault": null,
+  "vaultBytecodeHash": null,
+  "deploymentBlock": null,
+  "owner": null,
+  "treasury": null,
+  "operator": null,
+  "confirmations": 6,
+  "origins": [],
+  "hosts": [],
+  "dewebURL": null,
+  "testnetEvidenceSHA256": null,
+  "dataDir": "/data/snapvault-mainnet-v2",
+  "backupDir": "/data/snapvault-mainnet-v2/backups",
+  "tapeSend": {
+    "enabled": true,
+    "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+    "implementation": "0xdcc57797089ebd9f26e686379a4323f353a3f9c6",
+    "implementationHash": "0xf97f9432aefd6f305f610fbe6c789a8f4facfc251fcaf39e06d8c1f2c2881b61",
+    "circuits": null,
+    "tokenId": null,
+    "publicBaseURL": null,
+    "maxGasPriceWei": "1000000000",
+    "maxGasPerMessage": 1500000,
+    "maxDailyWei": "10000000000000000"
+  }
+}

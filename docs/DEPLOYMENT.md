@@ -1,44 +1,48 @@
-> 最新联调状态见 [TESTNET-HANDOFF.md](TESTNET-HANDOFF.md)。下文部署脚本为早期基础 SnapVault；真实交付购买需使用新的 SnapVaultCheckout，不能用基础合约绕开交付凭证。
+# 发布与钱包签名（2026-10-18）
 
-# 合约与部署
+主网部署目标只能是 `SnapVaultDirect`。`scripts/deploy.js` 仅允许隔离本地链 31337；公共链不能使用 DEPLOYER_KEY。不要使用基础 SnapVault 的 purchase 作为生产收款入口。
 
-## 已经完成
+当前 GitHub 分支：`codex-wip`。已有 Railway 入口与 1952 合约是旧测试版，不能当成本轮新合约验收或主网发布证据。
 
-- 合约上架、原生币/ERC20 购买、限量、分账、提现、重复购买拦截与独立购买期限。
-- 首次打开展示时间与付款后 24 小时购买资格分离；可选择限时或可重复展示。
-- 9 项本地合约测试；本地临时链部署脚本演练。
-- `npm run prepare:deployment` 输出 ABI/字节码和源码 SHA-256；`web/abi.js` 同步生成。
+## 发布顺序，不可跳步
 
-没有向 X Layer 广播交易，没有正式合约地址。`npm run deploy:local` 的 chainId 31337 和地址仅属于一次性本地临时链。
+1. 跑 `npm run test:all`。全部本地合约、服务、浏览器测试成功。
+2. 浏览器钱包部署**新的加固合约**到 X Layer 1952。A 创作者上架，B 买、看图，A 提现，保存回执和浏览器解密证据。官方 1952 无 Hub，TapeSend 必须先在本地官方 Hub 验证。
+3. 单独核算网站电路、容器与文件上传预算；用户确认后，通过 `serve-deweb-publish.mjs` 只发布 `dist/wallet`，按链上哈希和实际字节核验，保存 `deployment/deweb-wallet-proof.json`。不能传 wallet-local、实验页面或 HTTP 重定向壳。
+4. 新 owner/treasury 公开地址由用户提供；禁止旧测试地址。主网 operator 与发送 C 使用新生成的**不同**钱包，C 只存少量 gas。开 C 与测试买家容器前再报预算并由用户确认。
+5. `node scripts/serve-mainnet-deploy.mjs PRIVATE_PUBLIC_SETUP.json`：验证新测试网回执及真实 DeWEB 文件证据后，打开 localhost:5199，用户在浏览器钱包预览、签名部署。服务器不持有部署私钥、不代签广播。会核对创建字节码、chainId、sender、owner、treasury、operator、15% 上限和回执。
+6. 后端切到独立的主网数据目录与明确的 196 配置。主网默认关闭；必须有真实部署区块、字节码哈希、精确 DeWEB Origin、独立 C、Hub 钉住哈希和异地加密备份。先迁移并恢复演练，不覆盖旧测试卷。
+7. 用户确认很小金额后：主网买、看、提现；C 自动发送一次真实 TAP-10 消息，使用官方收件箱查看并保存 Sent 回执、收件箱截图。证据未齐不得称正式上线/参赛集成完成。
 
-## 真实部署前准备
+## 本机入口
 
-需要部署钱包、该网络 gas 币、平台收款地址、确定平台费率。私钥仅配置在本人本机环境变量中，不发给聊天、平台用户或写入 Git。
+- `node scripts/serve-testnet-deploy.mjs PRIVATE_TEST_SETUP_DIR` → 5188，仅新测试网合约。
+- `node scripts/build-app.mjs --api https://API_ORIGIN --allow-mainnet` → `dist/wallet`。显式配置允许 1952/196，运行时仍核对后端主网开关。
+- `node scripts/serve-deweb-publish.mjs REVIEWED_WEBSITE_SETUP.json` → 5200。网站容器须已开通，核对持有人、标准名字、合约实现与预算；每笔用户签名，续传顺序按回执保存。
+- `node scripts/serve-mainnet-deploy.mjs REVIEWED_MAINNET_SETUP.json` → 5199。见 config/*.example.json；模板故意缺失真实地址、预算与证据，不能直接运行。
 
-当前配置保留 X Layer 主网 chainId 196 和测试网 chainId 1952。执行前应从 X Layer 官方文档重新核对 RPC、chainId 与测试币入口；部署脚本会核验实际 RPC chainId。测试网部署不代表 TapeSend 在同一测试网可用。
+创建服务钥匙：`node scripts/prepare-service-wallets.mjs NEW_PRIVATE_DIR_OUTSIDE_REPO`。只生成新钱包和加密存储/备份钥匙，不充值、不部署、不导入用户私钥。输出仅公开地址，私密文件 0600，目录 0700。
 
-```bash
-npm ci --ignore-scripts
-npm test
-npm run prepare:deployment
-# 在本机安全配置 DEPLOYER_KEY 和 TREASURY 后执行；示例不包含任何私钥。
-FEE_BPS=1000 CONFIRM_LIVE_DEPLOY=xlayerTestnet npx hardhat run scripts/deploy.js --network xlayerTestnet
-```
+## 备份与恢复
 
-`CONFIRM_LIVE_DEPLOY` 必须与网络名称一致。主网名称为 `xlayer`，必须在测试网验收后再决定。RPC 可用 `XLAYER_TEST_RPC` 或 `XLAYER_RPC` 覆盖。
+- `SNAPVAULT_MASTER_KEY`：32 字节 hex，来自服务环境变量；生产禁止自动生成替代 key。既有卷先用 `migrate-master.mjs EXISTING_DIR PRIVATE_OUTPUT_ENV` 验证并导出旧 key，不删除旧文件；不打印或提交 key。
+- `SNAPVAULT_BACKUP_KEY`：独立 32 字节 hex。快照将 state.enc 与 master 一起 AES-256-GCM 加密；备份钥匙必须单独离线保存。
+- `SNAPVAULT_BACKUP_PUT_URL`：支持 HTTPS PUT 的异地存储预签名地址，仅放服务变量，不进 Git/前端/日志。主网缺少它就拒绝启动；本地卷内副本不等于灾难恢复。建议独立账号、对象版本控制与受限权限。签名 URL 过期会导致新付款凭证停止。
+- 上传待售内容在签付款凭证前完成异地备份；首次付费查看截止时间也会备份。普通消息定时备份（默认 5 分钟），因此灾难恢复有非零 RPO；未承诺零丢失。
+- `node scripts/backup-state.mjs create DATA_DIR PRIVATE_BACKUP`、`verify BACKUP`、`restore BACKUP NEW_PRIVATE_DIR`。恢复检查 GCM、JSON 和 chain/vault identity，拒绝覆盖现有状态；恢复 master 写到私人 env 文件。先在隔离目录恢复测试，再切服务。
 
-脚本保存 `deployments/<network>.json`，包含合约地址、交易、链 ID、owner、treasury、费率与 gasUsed，不包含私钥。收款地址 treasury 不等于合约 owner；初始 owner 是部署账户。归属 TapeOut 容器需要先核实该容器能调用 Ownable 管理方法，再单独验证/执行 transferOwnership，不能用 treasury 参数替代。
+## 退款与权限
 
-## 上链不等于整套产品上线
+`setOperator` 仅 owner，旧签名立即失效。`Ownable2Step` 的新 owner 必须 acceptOwnership。默认只收 OKB，其他标准 ERC20 需 owner 明确加入白名单；撤销白名单不冻结已有收入提现。上限 1500 bps。
 
-当前前端明确固定为本地演示，没有“填个合约地址就自动真实付款”的开关。接真实链前还需要：
+`refundDelivery(id,buyer)` 由 owner 裁决线下交付故障，并额外提供**全额**退款资金（OKB msg.value；ERC20 需 owner approve）。不侵占创作者/treasury 已有记账，已提现也可退。退款后撤销站内购买资格，不允许重复退款或对同一买家重售同一 ID。这不是链上自动证明“没交付”，不能收回已拿到的密钥。
 
-1. 钱包身份认证与网络核验、真实发布交易、确认收据后的订单索引；ERC20 地址和 decimals 需要核实，不能直接信任 UI 代币名称。
-2. 真实密文存储、固定 pinning、可用网关和下载失败重试；先上传并校验密文，确认可交付后才允许上架收款。
-3. 交付服务监听 Purchase，经最终确认后验证买家身份、作品/会话权限与期限，幂等重试、记录投递状态。异常订单需要退款或申诉规则；现有合约没有自动退款逻辑。
-4. TapeSend 发送方容器/持有者的可执行签名方案，接收方 endpoint、公钥与收件适配。当前合约不调用 TapeSend，不声称仅靠 ERC721 approve 就能代发。
-5. 首次打开在服务端原子记录，跨设备共用固定截止时间。本地 UI 截止时间可被修改，不能作为线上授权依据。密钥交付后仍无法阻止保存与拍屏。
-6. 私聊/群聊作品的买家授权：现有公开合约不限制谁能购买，需要在真实收费前增加绑定买家与作品 ID 的签名授权或白名单；否则无法兑现私有范围与付款后交付。
-7. 持久数据库、创作者与订单索引、密钥隔离保管、密钥轮换、备份和运营处置。这些都未由当前静态演示实现。
+## 当前仍需人工完成
 
-前端先部署普通静态预览即可体验；DeWEB 部署还需容器、上传工具和目标网关实测。没有完成这些接入之前，保留“本地演示 · 不扣款”标识。
+用户自己的主网 owner/treasury 地址；新公共测试网的 A/B 签名；真实异地备份账户和恢复演练；DeWEB/C/买家容器预算确认；主网小额最终钱包签名；官方收件箱截图。它们不能由本地测试报告代替。
+
+## 新测试网验收记录
+
+部署页生成 `deployment/xlayerTestnet-direct-v2.json`，不手工改成旧合约地址。完成两个真实测试账户的购买/解密/提现后，再写独立验收 JSON：`chainId:1952`、`vault`、`artifactHash`、`creator`、`buyer`、`purchaseTx`、`withdrawTx`、`originalSHA256`、`decryptedSHA256`。后两个必须是原图与浏览器实际解密字节的 SHA-256，不能只填“已通过”。在主网 setup.evidence.testnetRecord 指定此文件名，dewebRecord 指向真实 DeWEB proof。
+
+主网门禁会重新读链验证 v2 创建交易完整字节码、部署者、部署回执与运行时代码哈希，以及购买/提现事件；DeWEB 证据必须对应当前 dist/wallet 完整文件。记录本身不代替链上核对。旧实验付款页的无钱包安全回归使用隔离 RPC fixture，明确不计入公共测试网验收。

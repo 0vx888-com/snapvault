@@ -10,10 +10,13 @@ dist
 screenshots
 docs
 test
-scripts
-vendor
 cache
 artifacts
 *.keystore
 *.log
 .railway
+._*
+.DS_Store
+*.password
+*.env
+*.backup.enc
