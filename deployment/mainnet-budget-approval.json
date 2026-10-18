@@ -1,0 +1,28 @@
+{
+  "recordedDate": "2026-10-18",
+  "chainId": 196,
+  "status": "budget-accepted-awaiting-owner-address",
+  "userApprovedReserveOKB": "0.30",
+  "userApprovedReserveWei": "300000000000000000",
+  "scope": [
+    "One DeWEB website container and dist/wallet publication",
+    "One independent TapeSend sender C container",
+    "One demo recipient container",
+    "SnapVaultDirect deployment and small end-to-end acceptance gas"
+  ],
+  "budgetSource": "deployment/deweb-tapesend-mainnet-budget.json",
+  "owner": null,
+  "treasury": null,
+  "ownerEqualsTreasury": true,
+  "ownerMustBeNewUserControlledWallet": true,
+  "automaticSpendingAuthorized": false,
+  "showPurposeAmountAndGasBeforeSpending": true,
+  "humanWalletConfirmationRequired": true,
+  "mainnetTransactionsSent": false,
+  "excludes": [
+    "Backend and independent backup hosting charges",
+    "Content purchase principal",
+    "Exchange withdrawal and bridge fees"
+  ],
+  "userInstruction": "0.30 OKB预算可以；owner和treasury用同一个新钱包；需要钱包确认直接叫我；DeWEB和TapeSend都要跑通。"
+}

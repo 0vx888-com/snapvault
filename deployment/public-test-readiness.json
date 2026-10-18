@@ -43,7 +43,9 @@
     "chunks": 60,
     "budgetReport": "deployment/deweb-tapesend-mainnet-budget.json",
     "suggestedTotalReserveOKB": "0.30",
-    "budgetDocument": "docs/DEWEB-RELEASE-BUDGET.md"
+    "budgetDocument": "docs/DEWEB-RELEASE-BUDGET.md",
+    "budgetApproved": true,
+    "budgetApprovalRecord": "deployment/mainnet-budget-approval.json"
   },
   "checks": {
     "hostingAndDeliveryTestsPassed": 6,
@@ -51,7 +53,7 @@
     "coreTestsPassed": 43
   },
   "moneySpent": false,
-  "next": "Testnet v2 accepted; read-only 196 DeWEB + mandatory TapeSend budget prepared. Await user budget review and new mainnet owner/treasury public addresses. No mainnet transactions or new paid resources. Off-site encrypted backup/restore, production v2 rollout and mainnet evidence remain pending.",
+  "next": "User accepted 0.30 OKB reserve, owner=treasury in a new user-controlled wallet. Await public address, then prepare exact transactions and request human confirmation before actual spending. DeWEB/TapeSend mainnet evidence, encrypted off-site backup/restore and production v2 rollout remain pending.",
   "hardenedV2": {
     "publicTestnetDeployed": true,
     "mainnetDeployed": false,
