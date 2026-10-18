@@ -1,0 +1,22 @@
+// Dedicated loopback acceptance runtime. Never mainnet; never signs user transactions.
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {Wallet,Contract,JsonRpcProvider,keccak256} from 'ethers';
+import {WalletService} from '../server/wallet-service.mjs';
+import {walletHttp} from '../server/wallet-http.mjs';
+import {startWorkers} from '../server/workers.mjs';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const record=JSON.parse(readFileSync(resolve(root,'deployment/xlayerTestnet-direct-v2.json')));
+const artifact=JSON.parse(readFileSync(resolve(root,'artifacts/contracts/SnapVaultDirect.sol/SnapVaultDirect.json')));
+if(record.version!==2||record.chainId!==1952||record.artifactHash!==keccak256(artifact.bytecode))throw Error('Current new testnet deployment required');
+if(!process.env.RELAYER_KEYSTORE||!process.env.RELAYER_PASSWORD||!process.env.SNAPVAULT_MASTER_KEY||!process.env.SNAPVAULT_TEST_DATA_DIR)throw Error('Explicit test signer, environment master key and isolated data directory required');
+const provider=new JsonRpcProvider('https://testrpc.xlayer.tech/terigon',1952,{staticNetwork:true,batchMaxCount:1});
+if(Number(BigInt(await provider.send('eth_chainId',[])))!==1952||keccak256(await provider.getCode(record.address))!==record.vaultBytecodeHash)throw Error('Testnet RPC/code mismatch');
+const operator=await Wallet.fromEncryptedJson(readFileSync(process.env.RELAYER_KEYSTORE,'utf8'),process.env.RELAYER_PASSWORD),vault=new Contract(record.address,artifact.abi,provider);
+if(operator.address.toLowerCase()!==record.operator.toLowerCase()||(await vault.deliveryOperator()).toLowerCase()!==record.operator.toLowerCase()||Number(await vault.MAX_FEE_BPS())!==1500)throw Error('Hardened operator/contract mismatch');
+const port=5191,origin='http://127.0.0.1:'+port;
+const service=new WalletService({provider,vault,operator,dir:process.env.SNAPVAULT_TEST_DATA_DIR,origins:[origin],chainId:1952,confirmations:3,deploymentBlock:record.blockNumber,masterKey:process.env.SNAPVAULT_MASTER_KEY});
+await service.syncOrders(true);const stopWorkers=startWorkers(service);
+const server=walletHttp({service,root,port});server.listen(port,'127.0.0.1',()=>console.log('New v2 X Layer 1952 acceptance ready: '+origin+' — test OKB only; ordinary delivery; no official Hub on 1952'));
+const stop=()=>{stopWorkers();server.close(()=>{provider.destroy();process.exit(0)});setTimeout(()=>process.exit(1),5000).unref()};process.once('SIGTERM',stop);process.once('SIGINT',stop);

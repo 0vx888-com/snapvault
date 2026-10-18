@@ -32,3 +32,15 @@
 8. 预算内极小金额真实购买、查看、提现；由 C 自动真实 TapeSend 一次，保存 Sent 回执并在官方收件箱截图。完成后才发布可用范围与参赛证据。
 
 部署命令、环境变量、退款与备份恢复步骤见 [DEPLOYMENT.md](DEPLOYMENT.md)。公开服务身份见 `deployment/mainnet-service-identities.json`，私密文件不进 Git、不进入前端或 DeWEB。
+
+
+## 2026-10-18 后续实测：新测试网双钱包验收通过
+
+- 新合约 `0x9186c06E97D104ad8e6794b3C2ef2B71b259A356`，X Layer 1952，MAX_FEE_BPS = 1500。A 上架 #1；B 实际 purchaseDirect 付款、RSA 密钥交付及图片解密可见，60 秒到期关闭，刷新不重置。
+- A 提现 0.00001 测试 OKB。Withdraw 事件、钱包余额差（扣除 gas）、可提现余额归零均已核验。
+- 浏览器导出同一商品的作者预览原始 PNG，162730 字节，与上传原图逐字节一致、SHA-256 相同。明文哈希来自作者预览导出；B 的实际付款查看、到期及刷新有单独界面证据，没有重置 B 的查看期限。
+- 完整记录：`deployment/xlayerTestnet-direct-v2-acceptance.json`。部署、上架、购买、提现 gas 合计 0.000125226779858712 测试 OKB，未花主网 OKB。完整浏览器截图留在私人临时目录，不把其他标签页等个人浏览信息上传 GitHub。
+- B 付款时钱包曾提示“异常收款地址／非合约交互”。用户继续确认后，已按官方 RPC 核对目标代码哈希及真实交易 chainId/to/from/value、purchaseDirect calldata，均正确。提示原因尚未确认，不能称已修复。
+- 1952 无官方 Hub，本次公共测试网验收是普通交付；正式 TapeSend 仍需后续主网 C／买家容器及官方收件箱证据。本地官方 Hub 测试不能代替主网实测。
+- 本机入口 127.0.0.1:5191。`scripts/serve-testnet-acceptance.mjs` 明确限制当前 v2 的 1952 合约、独立加密目录、环境 master key，不导入 A/B 用户私钥。
+- Railway 仍是旧测试版；DeWEB 未发布。后续先准备异地备份与恢复演练、公开后端 v2 切换、主网 owner/treasury 公开地址、DeWEB/C/买家容器及发布预算。任何真钱步骤先给预算，再由用户确认。

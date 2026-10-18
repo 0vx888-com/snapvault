@@ -1,6 +1,6 @@
 {
   "updatedAt": "2026-10-18",
-  "status": "v1-testnet-running-v2-local-hardening-awaits-new-testnet-acceptance",
+  "status": "v2-testnet-acceptance-passed-deweb-and-mainnet-pending",
   "frontend": "approved lime/charcoal tape identity",
   "railway": {
     "projectId": "b8f93089-284c-4212-86f8-8590bf8385a2",
@@ -48,12 +48,17 @@
     "coreTestsPassed": 43
   },
   "moneySpent": false,
-  "next": "New v2 testnet wallet acceptance; off-site backup setup; explicit budget approval for DeWEB/C/buyer containers and mainnet; see docs/HARDENING-HANDOFF.md. No mainnet spending authorized or performed.",
+  "next": "New v2 1952 deployment, A listing, B purchase/view/expiry and A withdrawal verified. Browser plaintext matches original. Prepare encrypted off-site backup, public backend v2 rollout and DeWEB budget before mainnet; no mainnet spending authorized.",
   "hardenedV2": {
-    "publicTestnetDeployed": false,
+    "publicTestnetDeployed": true,
     "mainnetDeployed": false,
     "railwayUpdated": false,
     "localReport": "deployment/hardening-all-tests.json",
-    "handoff": "docs/HARDENING-HANDOFF.md"
+    "handoff": "docs/HARDENING-HANDOFF.md",
+    "publicTestnetVerified": true,
+    "testnetAddress": "0x9186c06E97D104ad8e6794b3C2ef2B71b259A356",
+    "testnetDeploymentTx": "0x9d6c6521bbf2e50d785aa4a2fa3e478a150364792447f738cbc3f1c1020f8d5f",
+    "acceptanceProgress": "deployment/testnet-v2-acceptance-progress.json",
+    "acceptanceRecord": "deployment/xlayerTestnet-direct-v2-acceptance.json"
   }
 }
