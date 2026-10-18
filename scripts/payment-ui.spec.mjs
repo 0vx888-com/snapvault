@@ -1,6 +1,7 @@
+import {launchOptions,tempPath} from './browser-test-config.cjs';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
-const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+const browser=await chromium.launch(launchOptions());
 const context=await browser.newContext({viewport:{width:1280,height:950}}),p=await context.newPage(),errors=[];context.on('page',page=>page.on('pageerror',e=>errors.push(e.message)));p.on('pageerror',e=>errors.push(e.message));
 const base=process.env.UI_URL||'http://127.0.0.1:5180';
 try{

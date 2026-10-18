@@ -1,0 +1,16 @@
+{
+  "status": "PENDING_USER_AND_HTTPS_CANDIDATE",
+  "date": "2026-10-19",
+  "realHardwareVerified": false,
+  "candidateDirectory": "dist/mobile-candidate",
+  "publicCandidateURL": null,
+  "signaturesAuthorized": false,
+  "paymentsAuthorized": false,
+  "dewebUploadAuthorized": false,
+  "environments": [
+    {"device": "real iPhone", "browser": "Safari", "opened": null, "connected": null, "signedLogin": null, "mainnetSelected": null, "purchasePageWithoutPayment": null, "screenshots": []},
+    {"device": "real iPhone", "browser": "OKX App Web3 browser", "opened": null, "connected": null, "signedLogin": null, "mainnetSelected": null, "purchasePageWithoutPayment": null, "screenshots": []}
+  ],
+  "blocker": "User paused signatures and uploads. Updated frontend is local only; real-device access and free login signatures need user cooperation and a reviewed HTTPS preview path.",
+  "notSubstitutedBy": ["desktop Chrome", "mobile viewport", "mobile user agent", "mock wallet session"]
+}

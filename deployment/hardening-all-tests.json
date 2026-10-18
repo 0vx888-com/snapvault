@@ -15,6 +15,10 @@
       "status": "PASS"
     },
     {
+      "name": "neutral loading, offline notice, remote confirmation UI",
+      "status": "PASS"
+    },
+    {
       "name": "browser order model",
       "status": "PASS"
     },
@@ -27,7 +31,11 @@
       "status": "PASS"
     },
     {
-      "name": "legacy automatic delivery marketplace UI",
+      "name": "legacy delivery marketplace repeat 1",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy delivery marketplace repeat 2",
       "status": "PASS"
     },
     {
@@ -39,7 +47,13 @@
       "status": "PASS"
     }
   ],
-  "publicTestnetV2Verified": false,
-  "mainnetVerified": false,
+  "publicTestnetV2Verified": true,
+  "publicTestnetEvidence": {
+    "verified": true,
+    "source": "deployment/xlayerTestnet-direct-v2-acceptance.json",
+    "method": "Saved public testnet acceptance matched to current artifact; no fresh chain verification in this local run",
+    "publicTapeSendVerified": false
+  },
+  "mainnetVerifiedThisRun": false,
   "mainnetSpending": false
 }

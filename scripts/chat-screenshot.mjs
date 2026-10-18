@@ -1,7 +1,8 @@
+import {launchOptions,tempPath} from './browser-test-config.cjs';
 // 用法：node chat-screenshot.mjs <输出目录>（需要 playwright，并先启动 http://localhost:5173）
 import { chromium } from "playwright";
 const out = process.argv[2] || ".";
-const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1280, height: 860 } });
+const b = await chromium.launch(launchOptions()); const p = await b.newPage({ viewport: { width: 1280, height: 860 } });
 const errs = []; p.on("pageerror", (e) => errs.push(e.message)); p.on("dialog", (d) => d.accept());
 await p.setContent(`<div style="width:300px;height:375px;background:linear-gradient(135deg,#ff2d75,#6a00ff)"></div>`);
 await p.screenshot({ path: "/tmp/sample.png" });

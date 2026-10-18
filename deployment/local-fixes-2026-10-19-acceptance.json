@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-19",
+  "status": "PASS_LOCAL_ONLY",
+  "command": "npm run test:all",
+  "platform": "Darwin",
+  "browser": "Chrome selected through CHROME_PATH",
+  "allSuites": [
+    {
+      "name": "all contracts/services + both official Hub browser flows",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile adapter and transaction safety",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile dialog and real SDK module load",
+      "status": "PASS"
+    },
+    {
+      "name": "neutral loading, offline notice, remote confirmation UI",
+      "status": "PASS"
+    },
+    {
+      "name": "browser order model",
+      "status": "PASS"
+    },
+    {
+      "name": "existing demo social UI",
+      "status": "PASS"
+    },
+    {
+      "name": "wallet social UI + paid image + withdrawal",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy delivery marketplace repeat 1",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy delivery marketplace repeat 2",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy wallet readiness and isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "payment probe no-wallet safety (isolated RPC fixture)",
+      "status": "PASS"
+    }
+  ],
+  "contractAndServiceTests": 59,
+  "mobileAndTransactionUnitTests": 12,
+  "walletBrowserChecks": 23,
+  "marketplaceRunsOnSameServer": 2,
+  "realIPhoneVerified": false,
+  "linuxExecutionVerified": false,
+  "dockerImageBuilt": false,
+  "productionOnlyInstallAndModuleImports": true,
+  "userWalletSignatures": false,
+  "mainnetTransactions": 0,
+  "newOKBSpent": "0",
+  "quoteRecord": "mobile-release-cost-readonly.json"
+}

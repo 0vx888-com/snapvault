@@ -1,0 +1,12 @@
+{
+  "productionInstall": true,
+  "ethers": "6.17.0",
+  "hardhatPresent": false,
+  "playwrightPresent": false,
+  "runtimeImports": [
+    "ethers",
+    "@aws-sdk/client-s3"
+  ],
+  "walletServiceImport": true,
+  "walletHttpImport": true
+}

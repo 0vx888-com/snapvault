@@ -1,7 +1,14 @@
 {
-  "checkedAt": "2026-10-18T19:57:25.011Z",
+  "oldRepairBudgetAccounting": {
+    "source": "deweb-publish-public-progress.json (recorded spend; not a fresh historical audit)",
+    "totalBudgetWei": "6000000000000000",
+    "recordedSpendWei": "4363122398156109",
+    "remainingWei": "1636877601843891",
+    "newModelExceedsRemaining": true
+  },
+  "checkedAt": "2026-10-18T20:40:56.659Z",
   "chainId": 196,
-  "block": 73584331,
+  "block": 73586946,
   "spendingPaused": true,
   "noSignatures": true,
   "noTransactions": true,
@@ -12,39 +19,45 @@
   "changedFiles": [
     {
       "path": "index.html",
-      "bytes": 11402,
+      "bytes": 11525,
       "chunks": 1,
-      "modelGas": "2687239"
+      "modelGas": "2733846"
     },
     {
       "path": "style.css",
-      "bytes": 34451,
+      "bytes": 34672,
       "chunks": 2,
-      "modelGas": "8012454"
+      "modelGas": "8075883"
     },
     {
       "path": "app.js",
-      "bytes": 33845,
+      "bytes": 34222,
       "chunks": 2,
-      "modelGas": "7878071"
+      "modelGas": "7975427"
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 983,
+      "chunks": 1,
+      "modelGas": "372696"
     },
     {
       "path": "wallet.js",
-      "bytes": 9832,
+      "bytes": 10374,
       "chunks": 1,
-      "modelGas": "2355348"
+      "modelGas": "2476483"
     },
     {
       "path": "wallet-connect.js",
-      "bytes": 3141,
+      "bytes": 6062,
       "chunks": 1,
-      "modelGas": "987796"
+      "modelGas": "1630730"
     },
     {
       "path": "transaction-guard.js",
-      "bytes": 906,
+      "bytes": 1162,
       "chunks": 1,
-      "modelGas": "495906"
+      "modelGas": "552245"
     },
     {
       "path": "vendor/okx-connect.min.js",
@@ -81,11 +94,6 @@
       "path": "store.js",
       "bytes": 5353,
       "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
-    },
-    {
-      "path": "local-delivery.js",
-      "bytes": 894,
-      "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436"
     },
     {
       "path": "wallet-chat.js",
@@ -128,9 +136,9 @@
       "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f"
     }
   ],
-  "pendingUploadOperations": 37,
-  "uploadStorageModelAtCurrentPriceOKB": "0.003362986888149336",
-  "uploadStorageModelWith20PercentGasAndPriceMarginOKB": "0.004842701078579203",
+  "pendingUploadOperations": 38,
+  "uploadStorageModelAtCurrentPriceOKB": "0.003390996809549832",
+  "uploadStorageModelWith20PercentGasAndPriceMarginOKB": "0.004883035365059798",
   "caveat": "Read-only per-chunk putFile storage model; append and gateway delivery gas may differ. NOT an authorization or guaranteed upper bound. Recheck exact plan before upload.",
   "tapeSendOldMessageReadOKB": "0",
   "newTapeSendMessagesPlanned": 0,
@@ -143,12 +151,5 @@
     "estimatedGasFeeOKB": "0.000000867620043381",
     "feeWith20PercentGasAndPriceMarginOKB": "0.000001249368052057"
   },
-  "refundMainnetTransactionsPlanned": 0,
-  "oldRepairBudgetAccounting": {
-    "source": "deweb-publish-public-progress.json (recorded spend; no fresh historical audit)",
-    "totalBudgetWei": "6000000000000000",
-    "recordedSpendWei": "4363122398156109",
-    "remainingWei": "1636877601843891",
-    "newModelExceedsRemaining": true
-  }
+  "refundMainnetTransactionsPlanned": 0
 }

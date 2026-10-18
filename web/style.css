@@ -30,3 +30,5 @@ dialog.purchase-dialog{width:min(460px,calc(100vw - 32px));padding:28px;backgrou
 @media(max-width:760px){.logo{font-size:21px}.logo img{width:33px;height:33px}.app-navigation{background:#f6f7efef;border-color:#dfe4d1}.tab.on{color:#344126}.tab.on .nav-icon{background:var(--accent)}.hero-copy h1{font-size:28px}.preview-note{color:#77836b}.creator-info>p{color:#6e7c61}.wallet #wallet-network{background:#303629;color:#dbe1c6}.creator-actions>.secondary{color:#57684a}.app-footer{padding-bottom:25px}}
 
 .wallet-connect-dialog{max-width:420px;width:calc(100% - 32px);border:1px solid #d8e2a2;border-radius:20px;padding:24px;background:#f7f8ef;color:#182016}.wallet-connect-dialog::backdrop{background:#141a16aa}.wallet-connect-dialog a{display:block;text-align:center;margin:20px 0;padding:14px}.wallet-connect-dialog p{overflow-wrap:anywhere;line-height:1.6}
+
+.service-status{margin:12px 24px;padding:14px 18px;border:1px solid #c6cf9d;border-radius:12px;background:#f4f6dc;color:#39412f;overflow-wrap:anywhere}.wallet-connect-dialog button.primary{white-space:normal;width:100%}

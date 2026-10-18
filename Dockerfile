@@ -15,9 +15,9 @@ RUN node scripts/build-app.mjs --server --allow-mainnet
 FROM node:24-bookworm-slim
 WORKDIR /app
 ENV NODE_ENV=production BIND=0.0.0.0
-COPY --from=build /app/node_modules ./node_modules
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
 COPY --from=build /app/artifacts/contracts/SnapVaultDirect.sol/SnapVaultDirect.json ./artifacts/contracts/SnapVaultDirect.sol/SnapVaultDirect.json
-COPY package.json ./
 COPY scripts/app-files.mjs ./scripts/app-files.mjs
 COPY vendor/tapekit-send ./vendor/tapekit-send
 COPY server ./server

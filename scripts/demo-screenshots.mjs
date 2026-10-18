@@ -1,6 +1,7 @@
+import {launchOptions,tempPath} from './browser-test-config.cjs';
 import { chromium } from "playwright";
 const out = process.argv[2];
-const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1280, height: 820 } });
+const b = await chromium.launch(launchOptions()); const p = await b.newPage({ viewport: { width: 1280, height: 820 } });
 p.on("dialog", (d) => d.accept()); p.on("pageerror", (e) => console.log("ERR", e.message));
 // 生成示例图片
 await p.setContent(`<div style="width:600px;height:750px;background:linear-gradient(135deg,#ff2d75,#6a00ff);display:flex;align-items:center;justify-content:center;color:#fff;font:bold 54px sans-serif;text-align:center">独家幕后<br>📸 SnapVault<br>Demo</div>`);

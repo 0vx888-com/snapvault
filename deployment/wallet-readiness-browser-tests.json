@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "checks": [
+    "配置未好之前全部中性文案；连接按钮不调用钱包，显示常驻网络提示",
+    "配置成功后才显示主网 OKB，清除错误提示",
+    "服务器连接失败超过 toast 生命周期仍保留提示；点击连接不会消失",
+    "远程请求显示确认弹窗；按钮手动 openWallet，拒绝提示常驻",
+    "远程超时后关闭等待弹窗并保留明确错误提示",
+    "电脑显示安装插件指引，手机显示 Web3 内置浏览器指引"
+  ],
+  "noUserWallets": true,
+  "noMainnetSignatures": true,
+  "realIPhoneVerified": false
+}

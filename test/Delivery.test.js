@@ -1,3 +1,4 @@
+const {launchOptions,tempPath}=require('../scripts/browser-test-config.cjs');
 const {expect}=require('chai');
 const {ethers}=require('hardhat');
 const {mkdtempSync,rmSync,readFileSync}=require('node:fs');
@@ -76,7 +77,7 @@ describe('真实付款 → 官方 DeWebHub → TAP-10 密钥交付（本地 fixt
   await new Promise(resolve=>app.server.listen(port,'127.0.0.1',resolve));
   let browser;
   try{
-   browser=await chromium.launch({headless:true,executablePath:process.env.CHROME||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
+   browser=await chromium.launch(launchOptions());
    const page=await browser.newPage({viewport:{width:1280,height:1000}}),errors=[],requests=[];
    page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push({url:r.url(),body:r.postData()||''}));
    let selected=creator;

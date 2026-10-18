@@ -1,6 +1,6 @@
 import {walletError} from './transaction-guard.js';
 import {initRefunds} from './refunds.js';
-import {wallet,connect,disconnect,initWallet,refresh as walletRefresh,publishWallet,purchaseWallet,openWallet,walletAction,setupNetwork,withdrawWallet,apiURL} from './wallet.js';
+import {wallet,connect,disconnect,initWallet,refresh as walletRefresh,publishWallet,purchaseWallet,openWallet,walletAction,setupNetwork,withdrawWallet,apiURL,SERVER_UNAVAILABLE} from './wallet.js';
 import {local,localCall,localRefresh} from './local-delivery.js';
 import { initChat, Friends } from './chat.js';
 import { PEOPLE, identity, setIdentity, profile, profiles, uidOf, saveProfile, follows, toggleFollow,
@@ -252,22 +252,21 @@ if(local.enabled){
 }
 
 if(wallet.enabled){
+ const serviceStatus=$('#wallet-service-status');const serviceFailure=()=>{serviceStatus.textContent=SERVER_UNAVAILABLE;serviceStatus.classList.remove('hidden');$('#mode').textContent='服务器连接异常';};
+ serviceStatus.classList.remove('hidden');serviceStatus.textContent='正在连接 X Layer 主网…';$('#mode').textContent='正在连接 X Layer 主网…';
  const networkButton=document.createElement('button');networkButton.className='secondary';networkButton.id='wallet-network';networkButton.textContent='切换网络';networkButton.onclick=()=>setupNetwork().catch(e=>toast(e.message));$('#connect').after(networkButton);
  $('.identity-label').classList.add('hidden');document.querySelector('.dev-tools')?.classList.add('hidden');
- $('#try-demo').textContent='发布测试图片 ↗';
+ $('#try-demo').textContent='发布图片 ↗';
  $('#connect').textContent=wallet.token?'退出登录':'连接钱包';
- $('#connect').onclick=async()=>{const button=$('#connect');if(button.disabled)return;button.disabled=true;try{if(wallet.token)disconnect();else await connect();$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';}catch(e){toast(walletError(e));}finally{button.disabled=false;}};
- $('#creator > .sub').textContent='普通钱包即可发布，无需个人容器。当前只允许本地链或 X Layer 测试网。';
- $('#purchase-dialog .demo-notice').textContent='请检查钱包网络、收款合约和金额。此版本只开放本地链 / X Layer 测试网，不花真钱。普通订单无需容器。';
- $('#token').innerHTML='<option value="OKB">测试 OKB</option>';$('#price').min='0.000001';$('#price').step='0.000001';$('#price').value='0.00001';$('#show-preview').disabled=true;
- $('.preview-note span:nth-child(2)').textContent='测试版本：钱包签名登录，免费聊天发图；付费图片使用测试币并按订单交付。未开放主网。';
- $('#preview-dialog h2').textContent='钱包与多人聊天测试版';
- $('#preview-dialog').querySelectorAll('p:not(.eyebrow):not(.field-note)').forEach((p,i)=>p.textContent=[
- '本模式使用真实钱包签名登录，聊天与图片通过站内服务同步。普通用户和创作者均无需开通容器。',
- '付费图片需在本地链或 X Layer 测试网确认交易，随后将内容密钥加密给已登录浏览器。当前不开放主网收款。',
- '测试服务会接触消息和内容密钥，不宣称平台无法读取。生产服务、正式 DeWEB 和公共内容存储尚未上线。'][i]||'');
- try{await initWallet();const inbox=$('#tapesend-inbox');inbox.href=apiURL('/tapesend/');inbox.classList.remove('hidden');const mainnet=wallet.config.mainnet;$('#mode').textContent=wallet.config.networkName||(wallet.config.chainId===31337?'本地链 · 无真钱':'X Layer 测试网');$('#wallet-network').textContent='切换'+(mainnet?'主网':'测试网络');$('#token').innerHTML='<option value="OKB">'+(wallet.config.symbol||'测试 OKB')+'</option>';if(mainnet){$('#try-demo').textContent='发布图片 ↗';$('#creator > .sub').textContent='普通钱包发布内容，付款使用 X Layer 主网 OKB。';$('.preview-note span:nth-child(2)').textContent='X Layer 主网：聊天发图免费，付费图片与提现会产生真实 OKB 交易。已有可用容器时优先 TapeSend，无容器走普通交付。';$('#purchase-dialog .demo-notice').textContent='本单使用真实 OKB。请核对金额、合约和当前交付方式；付款、提现均由你在钱包确认。';$('#preview-dialog h2').textContent='SnapVault · X Layer';$('#preview-dialog').querySelectorAll('p:not(.eyebrow):not(.field-note)').forEach((p,i)=>p.textContent=['本模式使用钱包签名登录，聊天与图片通过站内服务同步。普通用户和创作者无需个人容器。','付费图片在 X Layer 主网使用真实 OKB。已有可用容器和公钥时通过官方 TapeSend 交付查看链接，无容器时明确提示普通交付。','平台服务负责保存密文与交付密钥，不宣称平台无法读取。阅后即焚限制站内展示，不能防止截图或收回已保存内容。'][i]||'');}$('#wallet-earnings').classList.remove('hidden');$('#delivery-settings').classList.remove('hidden');$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';}catch(e){$('#mode').textContent='服务未就绪';toast(e.message);}
- setInterval(()=>{if(!document.hidden)walletRefresh().catch(e=>{$('#mode').textContent=e.message;});},10000);
+ $('#connect').onclick=async()=>{const button=$('#connect');if(button.disabled)return;button.disabled=true;try{if(!wallet.ready){serviceFailure();return;}if(wallet.token)disconnect();else await connect();$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';}catch(e){if(!wallet.ready||e instanceof TypeError||['AbortError','TimeoutError'].includes(e.name)||e.status>=500)serviceFailure();else toast(walletError(e));}finally{button.disabled=false;}};
+ $('#creator > .sub').textContent='正在连接 X Layer 主网…';
+ $('#purchase-dialog .demo-notice').textContent='正在连接 X Layer 主网…';
+ $('#token').innerHTML='<option value="OKB">正在连接 X Layer 主网…</option>';$('#price').min='0.000001';$('#price').step='0.000001';$('#price').value='0.00001';$('#show-preview').disabled=true;
+ $('.preview-note span:nth-child(2)').textContent='正在连接 X Layer 主网…';
+ $('#preview-dialog h2').textContent='正在连接 X Layer 主网…';
+ $('#preview-dialog').querySelectorAll('p:not(.eyebrow):not(.field-note)').forEach(p=>p.textContent='正在连接 X Layer 主网…');
+ try{await initWallet();serviceStatus.classList.add('hidden');const inbox=$('#tapesend-inbox');inbox.href=apiURL('/tapesend/');inbox.classList.remove('hidden');const mainnet=wallet.config.mainnet;$('#mode').textContent=wallet.config.networkName||(wallet.config.chainId===31337?'本地链 · 无真钱':'X Layer 测试网');$('#wallet-network').textContent='切换'+(mainnet?'主网':'测试网络');$('#token').innerHTML='<option value="OKB">'+(wallet.config.symbol||'测试 OKB')+'</option>';if(mainnet){$('#try-demo').textContent='发布图片 ↗';$('#creator > .sub').textContent='普通钱包发布内容，付款使用 X Layer 主网 OKB。';$('.preview-note span:nth-child(2)').textContent='X Layer 主网：聊天发图免费，付费图片与提现会产生真实 OKB 交易。已有可用容器时优先 TapeSend，无容器走普通交付。';$('#purchase-dialog .demo-notice').textContent='本单使用真实 OKB。请核对金额、合约和当前交付方式；付款、提现均由你在钱包确认。';$('#preview-dialog h2').textContent='SnapVault · X Layer';$('#preview-dialog').querySelectorAll('p:not(.eyebrow):not(.field-note)').forEach((p,i)=>p.textContent=['本模式使用钱包签名登录，聊天与图片通过站内服务同步。普通用户和创作者无需个人容器。','付费图片在 X Layer 主网使用真实 OKB。已有可用容器和公钥时通过官方 TapeSend 交付查看链接，无容器时明确提示普通交付。','平台服务负责保存密文与交付密钥，不宣称平台无法读取。阅后即焚限制站内展示，不能防止截图或收回已保存内容。'][i]||'');}if(!mainnet){const label=wallet.config.networkName||'本地测试网络';$('#creator > .sub').textContent=label+'：仅使用测试币。';$('#purchase-dialog .demo-notice').textContent=label+'：请核对钱包网络与金额。';$('.preview-note span:nth-child(2)').textContent=label+'：钱包登录，聊天发图与付费图片联调。';$('#preview-dialog h2').textContent=label;}$('#wallet-earnings').classList.remove('hidden');$('#delivery-settings').classList.remove('hidden');$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';}catch(e){serviceFailure();}
+ setInterval(()=>{if(!document.hidden&&wallet.ready)walletRefresh().then(()=>{serviceStatus.classList.add('hidden');$('#mode').textContent=wallet.config.networkName;}).catch(()=>serviceFailure());},10000);
  window.addEventListener('snapvault:delivery-route',e=>toast(e.detail));
  $('#save-delivery').onclick=async()=>{try{await walletAction('delivery-settings',{circuits:$('#delivery-circuits').value.trim(),tokenId:$('#delivery-token').value.trim()});const route=await walletAction('delivery-route');$('#delivery-feedback').textContent=route.available?'已核对，付款后通过官方 TapeSend 交付。':route.reason;}catch(e){$('#delivery-feedback').textContent=e.message;}};
  $('#refresh-earnings').onclick=async()=>{try{const e=await walletAction('earnings');$('#earnings-amount').textContent='可提现 '+e.amount+' '+(wallet.config.symbol||'OKB');}catch(e){$('#earnings-feedback').textContent=e.message;}};

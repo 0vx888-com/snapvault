@@ -1,10 +1,11 @@
+import {launchOptions,tempPath} from './browser-test-config.cjs';
 // Isolated browser regression for the LOCAL demo. No wallets, transactions or real payments.
 // Start: python3 -m http.server 5173 --bind 127.0.0.1 --directory web
 // Run: node scripts/ui-flow.spec.mjs (requires playwright + Chrome, or CHROME override)
 import assert from 'node:assert/strict';
 import { mkdir, readFile } from 'node:fs/promises';
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
-const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' });
+const browser = await chromium.launch(launchOptions());
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const errors = []; context.on('page', p => p.on('pageerror', e => errors.push(e.message)));
 const base = process.env.UI_URL || 'http://127.0.0.1:5173';

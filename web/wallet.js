@@ -3,13 +3,13 @@ import {selectProvider} from './wallet-connect.js';
 // Wallet mode is opt-in in development, the default for the deployable app build.
 let settings={};
 if(typeof location!=='undefined'){
- try{const r=await fetch(new URL('./app-config.json',import.meta.url));if(r.ok)settings=await r.json();}catch{/* existing demo remains usable without a deployment config */}
+ try{const r=await fetch(new URL('./app-config.json',import.meta.url),{signal:AbortSignal.timeout(10000)});if(r.ok)settings=await r.json();}catch{/* existing demo remains usable without a deployment config */}
 }
-export const wallet={enabled:typeof location!=='undefined'&&(settings.mode==='wallet'||new URLSearchParams(location.search).get('delivery')==='wallet'),preview:settings.mode==='preview',base:settings.apiBase||'',account:typeof sessionStorage!=='undefined'&&sessionStorage.getItem('sv:wallet-session')?sessionStorage.getItem('sv:wallet-account'):null,token:typeof sessionStorage!=='undefined'?sessionStorage.getItem('sv:wallet-session'):null,data:{contents:[],orders:[],profiles:{},convs:[],messages:[],friends:[]},config:null,device:null};
+export const wallet={enabled:typeof location!=='undefined'&&(settings.mode==='wallet'||new URLSearchParams(location.search).get('delivery')==='wallet'),preview:settings.mode==='preview',base:settings.apiBase||'',account:typeof sessionStorage!=='undefined'&&sessionStorage.getItem('sv:wallet-session')?sessionStorage.getItem('sv:wallet-account'):null,token:typeof sessionStorage!=='undefined'?sessionStorage.getItem('sv:wallet-session'):null,data:{contents:[],orders:[],profiles:{},convs:[],messages:[],friends:[]},config:null,ready:false,device:null};
 export const apiURL=path=>new URL((wallet.base?wallet.base.replace(/\/$/,''):'')+path,location.href).href;
 export async function call(action,body={}){
- if(!wallet.enabled)throw Error('钱包模式未启用');const r=await fetch(apiURL('/api/wallet/'+action),{method:'POST',headers:{'Content-Type':'application/json',...(wallet.token?{Authorization:'Bearer '+wallet.token}:{})},body:JSON.stringify(body)}),d=await r.json();
- if(!r.ok){if(r.status===401)disconnect(false);throw Error(d.error||'服务暂不可用');}return d;
+ if(!wallet.enabled)throw Error('钱包模式未启用');const r=await fetch(apiURL('/api/wallet/'+action),{method:'POST',signal:AbortSignal.timeout(10000),headers:{'Content-Type':'application/json',...(wallet.token?{Authorization:'Bearer '+wallet.token}:{})},body:JSON.stringify(body)}),d=await r.json();
+ if(!r.ok){if(r.status===401)disconnect(false);throw Object.assign(Error(d.error||'服务暂不可用'),{status:r.status});}return d;
 }
 async function device(){
  if(wallet.device)return wallet.device;const db=await new Promise((resolve,reject)=>{const r=indexedDB.open('snapvault-device',1);r.onupgradeneeded=()=>r.result.createObjectStore('keys');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
@@ -24,7 +24,9 @@ function provider(){const p=window.okxwallet||window.ethereum;if(!p?.request)thr
 let injected,subscriptions=false,revision=0,connecting=false;
 const accountChanged=()=>disconnect();const networkChanged=()=>window.dispatchEvent(new Event('snapvault:network'));
 
+export const SERVER_UNAVAILABLE='暂时连不上服务器，请检查网络或开启代理后刷新';
 export async function connect(){
+ if(!wallet.ready||!wallet.config)throw Error(SERVER_UNAVAILABLE);
  if(connecting)throw Error('正在等待钱包，请勿重复连接');connecting=true;try{
  if(injected&&subscriptions){injected.removeListener?.('accountsChanged',accountChanged);injected.removeListener?.('chainChanged',networkChanged);injected.removeListener?.('disconnect',accountChanged);subscriptions=false;}
  injected=await selectProvider(wallet.config);const accounts=await injected.request({method:'eth_requestAccounts'});if(!accounts[0])throw Error('钱包没有返回账户');
@@ -34,12 +36,18 @@ export async function connect(){
  wallet.account=result.address;wallet.token=result.token;sessionStorage.setItem('sv:wallet-session',result.token);sessionStorage.setItem('sv:wallet-account',result.address);
  if(!subscriptions&&injected.on){injected.on('accountsChanged',accountChanged);injected.on('chainChanged',networkChanged);injected.on('disconnect',accountChanged);subscriptions=true;}
  window.dispatchEvent(new Event('snapvault:identity'));await refresh();
- }finally{connecting=false;}
+ }catch(e){if(injected?.remote){await injected.disconnect().catch(()=>{});injected=null;}throw e;}finally{connecting=false;}
 }
 export function disconnect(revoke=true){if(revoke&&wallet.token)call('logout').catch(()=>{});revision++;wallet.token=null;wallet.account=null;wallet.device=null;sessionStorage.removeItem('sv:wallet-session');sessionStorage.removeItem('sv:wallet-account');wallet.data={contents:[],orders:[],profiles:{},convs:[],messages:[],friends:[]};window.dispatchEvent(new Event('snapvault:identity'));}
 export async function refresh(){const rev=++revision;const d=await call('state');if(rev!==revision)return;wallet.data=d;if(wallet.token)wallet.account=sessionStorage.getItem('sv:wallet-account');window.dispatchEvent(new Event('snapvault:change'));}
-export async function initWallet(){const r=await fetch(apiURL('/api/wallet/config'));if(!r.ok)throw Error('服务未配置');wallet.config=await r.json();const allowed=settings.allowedChainIds||[31337,1952];if(!allowed.includes(wallet.config.chainId))throw Error('后端链号不在本前端允许配置中');if(wallet.config.chainId===196&&(!settings.allowMainnet||!wallet.config.mainnet))throw Error('主网需前后端明确授权配置');await device();await refresh();}
+export async function initWallet(){
+ wallet.ready=false;wallet.config=null;
+ const r=await fetch(apiURL('/api/wallet/config'),{signal:AbortSignal.timeout(10000)});if(!r.ok)throw Error(SERVER_UNAVAILABLE);
+ const config=await r.json(),allowed=settings.allowedChainIds||[31337,1952];if(!allowed.includes(config.chainId))throw Error('后端链号不在本前端允许配置中');if(config.chainId===196&&(!settings.allowMainnet||!config.mainnet))throw Error('主网需前后端明确授权配置');
+ wallet.config=config;await device();await refresh();wallet.ready=true;
+}
 async function transaction(method,args,value=0n){
+ if(!wallet.ready||!wallet.config)throw Error(SERVER_UNAVAILABLE);
  if(!wallet.account)throw Error('请先签名登录');const p=injected||await selectProvider(wallet.config);injected=p;
  const chain=Number(BigInt(await p.request({method:'eth_chainId'})));if(chain!==wallet.config.chainId)throw Error('钱包网络不符，请切换到 '+wallet.config.networkName+'；未发送交易');
  if(chain===196&&(!settings.allowMainnet||!wallet.config.mainnet))throw Error('主网配置尚未明确启用');

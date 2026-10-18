@@ -3,9 +3,10 @@ import {resolve} from 'node:path';
 export async function cleanPublicBuild(out){
  const edit=async(file,fn)=>{const path=resolve(out,file);await writeFile(path,fn(await readFile(path,'utf8')))};
  await edit('index.html',s=>s.replace('<html lang="zh-CN">','<html lang="zh-CN" data-app-mode="wallet">')
+ .replace('class="service-status hidden"','class="service-status"')
  .replace('当前为不扣款的产品预览。','钱包登录，聊天发图，按需解锁内容。')
  .replace('class="identity-label"','class="identity-label hidden"').replaceAll('演示身份','账户')
- .replace('钱包接入说明','连接钱包').replace('SnapVault / 本地预览','SnapVault / X Layer')
+ .replace('钱包接入说明','连接钱包').replace('<option value="USDT">USDT</option><option value="OKB">OKB</option>','<option value="OKB">正在连接 X Layer 主网…</option>').replace('SnapVault / 本地预览','SnapVault / X Layer')
  .replace('产品预览：人物与聊天为演示数据，购买不扣款。正式钱包、多人同步与内容交付仍在接入。','正在连接服务。连接成功后显示当前网络与可用功能。')
  .replace('了解进度 ↗','使用说明 ↗').replace('体验图片解锁','发布图片')
  .replace('AI 生成的海边示例图片','装饰性海边插画')

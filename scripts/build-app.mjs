@@ -8,7 +8,7 @@ export async function buildApp({preview=false,local=false,server=false,api='',al
  if(local&&allowMainnet)throw Error('wallet-local must never enable mainnet');out ||= resolve(root,'dist',preview?'preview':server?'server':local?'wallet-local':'wallet');
  if(!out.startsWith(resolve(root,'dist')+'/'))throw Error('Build output must be inside dist');await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
  const files=[...APP_FILES];for(const f of files){await mkdir(dirname(resolve(out,f)),{recursive:true});await copyFile(resolve(root,'web',f),resolve(out,f));}
- let html=await readFile(resolve(out,'index.html'),'utf8');html=html.replace(/<details class="dev-tools">[\s\S]*?<\/details>/,'');if(!preview)html=html.replace('产品预览 · 不扣款','正在连接 X Layer');await writeFile(resolve(out,'index.html'),html);
+ let html=await readFile(resolve(out,'index.html'),'utf8');html=html.replace(/<details class="dev-tools">[\s\S]*?<\/details>/,'');if(!preview)html=html.replace('产品预览 · 不扣款','正在连接 X Layer 主网…');await writeFile(resolve(out,'index.html'),html);
  await writeFile(resolve(out,'app-config.json'),JSON.stringify({mode:preview?'preview':'wallet',apiBase:preview||server?'':new URL(api).origin,allowedChainIds:local?[31337]:allowMainnet?[1952,196]:[1952],allowMainnet},null,2)+'\n');files.push('app-config.json');
  if(!preview&&!local){await cleanPublicBuild(out);await optimizePublic(out);}
  const types={html:'text/html; charset=utf-8',css:'text/css',js:'text/javascript',json:'application/json',jpg:'image/jpeg',svg:'image/svg+xml',md:'text/markdown',png:'image/png'};

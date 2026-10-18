@@ -6,6 +6,6 @@
     "deployment",
     "wallet signatures"
   ],
-  "latestAuthorization": "Commit and push sanitized local changes to codex-wip only; no deployment or signing",
+  "latestAuthorization": "Local fixes, no-money tests, sanitized GitHub push and read-only delta quote only; no deployment, upload, user-wallet signatures or OKB spending. Real iPhone acceptance required before upload.",
   "resumeRequiresExplicitUserAuthorization": true
 }
