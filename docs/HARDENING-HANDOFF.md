@@ -44,3 +44,12 @@
 - 1952 无官方 Hub，本次公共测试网验收是普通交付；正式 TapeSend 仍需后续主网 C／买家容器及官方收件箱证据。本地官方 Hub 测试不能代替主网实测。
 - 本机入口 127.0.0.1:5191。`scripts/serve-testnet-acceptance.mjs` 明确限制当前 v2 的 1952 合约、独立加密目录、环境 master key，不导入 A/B 用户私钥。
 - Railway 仍是旧测试版；DeWEB 未发布。后续先准备异地备份与恢复演练、公开后端 v2 切换、主网 owner/treasury 公开地址、DeWEB/C/买家容器及发布预算。任何真钱步骤先给预算，再由用户确认。
+
+
+## Mainnet owner/treasury preparation - 2026-10-18
+
+User-created OKX Wallet 03: `0xEb55B0f0a274A72b940C10078fb46B998b53B100`. Verified in the native X Layer receive screen using its built-in 0x format selector; no seed, password or private key accessed. Owner and treasury are identical in `config/mainnet-deploy.draft.json` and `config/mainnet-backend.draft.json`. Both mainnet switches remain disabled. Operator and C remain separate fresh service identities.
+
+Two independent mainnet RPCs returned zero balance, nonce zero and no account code. See `deployment/mainnet-owner-verification.json`. User action requested: fund this own wallet with 0.10 OKB on X Layer for the first website-container/upload stage and later contract deployment; within the approved 0.30 OKB reserve. No mainnet transaction sent; no C/operator funding. Exact paid transactions still require human wallet confirmation.
+
+Release-copy fix: publishing progress/success, purchase summary and mainnet help now distinguish local, 1952 and 196. Mainnet publishing must not claim no real money was used. Full isolated test suite passed after this change. Current public backend remains the old 1952 service. Configuration is not deployment evidence.

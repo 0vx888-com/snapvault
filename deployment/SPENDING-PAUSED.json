@@ -1,0 +1,11 @@
+{
+  "status": "PAUSED_BY_USER",
+  "recordedDate": "2026-10-19",
+  "scope": [
+    "mainnet spending",
+    "deployment",
+    "wallet signatures"
+  ],
+  "latestAuthorization": "Commit and push sanitized local changes to codex-wip only; no deployment or signing",
+  "resumeRequiresExplicitUserAuthorization": true
+}

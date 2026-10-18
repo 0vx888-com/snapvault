@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-18T14:42:57.040Z",
+  "chainId": 196,
+  "path": "/index.html",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x8ae55120666faef5ed36f544e9289d2a43be6fbb2f9b7ec230fc366087ff963e",
+      "block": 73565495,
+      "status": 1,
+      "bytes": 10432,
+      "sha256": "0x3d2b7b9261203aefcd22950b11cc02670812d6fd79950740318cf0189732f787",
+      "feeOKB": "0.00005134180256709"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x8ae55120666faef5ed36f544e9289d2a43be6fbb2f9b7ec230fc366087ff963e",
+      "block": 73565495,
+      "status": 1,
+      "bytes": 10432,
+      "sha256": "0x3d2b7b9261203aefcd22950b11cc02670812d6fd79950740318cf0189732f787",
+      "feeOKB": "0.00005134180256709"
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,10 @@
+{
+  "chainId": 1952,
+  "rpc": "https://testrpc.xlayer.tech/terigon",
+  "vault": "0x0cCBD7252303EA920f5Bb9c970d3D2e2782cE900",
+  "deploymentBlock": 43802727,
+  "origins": [],
+  "hosts": [],
+  "confirmations": 3,
+  "dataDir": "/data/snapvault"
+}

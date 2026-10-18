@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-18T14:31:13.202Z",
+  "chainId": 196,
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "circuits": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+  "tokenId": 10,
+  "cpuIndex": 6,
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "name": "10.2.6.tape",
+  "publicURL": "https://10-2-6.tapekit.org/",
+  "checks": [
+    {
+      "url": "https://rpc.xlayer.tech",
+      "block": 73564827,
+      "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+      "opened": true,
+      "balanceOKB": "0.015030378259518913",
+      "nonce": 3
+    },
+    {
+      "url": "https://xlayer.drpc.org",
+      "block": 73564827,
+      "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+      "opened": true,
+      "balanceOKB": "0.015030378259518913",
+      "nonce": 3
+    }
+  ],
+  "transaction": {
+    "hash": "0x473eeafe377a8113c3967ae5dcc4ec13b9b9877ad3ef8acaab4e162fab108bda",
+    "to": "0x536adD8F30f03b69f6fbF29d425A816A0dC50106",
+    "from": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+    "nonce": 2,
+    "valueOKB": "0.08",
+    "data": "0x0a0e5c9d00000000000000000000000090b3ba18c32e9e9e6ea5e2cca3e68b86afbe7cdb000000000000000000000000000000000000000000000000000000000000000a",
+    "block": 73564783,
+    "status": 1,
+    "gasUsed": "167234",
+    "feeOKB": "0.000003344680167234"
+  }
+}

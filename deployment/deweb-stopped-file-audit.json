@@ -1,0 +1,341 @@
+{
+  "checkedAt": "2026-10-18T16:28:53.212Z",
+  "chainId": 196,
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "bundleBytes": 1142414,
+  "completeFiles": 6,
+  "totalFiles": 15,
+  "remainingOperations": 52,
+  "files": [
+    {
+      "path": "index.html",
+      "expectedBytes": 10086,
+      "expectedSHA256": "0x789433b4491682b26b7a7fa912697eed9b8c87b92496c11fcda16f9abb763017",
+      "status": "complete-verified",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "complete-verified",
+          "bytes": 10086,
+          "chunks": 1,
+          "sha256": "0x789433b4491682b26b7a7fa912697eed9b8c87b92496c11fcda16f9abb763017"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "complete-verified",
+          "bytes": 10086,
+          "chunks": 1,
+          "sha256": "0x789433b4491682b26b7a7fa912697eed9b8c87b92496c11fcda16f9abb763017"
+        }
+      ]
+    },
+    {
+      "path": "style.css",
+      "expectedBytes": 34094,
+      "expectedSHA256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07",
+      "status": "complete-verified",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "complete-verified",
+          "bytes": 34094,
+          "chunks": 2,
+          "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "complete-verified",
+          "bytes": 34094,
+          "chunks": 2,
+          "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07"
+        }
+      ]
+    },
+    {
+      "path": "app.js",
+      "expectedBytes": 33301,
+      "expectedSHA256": "0x5e99f3e0a8c781b52e2bdac00c98a09bedf08adc580524d782c53e0928f75f42",
+      "status": "complete-verified",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "complete-verified",
+          "bytes": 33301,
+          "chunks": 2,
+          "sha256": "0x5e99f3e0a8c781b52e2bdac00c98a09bedf08adc580524d782c53e0928f75f42"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "complete-verified",
+          "bytes": 33301,
+          "chunks": 2,
+          "sha256": "0x5e99f3e0a8c781b52e2bdac00c98a09bedf08adc580524d782c53e0928f75f42"
+        }
+      ]
+    },
+    {
+      "path": "chat.js",
+      "expectedBytes": 718,
+      "expectedSHA256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7",
+      "status": "complete-verified",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "complete-verified",
+          "bytes": 718,
+          "chunks": 1,
+          "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "complete-verified",
+          "bytes": 718,
+          "chunks": 1,
+          "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+        }
+      ]
+    },
+    {
+      "path": "store.js",
+      "expectedBytes": 5353,
+      "expectedSHA256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147",
+      "status": "complete-verified",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "complete-verified",
+          "bytes": 5353,
+          "chunks": 1,
+          "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "complete-verified",
+          "bytes": 5353,
+          "chunks": 1,
+          "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+        }
+      ]
+    },
+    {
+      "path": "local-delivery.js",
+      "expectedBytes": 894,
+      "expectedSHA256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436",
+      "status": "complete-verified",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "complete-verified",
+          "bytes": 894,
+          "chunks": 1,
+          "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "complete-verified",
+          "bytes": 894,
+          "chunks": 1,
+          "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436"
+        }
+      ]
+    },
+    {
+      "path": "wallet.js",
+      "expectedBytes": 8533,
+      "expectedSHA256": "0x121ccf37d75850571cb6bd163e382a6c57111808dd7cde3d1da7a7904ed9eb2a",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "path": "wallet-chat.js",
+      "expectedBytes": 11165,
+      "expectedSHA256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "expectedBytes": 522050,
+      "expectedSHA256": "0xb016b0c3898c78fd8156466eb1ff1f42c9df951c2f0d64c9bdf799fe745b0a6c",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "expectedBytes": 1075,
+      "expectedSHA256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "expectedBytes": 635,
+      "expectedSHA256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "expectedBytes": 512682,
+      "expectedSHA256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "path": "assets/studio.svg",
+      "expectedBytes": 864,
+      "expectedSHA256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "path": "assets/sketch.svg",
+      "expectedBytes": 807,
+      "expectedSHA256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "path": "app-config.json",
+      "expectedBytes": 157,
+      "expectedSHA256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f",
+      "status": "missing",
+      "checks": [
+        {
+          "rpc": "https://rpc.xlayer.tech",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        {
+          "rpc": "https://xlayer.drpc.org",
+          "status": "missing",
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "0x0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    }
+  ]
+}

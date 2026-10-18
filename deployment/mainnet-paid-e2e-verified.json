@@ -1,0 +1,107 @@
+{
+  "checkedAt": "2026-10-18T19:11:10.649Z",
+  "chainId": 196,
+  "vault": "0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f",
+  "contentId": "1",
+  "status": "PASS",
+  "readers": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "creatorUnwithdrawnOKB": "0.0",
+      "treasuryUnwithdrawnOKB": "0.000001",
+      "sold": "1",
+      "senderCNonce": 4,
+      "safeBlock": 73581530
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "creatorUnwithdrawnOKB": "0.0",
+      "treasuryUnwithdrawnOKB": "0.000001",
+      "sold": "1",
+      "senderCNonce": 4,
+      "safeBlock": 73581530
+    }
+  ],
+  "transactions": [
+    {
+      "purpose": "A gas 划拨",
+      "hash": "0xe06c6a1f36fc94ce708efd05340096d1cd07908938acde8fd99063a30a352326",
+      "block": 73578786,
+      "gasUsed": "21000",
+      "feeWei": "420000021000",
+      "feeOKB": "0.000000420000021",
+      "from": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+      "to": "0x1538Ac2d29d03615D2336A2227900aAb334D9402",
+      "valueOKB": "0.00005"
+    },
+    {
+      "purpose": "上架",
+      "hash": "0x2880a252fff7f6c445b09a394d17114d9f68588c4f6116dd26d36f7c0c6ed383",
+      "block": 73579517,
+      "gasUsed": "240383",
+      "feeWei": "4807660240383",
+      "feeOKB": "0.000004807660240383",
+      "from": "0x1538Ac2d29d03615D2336A2227900aAb334D9402",
+      "to": "0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f",
+      "valueOKB": "0.0"
+    },
+    {
+      "purpose": "购买",
+      "hash": "0x8c87dab6c7964fead1c1d7e96a4b3de8e8f864cfb32d418f23c9ff929bd91ee3",
+      "block": 73580439,
+      "gasUsed": "227776",
+      "feeWei": "4555520227776",
+      "feeOKB": "0.000004555520227776",
+      "from": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+      "to": "0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f",
+      "valueOKB": "0.00001"
+    },
+    {
+      "purpose": "TapeSend 自动发信",
+      "hash": "0xd4fc1c3b39e2ac2d4ec87059d8e2d3d4f4cd87689e337722626b7681606f5f4d",
+      "block": 73580677,
+      "gasUsed": "191625",
+      "feeWei": "3832500191625",
+      "feeOKB": "0.000003832500191625",
+      "from": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+      "to": "0xe61A9C7213a6Aa616C246a2B569e555B417b25ee",
+      "valueOKB": "0.0"
+    },
+    {
+      "purpose": "A 提现",
+      "hash": "0x5cf04cdb1d9d9dcc73e2d86132bb157d2effabad1126d80f0b5207ea1a379e97",
+      "block": 73581554,
+      "gasUsed": "33455",
+      "feeWei": "669100033455",
+      "feeOKB": "0.000000669100033455",
+      "from": "0x1538Ac2d29d03615D2336A2227900aAb334D9402",
+      "to": "0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f",
+      "valueOKB": "0.0"
+    }
+  ],
+  "withdrawal": {
+    "beforeOKB": "0.000045192339759617",
+    "afterOKB": "0.000053523239726162",
+    "grossReceivedOKB": "0.000009",
+    "netIncreaseOKB": "0.000008330899966545",
+    "feeOKB": "0.000000669100033455"
+  },
+  "totals": {
+    "flowGasOKB": "0.000013864780693239",
+    "fundingGasOKB": "0.000000420000021",
+    "totalGasWithFundingOKB": "0.000014284780714239",
+    "imagePriceOKB": "0.00001",
+    "creatorIncomeOKB": "0.000009",
+    "platformIncomeOKB": "0.000001",
+    "grossTransactionOutflowWithImagePriceOKB": "0.000024284780714239",
+    "scope": "This paid-content acceptance only; excludes prior infrastructure, contract deployment, DeWEB uploads and Railway bills. Internal funding and image principal are not burned fees."
+  },
+  "browser": {
+    "deweb": "https://10-2-6.tapekit.org/",
+    "inboxClient": "Official TapeKit TapeSend source running locally",
+    "imageDecrypted": true,
+    "viewSeconds": 60,
+    "expiredReopenRejected": true,
+    "fragmentCleared": true
+  }
+}

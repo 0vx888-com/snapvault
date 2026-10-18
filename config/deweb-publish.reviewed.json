@@ -1,0 +1,17 @@
+{
+  "chainId": 196,
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "circuits": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+  "tokenId": 10,
+  "cpuIndex": 6,
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "name": "10.2.6.tape",
+  "publicURL": "https://10-2-6.tapekit.org/",
+  "approvedBudgetWei": "10000000000000000",
+  "maxGasPriceWei": "30000000",
+  "preparation": {
+    "status": "CONTAINER_OPENED_READY_FOR_WALLET_PREVIEW",
+    "budgetBasis": "0.01 OKB allocated within user-approved 0.30 total reserve; no automatic signing; every transaction requires human wallet confirmation",
+    "openingRecord": "deployment/website-open-confirmed.json"
+  }
+}

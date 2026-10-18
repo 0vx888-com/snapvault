@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-18T15:07:10.277Z",
+  "chainId": 196,
+  "path": "/vendor/ethers.min.js",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x507f4afe581b500d2149c46196b61d0e7ab0dee9f51caca3ce9f040b381ad109",
+      "block": 73566943,
+      "status": 1,
+      "bytes": 24000,
+      "sha256": "0x4f39f13d72e3b4b40c9d463004e4fccd66b95485131de47919eea1a1b1d5e20e",
+      "declaredWholeFileSha256": "0xb016b0c3898c78fd8156466eb1ff1f42c9df951c2f0d64c9bdf799fe745b0a6c",
+      "feeOKB": "0.000109837925491896"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x507f4afe581b500d2149c46196b61d0e7ab0dee9f51caca3ce9f040b381ad109",
+      "block": 73566943,
+      "status": 1,
+      "bytes": 24000,
+      "sha256": "0x4f39f13d72e3b4b40c9d463004e4fccd66b95485131de47919eea1a1b1d5e20e",
+      "declaredWholeFileSha256": "0xb016b0c3898c78fd8156466eb1ff1f42c9df951c2f0d64c9bdf799fe745b0a6c",
+      "feeOKB": "0.000109837925491896"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": false,
+  "wholeFileBytes": 522050,
+  "next": {
+    "path": "/vendor/ethers.min.js",
+    "chunk": 1,
+    "bytes": 24000,
+    "valueOKB": "0"
+  }
+}

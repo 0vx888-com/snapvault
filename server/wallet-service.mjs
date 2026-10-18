@@ -1,3 +1,4 @@
+import {refundAction} from './wallet-refunds.mjs';
 // Authenticated wallet/chat/direct-delivery core. No user private keys, NFT or
 // container. Single-process persistent store; do not run multiple replicas.
 import {randomBytes,createCipheriv,createDecipheriv,createHash,publicEncrypt,createPublicKey,constants} from 'node:crypto';
@@ -19,7 +20,7 @@ function checkedImage(image,mime){
  if(real!==mime)fail('图片文件内容与格式不符');return bytes;
 }
 export class WalletService {
- constructor({provider,vault,operator,dir,origins,confirmations=1,deploymentBlock=0,chainId=31337,mainnetEnabled=false,mainnetAcknowledgement,owner,treasury,allowLocalKeyFile=false,masterKey=process.env.SNAPVAULT_MASTER_KEY,backupKey=process.env.SNAPVAULT_BACKUP_KEY,backupDir,backupPutURL,tapeSend,sender,allowStateMigration=false}){
+ constructor({provider,vault,operator,dir,origins,confirmations=1,deploymentBlock=0,chainId=31337,mainnetEnabled=false,mainnetAcknowledgement,owner,treasury,allowLocalKeyFile=false,masterKey=process.env.SNAPVAULT_MASTER_KEY,backupKey=process.env.SNAPVAULT_BACKUP_KEY,backupDir,backupPutURL,backupStore,tapeSend,sender,allowStateMigration=false}){
   const policy=networkPolicy({chainId,mainnetEnabled,mainnetAcknowledgement,owner,treasury,operator:operator.address,confirmations,tapeSend},{local:allowLocalKeyFile});
   Object.assign(this,{provider,vault,operator,dir,origins,confirmations,deploymentBlock,chainId,policy,tapeSend,owner,treasury});mkdirSync(dir,{recursive:true,mode:0o700});
   if(masterKey)this.master=secretKey(masterKey,'SNAPVAULT_MASTER_KEY');
@@ -29,8 +30,8 @@ export class WalletService {
   this.identity=chainId+':'+vault.target.toLowerCase();if(this.state.identity&&this.state.identity!==this.identity)throw Error('Data directory belongs to another chain/contract');if(!this.state.identity&&this.state.version===1&&!allowStateMigration)throw Error('Legacy data requires explicit backup and migration');this.state.identity=this.identity;this.state.version=2;
   this.state.orderIndex ||= {cursor:deploymentBlock-1,anchor:null,orders:{}};this.state.tapeJobs ||= {};
   this.nonces=new Map();this.sessions=new Map();this.pending=Promise.resolve();this.limits=new Map();this.scanTask=null;this.scanAt=0;
-  if(backupKey){const key=secretKey(backupKey,'SNAPVAULT_BACKUP_KEY');if(key.equals(this.master))throw Error('Backup key must differ from master key');this.backup=new BackupManager({dir:backupDir||resolve(dir,'backups'),key,putURL:backupPutURL});}
-  if(policy.mainnet&&(!this.backup||!backupPutURL))throw Error('Mainnet requires encrypted OFF-SITE backups');
+  if(backupKey){const key=secretKey(backupKey,'SNAPVAULT_BACKUP_KEY');if(key.equals(this.master))throw Error('Backup key must differ from master key');this.backup=new BackupManager({dir:backupDir||resolve(dir,'backups'),key,putURL:backupPutURL,store:backupStore});}
+  if(policy.mainnet&&(!this.backup||(!backupPutURL&&!backupStore)))throw Error('Mainnet requires encrypted OFF-SITE backups');
   if(tapeSend?.enabled&&sender)this.transport=new WalletTapeSend({service:this,config:tapeSend,sender});
   if(policy.mainnet&&!this.transport)throw Error('Mainnet TapeSend sender C must be configured separately');
   this.save();
@@ -81,7 +82,7 @@ export class WalletService {
   let pages=0,changed=false;for(let from=Math.max(this.deploymentBlock,index.cursor+1);from<=end&&pages<10;from+=100,pages++){
    const to=Math.min(from+99,end),logs=await this.provider.getLogs({address:this.vault.target,topics:[topics],fromBlock:from,toBlock:to});
    for(const log of logs){const e=this.vault.interface.parseLog(log),id=e.args.id.toString(),buyer=(e.args.buyer||e.args.fan).toLowerCase(),key=id+':'+buyer;
-    if(e.name==='DeliveryRefunded'){index.orders[key]={...(index.orders[key]||{}),refunded:true};const job=this.state.tapeJobs[this.jobRef(id,buyer)];if(job){job.status='refunded';delete job.raw;}continue;}
+    if(e.name==='DeliveryRefunded'){index.orders[key]={...(index.orders[key]||{}),refunded:true,refundTx:log.transactionHash};const job=this.state.tapeJobs[this.jobRef(id,buyer)];if(job){job.status='refunded';delete job.raw;}continue;}
     index.orders[key]={id,buyer,route:e.name==='DeliveryRequested'?'tapesend':'ordinary',blockNumber:log.blockNumber,transactionHash:log.transactionHash,refunded:false};
     if(e.name==='DeliveryRequested'){const ref=this.jobRef(id,buyer);this.state.tapeJobs[ref] ||= {id,buyer,circuits:e.args.circuits,tokenId:e.args.tokenId.toString(),key:e.args.key,endpoint:e.args.endpoint,status:'queued',purchaseTx:log.transactionHash};}
    }
@@ -99,8 +100,9 @@ export class WalletService {
   const s=this.auth(token,origin),who=s.account;this.limit(who);
   if(action==='logout'){this.sessions.delete(token);return {ok:true};}
   if(action==='state')return this.stateFor(who);
+  if(action.startsWith('refund-'))return refundAction(this,action,b,who);
   if(action==='delivery-settings'){let binding=null;if(b.circuits){const circuits=address(b.circuits),tokenId=String(b.tokenId);if(!/^[1-9][0-9]{0,76}$/.test(tokenId))fail('容器电路编号无效');binding={circuits,tokenId};}this.state.profiles[who]={...this.state.profiles[who],delivery:binding};this.save();return {ok:true};}
-  if(action==='delivery-route'){return this.deliveryRoute(who);}
+  if(action==='delivery-route'){const route=await this.deliveryRoute(who);return {available:route.available,reason:route.reason||null};}
   if(action==='earnings')return {amount:formatEther(await this.vault.balances(who,ZeroAddress)),token:ZeroAddress};
   if(action==='profile'){const name=String(b.name||'').trim(),bio=String(b.bio||'').trim();if(!name||name.length>20||bio.length>100)fail('昵称或简介长度无效');this.state.profiles[who]={...this.state.profiles[who],name,bio,creator:true};this.save();return {ok:true};}
   if(action==='friend'){

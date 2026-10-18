@@ -1,0 +1,28 @@
+{
+  "status": "UNSIGNED_AWAITING_USER_SINGLE_TRANSACTION_APPROVAL",
+  "chainId": 196,
+  "purpose": "Mint exactly 3 NAND for new independent TapeSend sender C",
+  "transaction": {
+    "from": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+    "to": "0x37Ea91bCe83286195cB4A908920018db24F2c784",
+    "nonce": 0,
+    "value": "0xd00c027e0c000",
+    "data": "0x1b2ef1ca00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003",
+    "gasLimit": "111541",
+    "maxGasPriceWei": "21000000"
+  },
+  "valueOKB": "0.00366",
+  "maximumExecutionGasOKB": "0.000002342361",
+  "maximumValuePlusExecutionGasOKB": "0.003662342361",
+  "receiverReuse": {
+    "circuits": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+    "tokenId": 10
+  },
+  "willNotAuthorize": [
+    "tapeout",
+    "container opening",
+    "second receiver container",
+    "repeated mint"
+  ],
+  "note": "C is an application-owned encrypted service wallet, not imported into the user browser wallet. No transaction signed or broadcast."
+}

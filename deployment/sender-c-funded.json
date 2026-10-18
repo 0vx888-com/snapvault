@@ -1,0 +1,10 @@
+{
+  "chainId": 196,
+  "hash": "0xbd8af6d06c082de5765828158d787e0d4fa94244ce01c89e6eff2e698ca19933",
+  "from": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "to": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+  "valueWei": "85100000000000000",
+  "feeWei": "420000021000",
+  "block": 73576363,
+  "kind": "internal-service-funding-not-protocol-expense"
+}

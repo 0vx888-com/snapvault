@@ -1,0 +1,36 @@
+{
+  "status": "VERIFIED",
+  "hash": "0xa93a6a9796ac4bc376aef4ee2a1abe08dbd742ddac07fe0bdd40a54b2f51e9e0",
+  "chainId": 196,
+  "from": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+  "to": "0x536add8f30f03b69f6fbf29d425a816a0dc50106",
+  "circuits": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+  "tokenId": "11",
+  "nonce": 2,
+  "valueWei": "80000000000000000",
+  "gasLimit": "203674",
+  "gasPriceWei": "20000001",
+  "dataFeeEstimateWei": "0",
+  "maximumModeledTotalWei": "80004073480203674",
+  "userCapWei": "80004400000000000",
+  "balanceBeforeWei": "80133722939686147",
+  "container": "0x5fC3d6B95Ea28832468C6c227351298015DB16bc",
+  "actualSpendWei": "80003344680167234",
+  "executionFeeWei": "3344680167234",
+  "balanceAfterWei": "130378259518913",
+  "block": 73576861,
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "status": 1,
+      "opened": true,
+      "container": "0x5fC3d6B95Ea28832468C6c227351298015DB16bc"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "status": 1,
+      "opened": true,
+      "container": "0x5fC3d6B95Ea28832468C6c227351298015DB16bc"
+    }
+  ]
+}

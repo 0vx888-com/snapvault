@@ -6,7 +6,7 @@ describe('免容器普通钱包交付',function(){
  const origin='https://snapvault.test';
  before(async()=>({WalletService}=await import('../server/wallet-service.mjs')));
  beforeEach(async()=>{
-  [creator,buyer,other]=await ethers.getSigners();operator=ethers.Wallet.fromPhrase('test test test test test test test test test test test junk');
+  [creator,buyer,other]=await ethers.getSigners();operator=ethers.Wallet.fromPhrase(require('hardhat').config.networks.hardhat.accounts.mnemonic);
   vault=await ethers.deployContract('SnapVaultDirect',[creator.address,1000,creator.address,operator.address]);
   dir=fs.mkdtempSync(path.join(os.tmpdir(),'sv-wallet-test-'));
   service=new WalletService({allowLocalKeyFile:true,provider:ethers.provider,vault,operator,dir,origins:[origin],confirmations:1});

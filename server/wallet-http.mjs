@@ -1,15 +1,16 @@
 import {createServer} from 'node:http';
-import {readFileSync} from 'node:fs';
+import {readFileSync,existsSync} from 'node:fs';
 import {resolve,extname,sep} from 'node:path';
 import {isIP} from 'node:net';
 import {APP_FILES} from '../scripts/app-files.mjs';
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml'};
-export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedProxy=false}){
+export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedProxy=false,staticDir=null}){
  const origin=`http://127.0.0.1:${port}`;
+ const tapeRoot=resolve(root,'public/tapesend'),tapeManifestPath=resolve(tapeRoot,'manifest.json'),tapeFiles=existsSync(tapeManifestPath)?JSON.parse(readFileSync(tapeManifestPath,'utf8')):{};
  const server=createServer(async(req,res)=>{
   const suppliedOrigin=req.headers.origin;
   const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'};
-  const send=(code,d)=>{res.writeHead(code,{...headers,'Content-Type':'application/json'});res.end(JSON.stringify(d));};
+  const send=(code,d)=>{const body=JSON.stringify(d,(_key,value)=>typeof value==='bigint'?value.toString():value);res.writeHead(code,{...headers,'Content-Type':'application/json'});res.end(body);};
   try{
    if(req.method==='GET'&&req.url==='/healthz'&&(req.headers.host==='healthcheck.railway.app'||req.headers.host===`127.0.0.1:${port}`||allowedHosts.includes(req.headers.host))){const config=await service.config();return send(200,{status:'ok',chainId:config.chainId,testnetOnly:config.chainId!==196});}
    if(req.headers.host!==`127.0.0.1:${port}`&&!allowedHosts.includes(req.headers.host))throw Object.assign(Error('Host 不允许'),{status:403});
@@ -17,10 +18,18 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedPr
    if(suppliedOrigin){headers['Access-Control-Allow-Origin']=suppliedOrigin;headers['Access-Control-Allow-Headers']='Content-Type, Authorization';headers['Access-Control-Allow-Methods']='GET, POST, OPTIONS';}
    if(req.method==='OPTIONS'){res.writeHead(204,headers);return res.end();}
    const url=new URL(req.url,origin);
+   if(url.pathname==='/tapesend'||url.pathname.startsWith('/tapesend/')){
+    if(req.method!=='GET')return send(405,{error:'仅支持 GET'});
+    if(url.pathname==='/tapesend'){res.writeHead(302,{...headers,Location:'/tapesend/'});return res.end();}
+    const name=decodeURIComponent(url.pathname.slice('/tapesend/'.length))||'index.html';
+    if(!Object.hasOwn(tapeFiles,name))return send(404,{error:'文件不存在'});
+    const file=resolve(tapeRoot,name);if(!file.startsWith(tapeRoot+sep))return send(404,{error:'文件不存在'});
+    const bytes=readFileSync(file);res.writeHead(200,{...headers,'Content-Type':mime[extname(file)]||'text/plain; charset=utf-8'});return res.end(bytes);
+   }
    if(url.pathname==='/app-config.json'&&req.method==='GET'){const c=await service.config();return send(200,{mode:'wallet',apiBase:'',allowedChainIds:[c.chainId],allowMainnet:c.chainId===196&&c.mainnet===true});}
    if(url.pathname==='/api/wallet/config'&&req.method==='GET')return send(200,await service.config());
    if(url.pathname.startsWith('/api/wallet/blob/')&&req.method==='GET'){
-    const hash=url.pathname.split('/').at(-1);if(!/^[a-f0-9]{64}$/.test(hash))throw Error('密文路径无效');res.writeHead(200,{...headers,'Content-Type':'application/octet-stream'});return res.end(service.blob(hash));
+    const hash=url.pathname.split('/').at(-1);if(!/^[a-f0-9]{64}$/.test(hash))throw Error('密文路径无效');const blob=service.blob(hash);res.writeHead(200,{...headers,'Content-Type':'application/octet-stream'});return res.end(blob);
    }
    if(url.pathname.startsWith('/api/')||url.pathname==='/rpc'){
     if(req.method!=='POST')return send(405,{error:'仅支持 POST'});
@@ -43,9 +52,9 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedPr
    }
    if(req.method!=='GET')return send(405,{error:'仅支持 GET'});
    const requested=decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname);if(!APP_FILES.includes(requested.slice(1))&&!['/app-config.json','/deweb-manifest.json'].includes(requested))return send(404,{error:'页面不存在'});
-   const web=resolve(root,'web'),file=resolve(web,'.'+requested);if(!file.startsWith(web+sep))throw Error('路径无效');
-   res.writeHead(200,{...headers,'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(readFileSync(file));
-  }catch(e){send(e.status||400,{error:e.message});}
+   const web=resolve(staticDir||resolve(root,'web')),file=resolve(web,'.'+requested);if(!file.startsWith(web+sep))throw Error('路径无效');
+   const bytes=readFileSync(file);res.writeHead(200,{...headers,'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(bytes);
+  }catch(e){if(res.headersSent){res.destroy();return;}send(e.status||400,{error:e.message});}
  });
  server.requestTimeout=20000;server.headersTimeout=10000;
  return server;

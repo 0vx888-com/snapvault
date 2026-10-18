@@ -7,6 +7,7 @@ import {WalletService} from './wallet-service.mjs';
 import {walletHttp} from './wallet-http.mjs';
 import {networkPolicy} from './network-policy.mjs';
 import {startWorkers} from './workers.mjs';
+import {s3BackupFromEnv} from './s3-backup.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const config=process.env.SNAPVAULT_WALLET_CONFIG_JSON?JSON.parse(process.env.SNAPVAULT_WALLET_CONFIG_JSON):JSON.parse(readFileSync(process.env.SNAPVAULT_WALLET_CONFIG||resolve(root,'config/wallet.json'),'utf8'));
 const policy=networkPolicy(config);
@@ -22,7 +23,7 @@ const artifact=JSON.parse(readFileSync(resolve(root,'artifacts/contracts/SnapVau
 if((await vault.deliveryOperator()).toLowerCase()!==operator.address.toLowerCase()||Number(await vault.MAX_FEE_BPS())!==1500||await vault.DIRECT_TYPEHASH()===null)throw Error('Expected hardened SnapVaultDirect/operator');
 if(policy.mainnet){if(!config.vaultBytecodeHash||keccak256(await provider.getCode(config.vault))!==config.vaultBytecodeHash)throw Error('Mainnet bytecode hash mismatch');if((await vault.owner()).toLowerCase()!==config.owner.toLowerCase()||(await vault.treasury()).toLowerCase()!==config.treasury.toLowerCase())throw Error('Owner/treasury mismatch');if(!config.dewebURL||!config.origins.includes(new URL(config.dewebURL).origin)||config.tapeSend.publicBaseURL!==new URL(config.dewebURL).origin||!config.testnetEvidenceSHA256)throw Error('Verified DeWEB origin and new testnet acceptance evidence required before mainnet runtime');}
 const sender=config.tapeSend?.enabled?(await signingWallet('TAPESEND')).connect(provider):undefined;
-const port=Number(process.env.PORT||5185),service=new WalletService({...config,provider,vault,operator,sender,dir:config.dataDir,masterKey:process.env.SNAPVAULT_MASTER_KEY,backupKey:process.env.SNAPVAULT_BACKUP_KEY,backupDir:config.backupDir,backupPutURL:process.env.SNAPVAULT_BACKUP_PUT_URL});
+const port=Number(process.env.PORT||5185),service=new WalletService({...config,provider,vault,operator,sender,dir:config.dataDir,masterKey:process.env.SNAPVAULT_MASTER_KEY,backupKey:process.env.SNAPVAULT_BACKUP_KEY,backupDir:config.backupDir,backupPutURL:process.env.SNAPVAULT_BACKUP_PUT_URL,backupStore:s3BackupFromEnv()});
 await service.flushBackup();await service.syncOrders(true);
 const server=walletHttp({service,root,port,allowedHosts:config.hosts||[],trustedProxy:!!process.env.RAILWAY_ENVIRONMENT_ID});
 const stopWorkers=startWorkers(service,{onError:kind=>console.error(kind+' worker unavailable; new checkout fails closed when readiness is missing')});

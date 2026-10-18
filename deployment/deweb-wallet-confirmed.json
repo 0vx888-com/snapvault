@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-18T15:04:10.510Z",
+  "chainId": 196,
+  "path": "/wallet.js",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x120243be495f95c08544da57aac3d6256c4d93f703a788686366cf0a196c0b51",
+      "block": 73566779,
+      "status": 1,
+      "bytes": 8497,
+      "sha256": "0xe67e4b84e4b692123344010b3a2a781f65a4dbd1d8a9eb37cc115cbf0f18267c",
+      "feeOKB": "0.000042610922130546"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x120243be495f95c08544da57aac3d6256c4d93f703a788686366cf0a196c0b51",
+      "block": 73566779,
+      "status": 1,
+      "bytes": 8497,
+      "sha256": "0xe67e4b84e4b692123344010b3a2a781f65a4dbd1d8a9eb37cc115cbf0f18267c",
+      "feeOKB": "0.000042610922130546"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": true,
+  "next": {
+    "path": "/wallet-chat.js",
+    "chunk": 0,
+    "bytes": 11168,
+    "wholeFileBytes": 11168,
+    "valueOKB": "0"
+  }
+}

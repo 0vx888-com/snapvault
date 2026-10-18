@@ -1,0 +1,27 @@
+{
+  "status": "PAID_MAINNET_E2E_VERIFIED",
+  "checkedAt": "2026-10-18T19:11:10.649Z",
+  "deploymentId": "d5fb7981-a373-4dd5-b265-2390fc459479",
+  "health": {
+    "chainId": 196,
+    "testnetOnly": false
+  },
+  "config": {
+    "chainId": 196,
+    "vault": "0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f",
+    "mainnet": true,
+    "tapeSendEnabled": true,
+    "confirmations": 6
+  },
+  "backupRestore": "mainnet-backup-restore-verified.json",
+  "testResult": "53 contract/service tests passed; 9 local TapeSend tests including HTTP/browser passed",
+  "realPurchaseVerified": true,
+  "realTapeSendVerified": true,
+  "gateway": "Mainnet UI verified after transient RPC quorum failure; cold loading availability remains a limitation",
+  "realDecryptionVerified": true,
+  "expiredReopenRejected": true,
+  "creatorWithdrawalVerified": true,
+  "withdrawalTx": "0x5cf04cdb1d9d9dcc73e2d86132bb157d2effabad1126d80f0b5207ea1a379e97",
+  "inboxClient": "Official TapeKit TapeSend source running locally",
+  "evidence": "mainnet-paid-e2e-verified.json"
+}

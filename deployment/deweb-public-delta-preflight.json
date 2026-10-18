@@ -1,0 +1,91 @@
+{
+  "checkedAt": "2026-10-18T16:11:20.462Z",
+  "pendingOperations": 58,
+  "reused": [
+    {
+      "path": "style.css",
+      "bytes": 34094,
+      "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07"
+    }
+  ],
+  "alreadySpentRepairOKB": "0.00031769501588475",
+  "repairBudgetTotalOKB": "0.006",
+  "remainingBudgetOKB": "0.00568230498411525",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 10086,
+      "sha256": "0x789433b4491682b26b7a7fa912697eed9b8c87b92496c11fcda16f9abb763017"
+    },
+    {
+      "path": "style.css",
+      "bytes": 34094,
+      "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07"
+    },
+    {
+      "path": "app.js",
+      "bytes": 33301,
+      "sha256": "0x5e99f3e0a8c781b52e2bdac00c98a09bedf08adc580524d782c53e0928f75f42"
+    },
+    {
+      "path": "chat.js",
+      "bytes": 718,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+    },
+    {
+      "path": "store.js",
+      "bytes": 5353,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 894,
+      "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436"
+    },
+    {
+      "path": "wallet.js",
+      "bytes": 8533,
+      "sha256": "0x121ccf37d75850571cb6bd163e382a6c57111808dd7cde3d1da7a7904ed9eb2a"
+    },
+    {
+      "path": "wallet-chat.js",
+      "bytes": 11165,
+      "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2"
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "bytes": 522050,
+      "sha256": "0xb016b0c3898c78fd8156466eb1ff1f42c9df951c2f0d64c9bdf799fe745b0a6c"
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "bytes": 1075,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "bytes": 635,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "bytes": 512682,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+    },
+    {
+      "path": "assets/studio.svg",
+      "bytes": 864,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+    },
+    {
+      "path": "assets/sketch.svg",
+      "bytes": 807,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+    },
+    {
+      "path": "app-config.json",
+      "bytes": 134,
+      "sha256": "0x8b4e53841e4fdf48f479fd0e8b35b99d0f6add11f515fbc280d991663fbd133f"
+    }
+  ]
+}

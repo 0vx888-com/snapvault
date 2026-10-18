@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-18T15:03:17.143Z",
+  "chainId": 196,
+  "path": "/local-delivery.js",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x1e25d00c010778058889bad1cb2658f9edb0d4700ed1304149d5f9f37c526b5c",
+      "block": 73566722,
+      "status": 1,
+      "bytes": 894,
+      "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436",
+      "feeOKB": "0.000009662680483134"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x1e25d00c010778058889bad1cb2658f9edb0d4700ed1304149d5f9f37c526b5c",
+      "block": 73566722,
+      "status": 1,
+      "bytes": 894,
+      "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436",
+      "feeOKB": "0.000009662680483134"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": true,
+  "next": {
+    "path": "/wallet.js",
+    "chunk": 0,
+    "bytes": 8497,
+    "wholeFileBytes": 8497,
+    "valueOKB": "0"
+  }
+}

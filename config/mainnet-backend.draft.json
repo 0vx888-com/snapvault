@@ -10,9 +10,14 @@
   "treasury": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
   "operator": "0xb402779Ed008DE2BeF8dA503EBE75fbAe4679309",
   "confirmations": 6,
-  "origins": [],
-  "hosts": [],
-  "dewebURL": null,
+  "origins": [
+    "https://10-2-6.tapekit.org",
+    "https://snapvault-api-production.up.railway.app"
+  ],
+  "hosts": [
+    "snapvault-api-production.up.railway.app"
+  ],
+  "dewebURL": "https://10-2-6.tapekit.org/",
   "testnetEvidenceSHA256": null,
   "dataDir": "/data/snapvault-mainnet-v2",
   "backupDir": "/data/snapvault-mainnet-v2/backups",
@@ -21,9 +26,9 @@
     "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
     "implementation": "0xdcc57797089ebd9f26e686379a4323f353a3f9c6",
     "implementationHash": "0xf97f9432aefd6f305f610fbe6c789a8f4facfc251fcaf39e06d8c1f2c2881b61",
-    "circuits": null,
-    "tokenId": null,
-    "publicBaseURL": null,
+    "circuits": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+    "tokenId": 11,
+    "publicBaseURL": "https://10-2-6.tapekit.org",
     "maxGasPriceWei": "1000000000",
     "maxGasPerMessage": 1500000,
     "maxDailyWei": "10000000000000000"

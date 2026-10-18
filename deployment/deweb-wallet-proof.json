@@ -1,0 +1,87 @@
+{
+  "chainId": 196,
+  "registry": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "name": "10.2.6.tape",
+  "url": "https://10-2-6.tapekit.org/",
+  "bundleMode": "wallet",
+  "files": [
+    {
+      "path": "/index.html",
+      "bytes": 10432,
+      "sha256": "0x3d2b7b9261203aefcd22950b11cc02670812d6fd79950740318cf0189732f787"
+    },
+    {
+      "path": "/style.css",
+      "bytes": 34094,
+      "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07"
+    },
+    {
+      "path": "/app.js",
+      "bytes": 35449,
+      "sha256": "0x34aae9503f6c8b8b4419f52b14795fff04bc69592a7ecf649e80299a80621ad5"
+    },
+    {
+      "path": "/chat.js",
+      "bytes": 26839,
+      "sha256": "0x778370fe43e3195bdf6029236b35f09e583fb85c1939cdbf4fe7f32c84da3fab"
+    },
+    {
+      "path": "/store.js",
+      "bytes": 7388,
+      "sha256": "0xd3b825166eded51fa923d8d804820ac1614c146462f6f1df012330286ce8bfbe"
+    },
+    {
+      "path": "/local-delivery.js",
+      "bytes": 894,
+      "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436"
+    },
+    {
+      "path": "/wallet.js",
+      "bytes": 8497,
+      "sha256": "0xe67e4b84e4b692123344010b3a2a781f65a4dbd1d8a9eb37cc115cbf0f18267c"
+    },
+    {
+      "path": "/wallet-chat.js",
+      "bytes": 11168,
+      "sha256": "0xcf548dbf816b3ed5bfadc3ae35b361ecc1cae53f80d7fdbde03b733dfe42b4cf"
+    },
+    {
+      "path": "/vendor/ethers.min.js",
+      "bytes": 522050,
+      "sha256": "0xb016b0c3898c78fd8156466eb1ff1f42c9df951c2f0d64c9bdf799fe745b0a6c"
+    },
+    {
+      "path": "/vendor/ethers-LICENSE.md",
+      "bytes": 1075,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "path": "/assets/mark-tape.svg",
+      "bytes": 635,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+    },
+    {
+      "path": "/assets/social-photos.jpg",
+      "bytes": 512682,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+    },
+    {
+      "path": "/assets/studio.svg",
+      "bytes": 864,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+    },
+    {
+      "path": "/assets/sketch.svg",
+      "bytes": 807,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+    },
+    {
+      "path": "/app-config.json",
+      "bytes": 157,
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f"
+    }
+  ],
+  "verifiedBlock": 73569862,
+  "independentReaders": 2
+}

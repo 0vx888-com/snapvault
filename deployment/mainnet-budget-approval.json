@@ -1,7 +1,7 @@
 {
   "recordedDate": "2026-10-18",
   "chainId": 196,
-  "status": "budget-accepted-owner-verified-awaiting-funding",
+  "status": "budget-accepted-owner-funded-awaiting-paid-transaction-confirmation",
   "userApprovedReserveOKB": "0.30",
   "userApprovedReserveWei": "300000000000000000",
   "scope": [

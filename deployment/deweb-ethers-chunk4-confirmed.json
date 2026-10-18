@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-10-18T15:14:11.634Z",
+  "chainId": 196,
+  "path": "/vendor/ethers.min.js",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x2f6f4b4d6252d8259604f51bb7688de30312e39dd343f1022fc1b2b62b6f3cee",
+      "block": 73567356,
+      "status": 1,
+      "verifiedPrefixBytes": 120000,
+      "sha256": "0xaba175b8ba6e81bd3860a8eef2c86c0bbc7dc6853b3f2c99e1f3d3786fa55750",
+      "feeOKB": "0.000107332065366603"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x2f6f4b4d6252d8259604f51bb7688de30312e39dd343f1022fc1b2b62b6f3cee",
+      "block": 73567356,
+      "status": 1,
+      "verifiedPrefixBytes": 120000,
+      "sha256": "0xaba175b8ba6e81bd3860a8eef2c86c0bbc7dc6853b3f2c99e1f3d3786fa55750",
+      "feeOKB": "0.000107332065366603"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": false,
+  "next": {
+    "path": "/vendor/ethers.min.js",
+    "chunk": 5,
+    "bytes": 24000,
+    "valueOKB": "0"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-18T14:48:22.570Z",
+  "chainId": 196,
+  "path": "/style.css",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x0fe44f26e90830ef4c82b667916ade8ff54ba995538eb9a3728ef7495db3afd1",
+      "block": 73565821,
+      "status": 1,
+      "bytes": 34094,
+      "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07",
+      "feeOKB": "0.0000470280023514"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x0fe44f26e90830ef4c82b667916ade8ff54ba995538eb9a3728ef7495db3afd1",
+      "block": 73565821,
+      "status": 1,
+      "bytes": 34094,
+      "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07",
+      "feeOKB": "0.0000470280023514"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": true,
+  "next": {
+    "method": "putFile",
+    "path": "/app.js",
+    "chunk": 0,
+    "bytes": 24000,
+    "valueOKB": "0"
+  }
+}

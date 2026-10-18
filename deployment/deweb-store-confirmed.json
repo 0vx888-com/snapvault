@@ -1,0 +1,34 @@
+{
+  "checkedAt": "2026-10-18T14:59:15.319Z",
+  "chainId": 196,
+  "path": "/store.js",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x3aba8b7819bc988d19942ee2f802876ba98321259db5d8d84d2ef01597c46dd8",
+      "block": 73566463,
+      "status": 1,
+      "bytes": 7388,
+      "sha256": "0xd3b825166eded51fa923d8d804820ac1614c146462f6f1df012330286ce8bfbe",
+      "feeOKB": "0.000037802861890143"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x3aba8b7819bc988d19942ee2f802876ba98321259db5d8d84d2ef01597c46dd8",
+      "block": 73566463,
+      "status": 1,
+      "bytes": 7388,
+      "sha256": "0xd3b825166eded51fa923d8d804820ac1614c146462f6f1df012330286ce8bfbe",
+      "feeOKB": "0.000037802861890143"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": true,
+  "next": {
+    "path": "/local-delivery.js",
+    "chunk": 0,
+    "bytes": 894,
+    "valueOKB": "0"
+  }
+}

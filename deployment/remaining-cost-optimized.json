@@ -1,0 +1,77 @@
+{
+  "checkedAt": "2026-10-18T17:02:06.329Z",
+  "readOnly": true,
+  "noTransactionsSent": true,
+  "spendingPaused": true,
+  "frozenManifest": "0x66e56d39cfe6aa8e3a7b373dbfd1c9e67949ef5f8691e5cc711a4653e090987c",
+  "block": 73573859,
+  "gasPriceWei": "20000001",
+  "remainingUploadOperations": 45,
+  "reusedFiles": [
+    {
+      "path": "style.css",
+      "bytes": 34094,
+      "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07"
+    },
+    {
+      "path": "chat.js",
+      "bytes": 718,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+    },
+    {
+      "path": "store.js",
+      "bytes": 5353,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 894,
+      "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436"
+    }
+  ],
+  "uploadModelOKB": "0.003991156759557828",
+  "uploadModelWith20PercentOKB": "0.004789388111469393",
+  "model": "Each pending chunk estimated as fresh putFile with synthetic nonzero bytes; append actual gas differs; execution gas model only, not invoice or guaranteed upper bound.",
+  "alreadySpentRepairOKB": "0.000562539308126964",
+  "remainingRepairCeilingOKB": "0.005437460691873036",
+  "newContainerProtocolOnlyOKB": "0.08496",
+  "twoNewContainersProtocolOnlyOKB": "0.16992",
+  "deploymentModelOKB": "0.0000547280027364",
+  "fees": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "openingWei": "80000000000000000",
+      "tapeoutWei": "1300000000000000",
+      "threeNandWei": "3660000000000000"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "openingWei": "80000000000000000",
+      "tapeoutWei": "1300000000000000",
+      "threeNandWei": "3660000000000000"
+    }
+  ],
+  "ownerBalanceOKB": "0.009142421385121084",
+  "nonce": 75,
+  "pendingNonce": 75,
+  "tapeSend": {
+    "simulation": "Unsigned eth_estimateGas using historical public container; not a real message or SnapVault-owned sender",
+    "payloadBytes": 445,
+    "sendGas": "175368",
+    "sendExecutionOKB": "0.000003507360175368",
+    "publishKey": {
+      "gas": "83494",
+      "executionOKB": "0.000001669880083494"
+    }
+  },
+  "notIncluded": [
+    "Actual container setup and buy/withdraw/refund gas are covered only by a rounded planning reserve, not exact quotes",
+    "Recurring Railway and offsite backup billing",
+    "Refund principal beyond small acceptance purchase",
+    "Exchange withdrawal/bridge fees"
+  ],
+  "optionalSaving": "Existing website container may serve as receiving test container only after role separation, ownership and Hub public-key checks. Not assumed ready; no extra buyer container purchased automatically.",
+  "remainingChainPlanningBudgetOKB": "0.176",
+  "planningBudgetExplanation": "Two new CPU6 three-NAND containers (sender C and independent buyer), upload plus 20 percent, deployment plus 20 percent, sample key/send plus 20 percent; rounded up for additional setup/test gas. Not a guaranteed cap or spending authorization. Excludes recurring hosting and backup invoices.",
+  "estimatedAdditionalFundingOKB": "0.166857578614878916"
+}

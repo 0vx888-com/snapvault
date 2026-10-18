@@ -25,3 +25,13 @@ config/mainnet-operator-public.json
 *.password
 *.env
 config/runtime-*.json
+
+releases/
+
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+*.key
+*.enc

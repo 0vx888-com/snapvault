@@ -20,7 +20,7 @@ describe('真实付款 → 官方 DeWebHub → TAP-10 密钥交付（本地 fixt
   await hub.connect(buyer).publishKey(fixture.target,2,1,0,keys.publicKey,1);
   vault=await ethers.deployContract('SnapVaultCheckout',[treasury.address,1000,hub.target,operator.address]);
   dir=mkdtempSync(path.join(tmpdir(),'snapvault-delivery-'));
-  const signer=ethers.Wallet.fromPhrase('test test test test test test test test test test test junk').connect(ethers.provider);
+  const signer=ethers.Wallet.fromPhrase(require('hardhat').config.networks.hardhat.accounts.mnemonic).connect(ethers.provider);
   delivery=new s.DeliveryService({provider:ethers.provider,signer,vault,hub:hub.target,implementation:impl.target,implementationHash:ethers.keccak256(await ethers.provider.getCode(impl.target)),circuits:fixture.target,tokenId:1,chainId:31337,dir,origin:'http://127.0.0.1:5180',confirmations:1});
   blob=readFileSync(path.join(__dirname,'../screenshots/sample.png'));
   const nonce=delivery.challenge(creator.address),manifest={title:'链上独家图片',mime:'image/png',audience:[buyer.address]};

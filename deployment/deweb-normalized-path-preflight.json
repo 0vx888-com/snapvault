@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-10-18T16:02:24.660Z",
+  "officialSource": "https://10-2-6.tapekit.org/.tape/kernel/path.js",
+  "files": 15,
+  "operations": 61,
+  "homepagePassed": true,
+  "fallbackPassed": true,
+  "allFilePathsPassed": true,
+  "allCalldataPathsPassed": true,
+  "unchangedFileHashes": true,
+  "approvedRepairBudgetOKB": "0.006"
+}

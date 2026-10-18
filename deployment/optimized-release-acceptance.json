@@ -1,0 +1,12 @@
+{
+  "status": "ALL_ONCHAIN_FILES_VERIFIED",
+  "transactions": 45,
+  "uniqueTransactionHashes": 45,
+  "files": 16,
+  "repairTotalOKB": "0.004363122398",
+  "newUploadOnlyOKB": "0.003800583090",
+  "remainingRepairBudgetOKB": "0.001636877602",
+  "backend": "Existing 1952 service, exact DeWEB CORS origin added; mainnet not enabled",
+  "publicGateway": "Page successfully loaded and connected after transient independent-node quorum issue; availability not guaranteed",
+  "tapeSendMainnet": "NOT_YET_SENT"
+}

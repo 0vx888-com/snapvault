@@ -1,0 +1,6 @@
+{
+  "status": "PAUSED_BY_USER",
+  "reason": "Read-only/local work only until new explicit user approval. Do not resume upload or mainnet deployment.",
+  "date": "2026-10-19",
+  "noAutomaticResume": true
+}

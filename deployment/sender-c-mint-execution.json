@@ -1,0 +1,32 @@
+{
+  "status": "VERIFIED",
+  "hash": "0x4b55f4fca4eddfd0bf1a1246e9c9ecefab396608ffada68b158ab38a159bbd3a",
+  "chainId": 196,
+  "from": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+  "to": "0x37Ea91bCe83286195cB4A908920018db24F2c784",
+  "nonce": 0,
+  "valueWei": "3660000000000000",
+  "gasLimit": "111541",
+  "gasPriceWei": "20000001",
+  "dataFeeEstimateWei": "0",
+  "maximumModeledTotalWei": "3662230820111541",
+  "userCapWei": "3662342361000000",
+  "balanceBeforeWei": "85100000000000000",
+  "createdAt": "2026-10-18T17:46:15.721Z",
+  "actualSpendWei": "3661727980086399",
+  "executionFeeWei": "1727980086399",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "status": 1,
+      "block": 73576542,
+      "nandBalance": "3"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "status": 1,
+      "block": 73576542,
+      "nandBalance": "3"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "test": "Real S3 encrypted upload/download/restore with disposable probe state",
+  "region": "ams",
+  "bytes": 756,
+  "sha256": "4bc8e797f8668490ebd7030edc1b6f94cfd9b49a348df56f0c514e9dde17a9df",
+  "remote": true,
+  "productionData": false,
+  "checkedAt": "2026-10-18T18:06:00.765Z"
+}

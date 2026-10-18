@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "environment": "actual Railway mainnet backend snapshot",
+  "identity": "196:0xfd9b25442955c09007abb2d10decd24b4d2cf83f",
+  "sha256": "8ce1249d01f55aa24e88b62d28df5b9f1e365d1042b2ba6fffff34a911a803f7",
+  "bytes": 1052,
+  "restoredEncryptedState": true,
+  "masterKeyMatches": true,
+  "region": "ams",
+  "checkedAt": "2026-10-18T18:12:55.294Z"
+}

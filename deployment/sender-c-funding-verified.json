@@ -1,0 +1,26 @@
+[
+  {
+    "rpc": "https://rpc.xlayer.tech",
+    "fundingReceiptStatus": 1,
+    "hash": "0xbd8af6d06c082de5765828158d787e0d4fa94244ce01c89e6eff2e698ca19933",
+    "balanceOKB": "0.0851",
+    "nonce": 0,
+    "transistorBalance": "0",
+    "mintValueOKB": "0.00366",
+    "mintGas": "92951",
+    "gasPriceWei": "20000001",
+    "mintGasWith20PercentOKB": "0.000002230820111541"
+  },
+  {
+    "rpc": "https://xlayer.drpc.org",
+    "fundingReceiptStatus": 1,
+    "hash": "0xbd8af6d06c082de5765828158d787e0d4fa94244ce01c89e6eff2e698ca19933",
+    "balanceOKB": "0.0851",
+    "nonce": 0,
+    "transistorBalance": "0",
+    "mintValueOKB": "0.00366",
+    "mintGas": "92951",
+    "gasPriceWei": "21000000",
+    "mintGasWith20PercentOKB": "0.000002342361"
+  }
+]

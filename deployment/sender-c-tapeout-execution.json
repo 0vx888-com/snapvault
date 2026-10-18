@@ -1,0 +1,34 @@
+{
+  "status": "VERIFIED",
+  "hash": "0xc5057448c40ef7410ebce3068a8a850c7608c102e88ea22a590cc34a0f56c993",
+  "chainId": 196,
+  "from": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+  "to": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+  "nonce": 1,
+  "valueWei": "1300000000000000",
+  "gasLimit": "285932",
+  "gasPriceWei": "20000001",
+  "dataFeeEstimateWei": "0",
+  "maximumModeledTotalWei": "1305718640285932",
+  "userCapWei": "1306100000000000",
+  "balanceBeforeWei": "81438272019913601",
+  "tokenId": "11",
+  "block": 73576732,
+  "actualSpendWei": "1304549080227454",
+  "executionFeeWei": "4549080227454",
+  "balanceAfterWei": "80133722939686147",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "status": 1,
+      "tokenId": "11",
+      "owner": "0x8ef49aE5494aAE74edBE775228048F66c1905027"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "status": 1,
+      "tokenId": "11",
+      "owner": "0x8ef49aE5494aAE74edBE775228048F66c1905027"
+    }
+  ]
+}

@@ -44,6 +44,7 @@
     <section class="card profile-editor"><h3>我的创作者资料</h3><label>昵称<input id="profile-name" maxlength="20"></label><label>简介<input id="profile-bio" maxlength="100"></label><button id="save-profile" class="secondary">保存资料</button><p id="profile-feedback" role="status"></p></section>
   </section>
   <section id="chat" class="page hidden"></section>
+<section id="refund-panel" class="card profile-editor hidden" aria-label="订单与退款"><h3>订单与退款</h3><p class="field-note">交付出现问题时可申请平台审核。退款不是自动批准，不能收回已保存的图片。</p><button id="refund-refresh" class="secondary" type="button">查看订单与退款</button><div id="refund-orders"></div><p id="refund-feedback" class="field-note" role="status"></p></section>
 </main>
 <footer class="app-footer"><span>SnapVault <span class="footer-dot">·</span> 分享由你决定。</span><span>当前产品预览 <span class="footer-dot">/</span> 正式前端计划发布到 X Layer DeWEB</span><button class="text-button" id="preview-details">预览说明</button></footer>
 <dialog id="preview-dialog" class="purchase-dialog"><form method="dialog"><button class="dialog-close" aria-label="关闭预览说明">×</button></form><p class="eyebrow">BUILDING IN PUBLIC</p><h2>先体验，再一起完善。</h2><p>这是可部署的静态产品预览。你可以切换演示身份、私聊与群聊、设置阅后即焚，并体验图片发布、模拟购买和解密。</p><p>这些记录保存在当前浏览器。免费聊天尚未接入真实多人服务；钱包登录、免容器交付和公共图片存储仍在开发。当前不会扣款，也不会请求你的钱包签名。</p><p>正式产品的付款与分账使用 X Layer，前端发布到 DeWEB。图片存储将单独接入，尚未上传真实内容到 IPFS。</p><p class="field-note">阅后即焚是限时展示，无法阻止截图或收回已保存的内容。</p></dialog>

@@ -1,14 +1,14 @@
 {
-  "verifiedAt": "2026-10-17T19:12:26.027Z",
+  "verifiedAt": "2026-10-18T18:08:17.219Z",
   "environment": "isolated local Hardhat chain 31337; TapeOut container fixture; official DeWebHub and TAP-10 source",
   "publicTapeSendVerified": false,
   "origin": "http://127.0.0.1:5182",
   "contentId": "2",
   "priceWei": "10000000000000",
-  "purchaseTransaction": "0x56487aafe07b4652170b004dea11748e28c937b39ba16be253a0d83164eebb29",
-  "sentTransaction": "0xe34e3fbdc2df31156bb3b5e4d412ad45ae8bd389f9776ecbbfd9c480b4de1f58",
+  "purchaseTransaction": "0x9adf408fa84752aeade47c8b7b123ffc6b01eaca1705ccbfe82d76629c0f334f",
+  "sentTransaction": "0x3a3099ecc28b1892901bf97b713c9c0a463bde9fd55fec366f6c54114ce7fefe",
   "plaintextSHA256": "0x0457c2470c6bbbc715763ccf34a3bb614e188bdf4b47b37ea0e130466d6ed094",
-  "ciphertextSHA256": "0xbdcf0b1d9263e86ebbfd6b6ef2e64a3ce5f5b27af1caf87e0f00c9e35a57faac",
+  "ciphertextSHA256": "0xe4b7132740e3cac51e29d8f288edf6ea22e75fc2b6a63effad5013dcefffd252",
   "checks": [
     "browser signed upload and on-chain listing",
     "browser payment with delivery quote",

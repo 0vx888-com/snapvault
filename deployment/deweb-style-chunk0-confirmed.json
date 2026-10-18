@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-10-18T14:45:50.348Z",
+  "chainId": 196,
+  "path": "/style.css",
+  "completedChunk": 0,
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x8ea80ffb3a896398bb4faa3ca63caf1f1148f057ccbbb1556ea8f93be6040557",
+      "block": 73565674,
+      "status": 1,
+      "storedBytes": 24000,
+      "firstChunkSHA256": "0x6a04d7271f88cf261d5814af0838cf3000172934a7b457e9ec7f1f587658cd72",
+      "expectedWholeFileSHA256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07",
+      "feeOKB": "0.00010983360549168"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x8ea80ffb3a896398bb4faa3ca63caf1f1148f057ccbbb1556ea8f93be6040557",
+      "block": 73565674,
+      "status": 1,
+      "storedBytes": 24000,
+      "firstChunkSHA256": "0x6a04d7271f88cf261d5814af0838cf3000172934a7b457e9ec7f1f587658cd72",
+      "expectedWholeFileSHA256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07",
+      "feeOKB": "0.00010983360549168"
+    }
+  ],
+  "next": {
+    "method": "appendChunk",
+    "path": "/style.css",
+    "chunk": "1",
+    "bytes": 10094,
+    "valueOKB": "0"
+  },
+  "verified": true,
+  "wholeFileComplete": false
+}

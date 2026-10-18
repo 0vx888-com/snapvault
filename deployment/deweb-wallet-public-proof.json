@@ -1,0 +1,92 @@
+{
+  "chainId": 196,
+  "registry": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "name": "10.2.6.tape",
+  "url": "https://10-2-6.tapekit.org/",
+  "bundleMode": "wallet",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 10524,
+      "sha256": "0x93348a0d7f8fb8c047b917cddb48917e0c6fc3fdc01c98ad980528648042266f"
+    },
+    {
+      "path": "style.css",
+      "bytes": 34094,
+      "sha256": "0x777c5446133991e93f4158c5f2ae6b42b7f891ea214634aa2075d5aaafa59d07"
+    },
+    {
+      "path": "app.js",
+      "bytes": 33377,
+      "sha256": "0xdbc25ab3469c6b205248e953db9a8ba0e6c47ba4d2a15f6b4787db97ef606a6e"
+    },
+    {
+      "path": "chat.js",
+      "bytes": 718,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+    },
+    {
+      "path": "store.js",
+      "bytes": 5353,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 894,
+      "sha256": "0x594bd67cb77c83332acf12a540aa6a59e071777700ae545c0361eb932daff436"
+    },
+    {
+      "path": "wallet.js",
+      "bytes": 8788,
+      "sha256": "0xa375fc583731d378612f981c937d463665582b68b9334d351409d341554aaae8"
+    },
+    {
+      "path": "wallet-chat.js",
+      "bytes": 11165,
+      "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2"
+    },
+    {
+      "path": "refunds.js",
+      "bytes": 3005,
+      "sha256": "0xd530844dd918a82d1d4d2c7de7b7588984a5aa56b75225ad4328b4ecd0d92be6"
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "bytes": 254372,
+      "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1"
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "bytes": 1075,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "bytes": 635,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "bytes": 512682,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+    },
+    {
+      "path": "assets/studio.svg",
+      "bytes": 864,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+    },
+    {
+      "path": "assets/sketch.svg",
+      "bytes": 807,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+    },
+    {
+      "path": "app-config.json",
+      "bytes": 157,
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f"
+    }
+  ],
+  "verifiedBlock": 73575981,
+  "independentReaders": 2
+}

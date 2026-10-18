@@ -45,3 +45,5 @@ export async function setupNetwork(){
  try{await p.request({method:'wallet_switchEthereumChain',params:[{chainId}]});}
  catch(e){if(e.code!==4902)throw e;await p.request({method:'wallet_addEthereumChain',params:[{chainId,chainName:wallet.config.networkName||(wallet.config.chainId===31337?'SnapVault Local':'X Layer Testnet'),nativeCurrency:{name:wallet.config.chainId===196?'OKB':'Test OKB',symbol:'OKB',decimals:18},rpcUrls:[wallet.config.chainId===31337?apiURL('/rpc'):wallet.config.chainId===196?'https://rpc.xlayer.tech':'https://testrpc.xlayer.tech/terigon']}]});}
 }
+
+export async function refundWallet(id,buyer){const q=await call('refund-quote',{id,buyer});const {hash}=await transaction('refundDelivery',[q.id,q.buyer],q.valueWei);await call('refund-confirm',{id:q.id,buyer:q.buyer,hash});await refresh();return hash;}

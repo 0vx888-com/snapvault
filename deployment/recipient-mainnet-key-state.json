@@ -1,0 +1,24 @@
+[
+  {
+    "rpc": "https://rpc.xlayer.tech",
+    "opened": true,
+    "usable": true,
+    "holder": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+    "key": "0xdff9b18bd0ab6b3f4a0bec8b65a1c0e104215e64aa36865e93cbc28d06b85f31",
+    "suite": "1",
+    "chains": "7",
+    "version": "1",
+    "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E"
+  },
+  {
+    "rpc": "https://xlayer.drpc.org",
+    "opened": true,
+    "usable": true,
+    "holder": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+    "key": "0xdff9b18bd0ab6b3f4a0bec8b65a1c0e104215e64aa36865e93cbc28d06b85f31",
+    "suite": "1",
+    "chains": "7",
+    "version": "1",
+    "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E"
+  }
+]

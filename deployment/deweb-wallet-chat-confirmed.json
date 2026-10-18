@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-10-18T15:05:38.394Z",
+  "chainId": 196,
+  "path": "/wallet-chat.js",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x2d5e290859f886a22dc154caae2cff87cd04c50ffc8d4b85bf94b4471a1a89b7",
+      "block": 73566854,
+      "status": 1,
+      "bytes": 11168,
+      "sha256": "0xcf548dbf816b3ed5bfadc3ae35b361ecc1cae53f80d7fdbde03b733dfe42b4cf",
+      "feeOKB": "0.000054189222709461"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x2d5e290859f886a22dc154caae2cff87cd04c50ffc8d4b85bf94b4471a1a89b7",
+      "block": 73566854,
+      "status": 1,
+      "bytes": 11168,
+      "sha256": "0xcf548dbf816b3ed5bfadc3ae35b361ecc1cae53f80d7fdbde03b733dfe42b4cf",
+      "feeOKB": "0.000054189222709461"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": true,
+  "next": {
+    "path": "/vendor/ethers.min.js",
+    "chunk": 0,
+    "bytes": 24000,
+    "wholeFileBytes": 522050,
+    "valueOKB": "0"
+  }
+}

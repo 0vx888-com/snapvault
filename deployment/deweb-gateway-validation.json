@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-18T15:59:51.949Z",
+  "chainId": 196,
+  "url": "https://10-2-6.tapekit.org/",
+  "uploadReceipts": 62,
+  "uploadTotal": 62,
+  "byteHashProof": "deweb-wallet-proof.json",
+  "byteHashVerificationPassed": true,
+  "gatewayUsable": false,
+  "gatewayObserved": "404 · No such file on chain",
+  "cause": "Uploader stored leading slash paths; official kernel normalizePath strips leading slashes before pathSet lookup.",
+  "chainPathsExample": "/index.html",
+  "gatewayExpected": "index.html",
+  "fallbackStored": "/index.html",
+  "fallbackExpected": "index.html",
+  "repair": {
+    "requiresNewWrites": true,
+    "documentedRenameAvailable": false,
+    "operationsWithoutActivation": 61,
+    "expectedGasOKBApprox": "0.0054",
+    "proposedGasCeilingOKB": "0.006",
+    "extraContainerOpeningRequired": false,
+    "newPaymentSent": false
+  },
+  "tapeSendMainnetVerified": false
+}

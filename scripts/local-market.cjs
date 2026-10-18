@@ -17,7 +17,7 @@ async function main(){
  for(let n=0;n<ids.length;n++){const signer=signers[n+1],tokenId=n+2;roles.set(ids[n],{signer,tokenId});await fixture.setOwner(tokenId,signer.address);const container=await hub.accountOf(fixture.target,tokenId);await fixture.setPaid(container,true);const params={tokenId,cpuIndex:0,container,holder:signer.address,hub:hub.target,chainId:31337};const key=crypto.deriveKeyPair({...params,signature:await signer.signMessage(crypto.keyDerivationText(params))});keys.set(ids[n],key);await hub.connect(signer).publishKey(fixture.target,tokenId,1,0,key.publicKey,1);}
  const vault=await ethers.deployContract('SnapVaultCheckout',[operator.address,1000,hub.target,operator.address]);
  const port=Number(process.env.LOCAL_MARKET_PORT||5184),origin=`http://127.0.0.1:${port}`,dir=fs.mkdtempSync(path.join(os.tmpdir(),'snapvault-market-'));
- const signer=ethers.Wallet.fromPhrase('test test test test test test test test test test test junk').connect(ethers.provider);
+ const signer=ethers.Wallet.fromPhrase(require('hardhat').config.networks.hardhat.accounts.mnemonic).connect(ethers.provider);
  const service=new DeliveryService({provider:ethers.provider,signer,vault,hub:hub.target,implementation:impl.target,implementationHash:ethers.keccak256(await ethers.provider.getCode(impl.target)),circuits:fixture.target,tokenId:1,chainId:31337,dir,origin,confirmations:1});
  const local=localMarket({service,vault,hub,fixture,roles,keys});
  const app=createIntegrationServer({root:path.resolve(__dirname,'..'),port,service,config:{chainId:31337,vault:vault.target,hub:hub.target},local});

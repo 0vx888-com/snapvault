@@ -1,8 +1,8 @@
 {
-  "checkedAt": "2026-10-18T12:52:42.860Z",
+  "checkedAt": "2026-10-18T14:00:07.902Z",
   "scope": "READ ONLY; eth_call and eth_estimateGas only. No signers, no broadcast, no payment. Synthetic upload bytes only.",
   "chainId": 196,
-  "block": 73558920,
+  "block": 73562969,
   "addresses": {
     "factory": "0x1f09daefa827f02cbb40967cc91b259763760761",
     "opener": "0x536add8f30f03b69f6fbf29d425a816a0dc50106",
@@ -129,8 +129,8 @@
     {
       "type": "Actual production-format TAP-10 sealed dummy link",
       "payloadBytes": 487,
-      "gas": "176666",
-      "executionOKB": "0.000003533320176666",
+      "gas": "176702",
+      "executionOKB": "0.000003534040176702",
       "note": "Dummy keys and illustrative URL; no customer data. URL validity not asserted."
     },
     {
@@ -156,7 +156,7 @@
     "note": "Unsigned dummy sample only; not a guarantee for signed actual transaction or all publication transactions."
   },
   "frontend": {
-    "manifestSHA256": "0x3720a7de08851fa2e658c05750c8794d9ce42c42a6104a100dac4ae3c92bc46d",
+    "manifestSHA256": "0x107b5b9dbe89b1ffa1b32b8f29a15557390f47266b403bd66f080e72fa4615e9",
     "files": [
       {
         "path": "/index.html",
@@ -172,9 +172,9 @@
       },
       {
         "path": "/app.js",
-        "bytes": 34598,
+        "bytes": 35449,
         "chunks": 2,
-        "gas": "8245773"
+        "gas": "8433073"
       },
       {
         "path": "/chat.js",
@@ -249,11 +249,11 @@
         "gas": "348429"
       }
     ],
-    "totalBytes": 1172180,
+    "totalBytes": 1173031,
     "dataChunks": 60,
     "fallbackGas": "116324",
-    "estimatedGas": "277063427",
-    "executionOKB": "0.005541268817063427",
+    "estimatedGas": "277250727",
+    "executionOKB": "0.005545014817250727",
     "model": "Every chunk modeled as a fresh putFile with synthetic nonzero bytes and new path. Actual appendChunk has different overhead. Not an invoice; calldata source files never transmitted. eth_estimateGas uses latest, fee reads pinned to block."
   },
   "budget": {

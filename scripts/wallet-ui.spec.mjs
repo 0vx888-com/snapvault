@@ -11,7 +11,7 @@ const browser=await chromium.launch({headless:true,executablePath:'/Applications
 const check=(v,m)=>{assert.ok(v,m);checks.push(m);console.log('PASS',m);};
 const image={name:'sample.png',mimeType:'image/png',buffer:await readFile(root+'/screenshots/sample.png')};
 async function user(n){
- const account=HDNodeWallet.fromPhrase('test test test test test test test test test test test junk',undefined,`m/44'/60'/0'/0/${n+offset}`).connect(provider),signer=new NonceManager(account);
+ const account=HDNodeWallet.fromPhrase((await import('hardhat')).default.config.networks.hardhat.accounts.mnemonic,undefined,`m/44'/60'/0'/0/${n+offset}`).connect(provider),signer=new NonceManager(account);
  const context=await browser.newContext({viewport:{width:1360,height:1000}}),page=await context.newPage();page.on('pageerror',e=>{errors.push(e.message);console.log('BROWSER_ERROR',e.message);});
  await page.exposeFunction('__testWalletRequest',async({method,params=[]})=>{
   if(['eth_requestAccounts','eth_accounts'].includes(method))return [account.address];

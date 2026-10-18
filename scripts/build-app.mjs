@@ -1,3 +1,5 @@
+import {cleanPublicBuild} from './public-build.mjs';
+import {optimizePublic} from './optimize-public.mjs';
 // Static build only. Never uploads, signs or publishes.
 import {readFile,writeFile,mkdir,copyFile,rm} from 'node:fs/promises';import {resolve,dirname} from 'node:path';import {fileURLToPath} from 'node:url';import {createHash} from 'node:crypto';import {APP_FILES} from './app-files.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
@@ -8,6 +10,7 @@ export async function buildApp({preview=false,local=false,server=false,api='',al
  const files=[...APP_FILES];for(const f of files){await mkdir(dirname(resolve(out,f)),{recursive:true});await copyFile(resolve(root,'web',f),resolve(out,f));}
  let html=await readFile(resolve(out,'index.html'),'utf8');html=html.replace(/<details class="dev-tools">[\s\S]*?<\/details>/,'');if(!preview)html=html.replace('产品预览 · 不扣款','正在连接 X Layer');await writeFile(resolve(out,'index.html'),html);
  await writeFile(resolve(out,'app-config.json'),JSON.stringify({mode:preview?'preview':'wallet',apiBase:preview||server?'':new URL(api).origin,allowedChainIds:local?[31337]:allowMainnet?[1952,196]:[1952],allowMainnet},null,2)+'\n');files.push('app-config.json');
+ if(!preview&&!local){await cleanPublicBuild(out);await optimizePublic(out);}
  const types={html:'text/html; charset=utf-8',css:'text/css',js:'text/javascript',json:'application/json',jpg:'image/jpeg',svg:'image/svg+xml',md:'text/markdown'};
  const manifest={version:2,mode:preview?'preview':local?'wallet-local':server?'server':'wallet',target:'X Layer DeWEB SiteRegistry',published:false,mainnetEnabled:allowMainnet,externalData:preview||server?[]:[new URL(api).origin],files:[]};for(const file of files){const data=await readFile(resolve(out,file));manifest.files.push({path:'/'+file,contentType:types[file.split('.').at(-1)],bytes:data.length,sha256:'0x'+createHash('sha256').update(data).digest('hex'),chunks:Math.ceil(data.length/24000)});}await writeFile(resolve(out,'deweb-manifest.json'),JSON.stringify(manifest,null,2)+'\n');return {out,files:files.length,bytes:manifest.files.reduce((n,f)=>n+f.bytes,0),chunks:manifest.files.reduce((n,f)=>n+f.chunks,0),published:false};
 }

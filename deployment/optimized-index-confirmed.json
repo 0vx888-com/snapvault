@@ -1,0 +1,24 @@
+{
+  "rows": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "status": 1,
+      "hash": "0x9962e3b96f56fb0caf632d6844b2dba6d2ebc506eab2dc16376cc0e415ce1add",
+      "block": 73575322,
+      "feeOKB": "0.000048585142429257",
+      "bytes": 10524,
+      "sha256": "0x93348a0d7f8fb8c047b917cddb48917e0c6fc3fdc01c98ad980528648042266f"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "status": 1,
+      "hash": "0x9962e3b96f56fb0caf632d6844b2dba6d2ebc506eab2dc16376cc0e415ce1add",
+      "block": 73575322,
+      "feeOKB": "0.000048585142429257",
+      "bytes": 10524,
+      "sha256": "0x93348a0d7f8fb8c047b917cddb48917e0c6fc3fdc01c98ad980528648042266f"
+    }
+  ],
+  "repairSpentOKB": "0.000611124450556221",
+  "repairRemainingOKB": "0.005388875549443779"
+}

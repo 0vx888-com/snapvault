@@ -33,12 +33,5 @@
   ],
   "publicTestnetV2Verified": false,
   "mainnetVerified": false,
-  "mainnetSpending": false,
-  "coreTestsPassed": 43,
-  "orderModelTestsPassed": 7,
-  "walletUIChecksPassed": 17,
-  "syntaxFilesChecked": 51,
-  "diffCheck": "PASS",
-  "credentialLiteralScan": "PASS",
-  "browserErrors": []
+  "mainnetSpending": false
 }

@@ -45,15 +45,22 @@
     "suggestedTotalReserveOKB": "0.30",
     "budgetDocument": "docs/DEWEB-RELEASE-BUDGET.md",
     "budgetApproved": true,
-    "budgetApprovalRecord": "deployment/mainnet-budget-approval.json"
+    "budgetApprovalRecord": "deployment/mainnet-budget-approval.json",
+    "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+    "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+    "name": "10.2.6.tape",
+    "plannedURL": "https://10-2-6.tapekit.org/",
+    "publisher": "http://127.0.0.1:5200/",
+    "plannedTransactionCount": 62,
+    "uploadBudgetOKB": "0.01"
   },
   "checks": {
     "hostingAndDeliveryTestsPassed": 6,
     "hardeningAllSuites": "PASS",
     "coreTestsPassed": 43
   },
-  "moneySpent": false,
-  "next": "User accepted 0.30 OKB reserve, owner=treasury in a new user-controlled wallet. Await public address, then prepare exact transactions and request human confirmation before actual spending. DeWEB/TapeSend mainnet evidence, encrypted off-site backup/restore and production v2 rollout remain pending.",
+  "moneySpent": true,
+  "next": "Website circuit10 container opening verified with two RPCs. Publisher5200 verifies dist/wallet whitelist and official registry pins. First upload index.html has zero value and awaits human wallet confirmation; 62 operations planned under 0.01 OKB upload ceiling within total0.30. Actual DeWEB file proof, mainnet business contract/backend and TapeSend inbox proof remain pending.",
   "hardenedV2": {
     "publicTestnetDeployed": true,
     "mainnetDeployed": false,
@@ -65,5 +72,22 @@
     "testnetDeploymentTx": "0x9d6c6521bbf2e50d785aa4a2fa3e478a150364792447f738cbc3f1c1020f8d5f",
     "acceptanceProgress": "deployment/testnet-v2-acceptance-progress.json",
     "acceptanceRecord": "deployment/xlayerTestnet-direct-v2-acceptance.json"
+  },
+  "mainnetPreparation": {
+    "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+    "treasury": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+    "ownerVerification": "deployment/mainnet-owner-verification.json",
+    "deployDraft": "config/mainnet-deploy.draft.json",
+    "backendDraft": "config/mainnet-backend.draft.json",
+    "firstStageFundingRequestedOKB": "0.10",
+    "fundingConfirmed": true,
+    "enabled": false,
+    "confirmedOwnerBalanceOKB": "0.10",
+    "websiteCircuitConfirmed": true,
+    "websiteCircuitRecord": "deployment/website-circuit-confirmed.json",
+    "websiteContainer": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+    "containerOpened": true,
+    "spendLedger": "deployment/mainnet-spend-ledger.json",
+    "openingRecord": "deployment/website-open-confirmed.json"
   }
 }

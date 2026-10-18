@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-18T14:55:54.334Z",
+  "chainId": 196,
+  "path": "/chat.js",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x835bf7144fdb2ed338cbd7fa1a93c5ae9d2d10392a6fde3507fe1611ef8f0ca9",
+      "block": 73566274,
+      "status": 1,
+      "bytes": 24000,
+      "sha256": "0x01196de07354a8ddc7fc72530c19cdb3703bd3c03c639cbffcb74e5e0d02fb85",
+      "declaredWholeFileSha256": "0x778370fe43e3195bdf6029236b35f09e583fb85c1939cdbf4fe7f32c84da3fab",
+      "feeOKB": "0.00010983480549174"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x835bf7144fdb2ed338cbd7fa1a93c5ae9d2d10392a6fde3507fe1611ef8f0ca9",
+      "block": 73566274,
+      "status": 1,
+      "bytes": 24000,
+      "sha256": "0x01196de07354a8ddc7fc72530c19cdb3703bd3c03c639cbffcb74e5e0d02fb85",
+      "declaredWholeFileSha256": "0x778370fe43e3195bdf6029236b35f09e583fb85c1939cdbf4fe7f32c84da3fab",
+      "feeOKB": "0.00010983480549174"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": false,
+  "wholeFileBytes": 26839,
+  "next": {
+    "path": "/chat.js",
+    "chunk": 1,
+    "bytes": 2839,
+    "valueOKB": "0"
+  }
+}

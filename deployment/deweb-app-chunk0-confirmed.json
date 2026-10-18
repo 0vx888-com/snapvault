@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-18T14:52:51.145Z",
+  "chainId": 196,
+  "path": "/app.js",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0x256295084051163a17846d710e0a5f4b0688ffebb53f5224a85661a8b14a5b18",
+      "block": 73566053,
+      "status": 1,
+      "bytes": 24000,
+      "sha256": "0xccf884a2135a8ba205d07ecd7faad2ec1f3fa85f1402f70004052a76e0729ccc",
+      "declaredWholeFileSha256": "0x34aae9503f6c8b8b4419f52b14795fff04bc69592a7ecf649e80299a80621ad5",
+      "feeOKB": "0.000109834565491728"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0x256295084051163a17846d710e0a5f4b0688ffebb53f5224a85661a8b14a5b18",
+      "block": 73566053,
+      "status": 1,
+      "bytes": 24000,
+      "sha256": "0xccf884a2135a8ba205d07ecd7faad2ec1f3fa85f1402f70004052a76e0729ccc",
+      "declaredWholeFileSha256": "0x34aae9503f6c8b8b4419f52b14795fff04bc69592a7ecf649e80299a80621ad5",
+      "feeOKB": "0.000109834565491728"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": false,
+  "wholeFileBytes": 35449,
+  "next": {
+    "path": "/app.js",
+    "chunk": 1,
+    "bytes": 11449,
+    "valueOKB": "0"
+  }
+}

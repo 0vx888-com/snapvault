@@ -1,0 +1,33 @@
+{
+  "status": "UNSIGNED_NOT_AUTHORIZED",
+  "from": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+  "to": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+  "chainId": 196,
+  "data": "0x7bd3ac1d00000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000150000000200000300000004000004000000050000050000000000000000000000",
+  "netlist": "0x000000020000030000000400000400000005000005",
+  "inputCount": "2",
+  "outputCount": "1",
+  "rows": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "nonce": 1,
+      "valueWei": "1300000000000000",
+      "valueOKB": "0.0013",
+      "estimatedGas": "238277",
+      "gasLimit": "285932",
+      "executionGasAtMaxPriceOKB": "0.000006004572",
+      "totalAtMaxPriceOKB": "0.001306004572"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "nonce": 1,
+      "valueWei": "1300000000000000",
+      "valueOKB": "0.0013",
+      "estimatedGas": "238277",
+      "gasLimit": "285932",
+      "executionGasAtMaxPriceOKB": "0.000006004572",
+      "totalAtMaxPriceOKB": "0.001306004572"
+    }
+  ],
+  "note": "Same three-NAND netlist as existing verified website circuit. No tapeout sent. Recheck data fees and current state before any broadcast."
+}

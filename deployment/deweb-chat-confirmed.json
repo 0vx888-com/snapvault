@@ -1,0 +1,34 @@
+{
+  "checkedAt": "2026-10-18T14:57:48.883Z",
+  "chainId": 196,
+  "path": "/chat.js",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "checks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0xeef83050aad5165bf08572e07d077726120531ae33a33eba51f68f0bef2fb9f4",
+      "block": 73566393,
+      "status": 1,
+      "bytes": 26839,
+      "sha256": "0x778370fe43e3195bdf6029236b35f09e583fb85c1939cdbf4fe7f32c84da3fab",
+      "feeOKB": "0.000015583160779158"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0xeef83050aad5165bf08572e07d077726120531ae33a33eba51f68f0bef2fb9f4",
+      "block": 73566393,
+      "status": 1,
+      "bytes": 26839,
+      "sha256": "0x778370fe43e3195bdf6029236b35f09e583fb85c1939cdbf4fe7f32c84da3fab",
+      "feeOKB": "0.000015583160779158"
+    }
+  ],
+  "verified": true,
+  "wholeFileComplete": true,
+  "next": {
+    "path": "/store.js",
+    "chunk": 0,
+    "bytes": 7388,
+    "valueOKB": "0"
+  }
+}

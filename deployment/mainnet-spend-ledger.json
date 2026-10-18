@@ -1,0 +1,687 @@
+{
+  "chainId": 196,
+  "approvedTotalReserveOKB": "0.30",
+  "spendingStatus": "STOPPED_BY_USER",
+  "verifiedBy": "mainnet-spend-audit.json",
+  "entries": [
+    {
+      "hash": "0xf7f5563f26bb3544008602b7ec0ae0cfe5c6e5d8d08a9d67eda5da674bfdcab7",
+      "purpose": "infrastructure:mint",
+      "valueOKB": "0.00366",
+      "gasOKB": "0.000001727980086399",
+      "block": 73564416,
+      "nonce": 0,
+      "status": 1
+    },
+    {
+      "hash": "0x98a8b7902148375c09dfc8fa76bad2191e82b35d0441ee3fd8406a838d64c7d6",
+      "purpose": "infrastructure:tapeout",
+      "valueOKB": "0.0013",
+      "gasOKB": "0.000004549080227454",
+      "block": 73564421,
+      "nonce": 1,
+      "status": 1
+    },
+    {
+      "hash": "0x473eeafe377a8113c3967ae5dcc4ec13b9b9877ad3ef8acaab4e162fab108bda",
+      "purpose": "infrastructure:website-container-open",
+      "valueOKB": "0.08",
+      "gasOKB": "0.000003344680167234",
+      "block": 73564783,
+      "nonce": 2,
+      "status": 1
+    },
+    {
+      "hash": "0x8ae55120666faef5ed36f544e9289d2a43be6fbb2f9b7ec230fc366087ff963e",
+      "purpose": "wrong-path:/index.html:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.00005134180256709",
+      "block": 73565495,
+      "nonce": 3,
+      "status": 1
+    },
+    {
+      "hash": "0x8ea80ffb3a896398bb4faa3ca63caf1f1148f057ccbbb1556ea8f93be6040557",
+      "purpose": "wrong-path:/style.css:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.00010983360549168",
+      "block": 73565674,
+      "nonce": 4,
+      "status": 1
+    },
+    {
+      "hash": "0x0fe44f26e90830ef4c82b667916ade8ff54ba995538eb9a3728ef7495db3afd1",
+      "purpose": "wrong-path:/style.css:1",
+      "valueOKB": "0.0",
+      "gasOKB": "0.0000470280023514",
+      "block": 73565821,
+      "nonce": 5,
+      "status": 1
+    },
+    {
+      "hash": "0x256295084051163a17846d710e0a5f4b0688ffebb53f5224a85661a8b14a5b18",
+      "purpose": "wrong-path:/app.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000109834565491728",
+      "block": 73566053,
+      "nonce": 6,
+      "status": 1
+    },
+    {
+      "hash": "0x7ed166339941af38e5858d128ddfd463fe17d7495189137de63f4c4b516e79d2",
+      "purpose": "wrong-path:/app.js:1",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000052900222645011",
+      "block": 73566171,
+      "nonce": 7,
+      "status": 1
+    },
+    {
+      "hash": "0x835bf7144fdb2ed338cbd7fa1a93c5ae9d2d10392a6fde3507fe1611ef8f0ca9",
+      "purpose": "wrong-path:/chat.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.00010983480549174",
+      "block": 73566274,
+      "nonce": 8,
+      "status": 1
+    },
+    {
+      "hash": "0xeef83050aad5165bf08572e07d077726120531ae33a33eba51f68f0bef2fb9f4",
+      "purpose": "wrong-path:/chat.js:1",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000015583160779158",
+      "block": 73566393,
+      "nonce": 9,
+      "status": 1
+    },
+    {
+      "hash": "0x3aba8b7819bc988d19942ee2f802876ba98321259db5d8d84d2ef01597c46dd8",
+      "purpose": "wrong-path:/store.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000037802861890143",
+      "block": 73566463,
+      "nonce": 10,
+      "status": 1
+    },
+    {
+      "hash": "0x1e25d00c010778058889bad1cb2658f9edb0d4700ed1304149d5f9f37c526b5c",
+      "purpose": "wrong-path:/local-delivery.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000009662680483134",
+      "block": 73566722,
+      "nonce": 11,
+      "status": 1
+    },
+    {
+      "hash": "0x120243be495f95c08544da57aac3d6256c4d93f703a788686366cf0a196c0b51",
+      "purpose": "wrong-path:/wallet.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000042610922130546",
+      "block": 73566779,
+      "nonce": 12,
+      "status": 1
+    },
+    {
+      "hash": "0x2d5e290859f886a22dc154caae2cff87cd04c50ffc8d4b85bf94b4471a1a89b7",
+      "purpose": "wrong-path:/wallet-chat.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000054189222709461",
+      "block": 73566854,
+      "nonce": 13,
+      "status": 1
+    },
+    {
+      "hash": "0x507f4afe581b500d2149c46196b61d0e7ab0dee9f51caca3ce9f040b381ad109",
+      "purpose": "wrong-path:/vendor/ethers.min.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000109837925491896",
+      "block": 73566943,
+      "nonce": 14,
+      "status": 1
+    },
+    {
+      "hash": "0x371ecaedb691392e16175fefb17647d7813ec791295005bd1f1da3c4fc87eea0",
+      "purpose": "wrong-path:/vendor/ethers.min.js:1",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73567012,
+      "nonce": 15,
+      "status": 1
+    },
+    {
+      "hash": "0x303022f8c0b2382b932d82023040ac29fb3d6f353f03e62dc5ef180f0017247a",
+      "purpose": "wrong-path:/vendor/ethers.min.js:2",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73567096,
+      "nonce": 16,
+      "status": 1
+    },
+    {
+      "hash": "0x13e52ab6d8e5a38b7d56a5c82fa0d3cd4d4cf3c32f9d7ccf3a7eab1c65ec4370",
+      "purpose": "wrong-path:/vendor/ethers.min.js:3",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73567264,
+      "nonce": 17,
+      "status": 1
+    },
+    {
+      "hash": "0x2f6f4b4d6252d8259604f51bb7688de30312e39dd343f1022fc1b2b62b6f3cee",
+      "purpose": "wrong-path:/vendor/ethers.min.js:4",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73567356,
+      "nonce": 18,
+      "status": 1
+    },
+    {
+      "hash": "0x19fb948796a0347412f8f4aadc523d22f75c6303181bb1e0a4fcf302ed5d7278",
+      "purpose": "wrong-path:/vendor/ethers.min.js:5",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73567452,
+      "nonce": 19,
+      "status": 1
+    },
+    {
+      "hash": "0x7568ae15b523147db8416afdc95051679b5f63ec206ff8d2d5d801c02b01daf1",
+      "purpose": "wrong-path:/vendor/ethers.min.js:6",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73567588,
+      "nonce": 20,
+      "status": 1
+    },
+    {
+      "hash": "0xc909e4a5c2845c9b2c4d25df371dbdbb06e7b7f7fe11952a567b83bcd02833c9",
+      "purpose": "wrong-path:/vendor/ethers.min.js:7",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73567874,
+      "nonce": 21,
+      "status": 1
+    },
+    {
+      "hash": "0x456148bf3f04788bf766a58d4d1c45f9e99ce33e717ed3850213de42fd77cfa8",
+      "purpose": "wrong-path:/vendor/ethers.min.js:8",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73567996,
+      "nonce": 22,
+      "status": 1
+    },
+    {
+      "hash": "0xefae3dfeb4bee0f7a2bc72295b11f83dbd78256d48b3fa9cd16f5b6d6e11f816",
+      "purpose": "wrong-path:/vendor/ethers.min.js:9",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73568076,
+      "nonce": 23,
+      "status": 1
+    },
+    {
+      "hash": "0x446de67e37d3ae6a20aee1e01d610a83247af2a89fd4712af850caf257d6ac0e",
+      "purpose": "wrong-path:/vendor/ethers.min.js:10",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73568220,
+      "nonce": 24,
+      "status": 1
+    },
+    {
+      "hash": "0x5ec743732c58a66d4a55578e45fc02823436d3eeee3fed9860a94c67d46cb413",
+      "purpose": "wrong-path:/vendor/ethers.min.js:11",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73568310,
+      "nonce": 25,
+      "status": 1
+    },
+    {
+      "hash": "0x99329eb47673b2b8aabc6b69ded1f8813b9caa018d5d7bd1b719fae39ae25e4c",
+      "purpose": "wrong-path:/vendor/ethers.min.js:12",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73568449,
+      "nonce": 26,
+      "status": 1
+    },
+    {
+      "hash": "0x329dc71b44e932a4344755ab5f2c4b6770a82140cc180d8e156ea1872c2fa68d",
+      "purpose": "wrong-path:/vendor/ethers.min.js:13",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73568733,
+      "nonce": 27,
+      "status": 1
+    },
+    {
+      "hash": "0xcad11e0f4864802c65cc2ca4f92a2572d875359478e1d1ef77970e91efbf4cb5",
+      "purpose": "wrong-path:/vendor/ethers.min.js:14",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73568840,
+      "nonce": 28,
+      "status": 1
+    },
+    {
+      "hash": "0x2162d8405b01bed389f9c97f91dd248e5df67b4446a10523e979f78332e1ff06",
+      "purpose": "wrong-path:/vendor/ethers.min.js:15",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73568995,
+      "nonce": 29,
+      "status": 1
+    },
+    {
+      "hash": "0x47057300660699adc8f8bde197873e50922eac6bbf5fec2d1b7dc245c41ae110",
+      "purpose": "wrong-path:/vendor/ethers.min.js:16",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73569100,
+      "nonce": 30,
+      "status": 1
+    },
+    {
+      "hash": "0xb9d5e7532ce7f53830d1755fc40f63c69e03eeab16d07fd6143284af1e9e55fe",
+      "purpose": "wrong-path:/vendor/ethers.min.js:17",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73569299,
+      "nonce": 31,
+      "status": 1
+    },
+    {
+      "hash": "0xf4cb04b3eb97937dc279514020e0b0854072fb03c6cce3ed38101bd9cff5c137",
+      "purpose": "wrong-path:/vendor/ethers.min.js:18",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73569315,
+      "nonce": 32,
+      "status": 1
+    },
+    {
+      "hash": "0xd4e5b5f435e4399670621af08c9a5caebd4ee8781265a9e4cc473352e1a4f278",
+      "purpose": "wrong-path:/vendor/ethers.min.js:19",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73569325,
+      "nonce": 33,
+      "status": 1
+    },
+    {
+      "hash": "0x9313918c723e600851a2d01a60d7fe8ad06a8b4d4fb25978fb8ded9689468199",
+      "purpose": "wrong-path:/vendor/ethers.min.js:20",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107332065366603",
+      "block": 73569336,
+      "nonce": 34,
+      "status": 1
+    },
+    {
+      "hash": "0x96fd72f3abc6fdda0fa88e86bf5462e960e8e0951883dd11e7a2564648248e36",
+      "purpose": "wrong-path:/vendor/ethers.min.js:21",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000081527224076361",
+      "block": 73569364,
+      "nonce": 35,
+      "status": 1
+    },
+    {
+      "hash": "0x2ce4a2219cc49bca5ba85167666a50f5a41ee944852f1efcc596bbc1cc323acb",
+      "purpose": "wrong-path:/vendor/ethers-LICENSE.md:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000010449340522467",
+      "block": 73569381,
+      "nonce": 36,
+      "status": 1
+    },
+    {
+      "hash": "0x67ce713942e0f497fa68c185af973459e642e913662c38197ba03c87534afafb",
+      "purpose": "wrong-path:/assets/mark-tape.svg:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000008541240427062",
+      "block": 73569397,
+      "nonce": 37,
+      "status": 1
+    },
+    {
+      "hash": "0x5c3e6919599d3c58c5085980a33cbbfd420ea2ff35500717ec0cba1d3121c657",
+      "purpose": "wrong-path:/assets/social-photos.jpg:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000109776485488824",
+      "block": 73569405,
+      "nonce": 38,
+      "status": 1
+    },
+    {
+      "hash": "0x80125ff5eb1d530a41b7169af82e70acdef74e35c020fba8af4c3d4cdc035078",
+      "purpose": "wrong-path:/assets/social-photos.jpg:1",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107301585365079",
+      "block": 73569463,
+      "nonce": 39,
+      "status": 1
+    },
+    {
+      "hash": "0x2e83a0e5d515560336ebe32c5da8ebb84aaa5be8df465e6e1f6ef16c00e39f56",
+      "purpose": "wrong-path:/assets/social-photos.jpg:2",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107295105364755",
+      "block": 73569471,
+      "nonce": 40,
+      "status": 1
+    },
+    {
+      "hash": "0x52e6a4fcfc9b697845a7963eecfad144e175260621dd43ff63d8cf675febf3e6",
+      "purpose": "wrong-path:/assets/social-photos.jpg:3",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107298465364923",
+      "block": 73569531,
+      "nonce": 41,
+      "status": 1
+    },
+    {
+      "hash": "0xfb8f2ec4ae5c0174977b3f80854b76696432fb8ed8d576f7489942b6a76c9a94",
+      "purpose": "wrong-path:/assets/social-photos.jpg:4",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107297505364875",
+      "block": 73569541,
+      "nonce": 42,
+      "status": 1
+    },
+    {
+      "hash": "0xf1bffad5cdb6c38b41f110039ea6773ec3a4317c53ef4d24760224e956179bc4",
+      "purpose": "wrong-path:/assets/social-photos.jpg:5",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107292945364647",
+      "block": 73569551,
+      "nonce": 43,
+      "status": 1
+    },
+    {
+      "hash": "0x80015bfa33c4153240f6c2c8936c973b0f47be1bd9e125da7795785a576e5684",
+      "purpose": "wrong-path:/assets/social-photos.jpg:6",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107290785364539",
+      "block": 73569560,
+      "nonce": 44,
+      "status": 1
+    },
+    {
+      "hash": "0x99a30b449f40751d75cf05c684a252db1d1b1cdf5fe643da4490bbff7d1353ba",
+      "purpose": "wrong-path:/assets/social-photos.jpg:7",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107287665364383",
+      "block": 73569569,
+      "nonce": 45,
+      "status": 1
+    },
+    {
+      "hash": "0x0ea2cd83439e9c11b00be2264c56d1216c0beea1c4ae85b2e477941fe0884ab1",
+      "purpose": "wrong-path:/assets/social-photos.jpg:8",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107283585364179",
+      "block": 73569578,
+      "nonce": 46,
+      "status": 1
+    },
+    {
+      "hash": "0xc68a95739ee247a8e9c2c8c9539638b75a732ed076101fde07405ae6e6bd6895",
+      "purpose": "wrong-path:/assets/social-photos.jpg:9",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107294385364719",
+      "block": 73569587,
+      "nonce": 47,
+      "status": 1
+    },
+    {
+      "hash": "0xb0fbc38e304b367412ff6b0994e436de0f3dc1b108b5564d042b9ee5c3867291",
+      "purpose": "wrong-path:/assets/social-photos.jpg:10",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107292945364647",
+      "block": 73569605,
+      "nonce": 48,
+      "status": 1
+    },
+    {
+      "hash": "0xa03a37193c159f0d1b19efb34045013472c94cd895c0f0332302210f4d6b08ab",
+      "purpose": "wrong-path:/assets/social-photos.jpg:11",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107291745364587",
+      "block": 73569615,
+      "nonce": 49,
+      "status": 1
+    },
+    {
+      "hash": "0x58d485ccc752e35a6a8bfbeb995553794a9650eeca4e93d620deb2f6d665bace",
+      "purpose": "wrong-path:/assets/social-photos.jpg:12",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107293425364671",
+      "block": 73569677,
+      "nonce": 50,
+      "status": 1
+    },
+    {
+      "hash": "0x69b1e03cf77ba1811e5c524b44897cf8116795cba8a0864bb32cfa53a28a7aa0",
+      "purpose": "wrong-path:/assets/social-photos.jpg:13",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107295825364791",
+      "block": 73569690,
+      "nonce": 51,
+      "status": 1
+    },
+    {
+      "hash": "0xa234f59c7c6cf92e389593f87c51113228d3e39d55f28d5de06276456d94e7a5",
+      "purpose": "wrong-path:/assets/social-photos.jpg:14",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107291265364563",
+      "block": 73569698,
+      "nonce": 52,
+      "status": 1
+    },
+    {
+      "hash": "0x8bb40412cb815cc025c827f4310ca265c4938b199d563c5f656d59f7aef9263c",
+      "purpose": "wrong-path:/assets/social-photos.jpg:15",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107296305364815",
+      "block": 73569707,
+      "nonce": 53,
+      "status": 1
+    },
+    {
+      "hash": "0xb3fe19732e8a5a24fa80df4f2393a42a187950c385943e6958bef057206968fe",
+      "purpose": "wrong-path:/assets/social-photos.jpg:16",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107298225364911",
+      "block": 73569716,
+      "nonce": 54,
+      "status": 1
+    },
+    {
+      "hash": "0x5fcc3e84a80de55738d74fd740195752fe22d7c54969521925fd7ef593600493",
+      "purpose": "wrong-path:/assets/social-photos.jpg:17",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107286945364347",
+      "block": 73569725,
+      "nonce": 55,
+      "status": 1
+    },
+    {
+      "hash": "0x46cc23323711e2521f254bb17fa90427fea828797024eab597f9848905037cd9",
+      "purpose": "wrong-path:/assets/social-photos.jpg:18",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107291265364563",
+      "block": 73569752,
+      "nonce": 56,
+      "status": 1
+    },
+    {
+      "hash": "0x86d7754ba121e7513b9fcea27d732282c6a837820d64c12cc923f416df6b2658",
+      "purpose": "wrong-path:/assets/social-photos.jpg:19",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107294625364731",
+      "block": 73569762,
+      "nonce": 57,
+      "status": 1
+    },
+    {
+      "hash": "0xe857ad206d8c5a41e89f5cf3170eb66ae82ac3a83a33003ba462ea7175473d3d",
+      "purpose": "wrong-path:/assets/social-photos.jpg:20",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107296305364815",
+      "block": 73569772,
+      "nonce": 58,
+      "status": 1
+    },
+    {
+      "hash": "0x61d03df2c14374fc1609f7c47194fe31a1a4d34319df6149f2c93e8dd4ee8d03",
+      "purpose": "wrong-path:/assets/social-photos.jpg:21",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000040874302043715",
+      "block": 73569780,
+      "nonce": 59,
+      "status": 1
+    },
+    {
+      "hash": "0x54fd4b5e3a3b2e47e9941ce5218ab6190d88b8ed6b52eaafadcc97670dad1436",
+      "purpose": "wrong-path:/assets/studio.svg:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.00000953240047662",
+      "block": 73569794,
+      "nonce": 60,
+      "status": 1
+    },
+    {
+      "hash": "0xcd5cef05ca7eb98536c4acfef72056d02f17ead6ec7156be2644a0f7342dcb06",
+      "purpose": "wrong-path:/assets/sketch.svg:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000009287520464376",
+      "block": 73569800,
+      "nonce": 61,
+      "status": 1
+    },
+    {
+      "hash": "0x67cbd5f58c39acf165eebfb8ff5af9cca6cef3e93439898a6a2182a6f327e789",
+      "purpose": "wrong-path:/app-config.json:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000006469540323477",
+      "block": 73569811,
+      "nonce": 62,
+      "status": 1
+    },
+    {
+      "hash": "0xa509114cfb7a2d80f20a4742ec9127c635ecc8b857a3ee49a732e75466fa7909",
+      "purpose": "wrong-path:fallback",
+      "valueOKB": "0.0",
+      "gasOKB": "0.00000228500011425",
+      "block": 73569819,
+      "nonce": 63,
+      "status": 1
+    },
+    {
+      "hash": "0x70a66f20db3f359ab194ffd3ba5f40be62a1dd57dc4a36ced7b4e94ae865bf4b",
+      "purpose": "wrong-path:activation",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000003702520185126",
+      "block": 73569825,
+      "nonce": 64,
+      "status": 1
+    },
+    {
+      "hash": "0xb3b24db337df0daacab17d7d278853be862da56812e69c921276ad04284b72f7",
+      "purpose": "first-repair:index.html:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000050999562549978",
+      "block": 73570378,
+      "nonce": 65,
+      "status": 1
+    },
+    {
+      "hash": "0x391f26971fad57b94c884d09ab3a200f141329fa775cc60faa13907ffbdfeb8e",
+      "purpose": "first-repair:style.css:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000109833365491668",
+      "block": 73570391,
+      "nonce": 66,
+      "status": 1
+    },
+    {
+      "hash": "0xb139b7ffb885e66a864ab7b2ce37425f1fe901e4550c9581fe6c75f900e3d5a6",
+      "purpose": "first-repair:style.css:1",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000047027762351388",
+      "block": 73570531,
+      "nonce": 67,
+      "status": 1
+    },
+    {
+      "hash": "0xe5988c9418038af4b9acb8d5bce45dbc651628e8a82e780ae602d0d4276dc343",
+      "purpose": "first-repair:app.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000109834325491716",
+      "block": 73570542,
+      "nonce": 68,
+      "status": 1
+    },
+    {
+      "hash": "0xa30b3e6c0c71eac3c6a7252af9b0452cfccac48967997461c93cfef543c9a9fc",
+      "purpose": "clean-public:index.html:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.00004668840233442",
+      "block": 73571669,
+      "nonce": 69,
+      "status": 1
+    },
+    {
+      "hash": "0x5e53e1119a87ed0c7053dc20abecdd22e3e94c5e842092e2c501300df8075b93",
+      "purpose": "clean-public:app.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000107020845351042",
+      "block": 73571692,
+      "nonce": 70,
+      "status": 1
+    },
+    {
+      "hash": "0x1f080685d4d977becbaad92ccd2608231b3079e141e7071086c414976ff95ab6",
+      "purpose": "clean-public:app.js:1",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000043588902179445",
+      "block": 73571708,
+      "nonce": 71,
+      "status": 1
+    },
+    {
+      "hash": "0xce0421827a94d70529d97b7f659cb476a0667141114349ee0dbcb840845aec0c",
+      "purpose": "clean-public:chat.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000008899180444959",
+      "block": 73571727,
+      "nonce": 72,
+      "status": 1
+    },
+    {
+      "hash": "0xc70e45f6d1f6afaf108f2f28b17978ba615f3769b4a9b967f7f1ad21a7512c0a",
+      "purpose": "clean-public:store.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000028984521449226",
+      "block": 73571734,
+      "nonce": 73,
+      "status": 1
+    },
+    {
+      "hash": "0x4f93827a34e9a9eb48f393b922b1525548b683216739f3749711b1c408c6686c",
+      "purpose": "clean-public:local-delivery.js:0",
+      "valueOKB": "0.0",
+      "gasOKB": "0.000009662440483122",
+      "block": 73571740,
+      "nonce": 74,
+      "status": 1
+    }
+  ],
+  "confirmedProjectSpendOKB": "0.090857578614878916",
+  "ownerBalanceOKB": "0.009142421385121084",
+  "balanceVerifiedBlock": 73571878,
+  "note": "All 75 transaction nonces reconciled against two RPCs. Previous approvals do not authorize resuming after user stop."
+}
