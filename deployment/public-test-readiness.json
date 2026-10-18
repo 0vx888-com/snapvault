@@ -40,7 +40,10 @@
     "externalAPIRequiresGatewayPermission": true,
     "mainnetSpendApproved": false,
     "bytes": 1172180,
-    "chunks": 60
+    "chunks": 60,
+    "budgetReport": "deployment/deweb-tapesend-mainnet-budget.json",
+    "suggestedTotalReserveOKB": "0.30",
+    "budgetDocument": "docs/DEWEB-RELEASE-BUDGET.md"
   },
   "checks": {
     "hostingAndDeliveryTestsPassed": 6,
@@ -48,7 +51,7 @@
     "coreTestsPassed": 43
   },
   "moneySpent": false,
-  "next": "New v2 1952 deployment, A listing, B purchase/view/expiry and A withdrawal verified. Browser plaintext matches original. Prepare encrypted off-site backup, public backend v2 rollout and DeWEB budget before mainnet; no mainnet spending authorized.",
+  "next": "Testnet v2 accepted; read-only 196 DeWEB + mandatory TapeSend budget prepared. Await user budget review and new mainnet owner/treasury public addresses. No mainnet transactions or new paid resources. Off-site encrypted backup/restore, production v2 rollout and mainnet evidence remain pending.",
   "hardenedV2": {
     "publicTestnetDeployed": true,
     "mainnetDeployed": false,

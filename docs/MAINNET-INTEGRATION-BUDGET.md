@@ -1,3 +1,5 @@
+> 当前预算请看 [DEWEB-RELEASE-BUDGET.md](DEWEB-RELEASE-BUDGET.md)：包含网站、发送 C、演示买家三个容器及真实 dist/wallet 大小；旧双容器成本不适用。
+
 > 2026-10-18 更新：最新发布/交付架构以 [DEPLOYMENT.md](DEPLOYMENT.md) 为准。TapeSend 已要求接入正式交付，普通无容器交付为明确提示的回退；本文旧预算与“可选”描述只作历史记录，不是当前上线证明。
 
 # SnapVault 主网接法与预算（历史双容器方案）

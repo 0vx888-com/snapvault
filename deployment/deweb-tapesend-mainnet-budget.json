@@ -1,0 +1,288 @@
+{
+  "checkedAt": "2026-10-18T12:52:42.860Z",
+  "scope": "READ ONLY; eth_call and eth_estimateGas only. No signers, no broadcast, no payment. Synthetic upload bytes only.",
+  "chainId": 196,
+  "block": 73558920,
+  "addresses": {
+    "factory": "0x1f09daefa827f02cbb40967cc91b259763760761",
+    "opener": "0x536add8f30f03b69f6fbf29d425a816a0dc50106",
+    "registry": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+    "binding": "0x68809fd2fb343aa57d0aeb7f33defe477c9666f9",
+    "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee"
+  },
+  "crossChecks": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "openingOKB": "0.08",
+      "monthlyOKB": "0.0",
+      "protocolMintOKB": "0.00066",
+      "cpuCount": "367",
+      "pins": {
+        "registry": {
+          "implementation": "0xa85c4143d1d4a77f54b8e4ecc9e6d1418afea45f",
+          "codeHash": "0xec8c29acef66eb1bf973d6e80202258830631b7b2849f75d04365c6f80443e6d"
+        },
+        "binding": {
+          "implementation": "0x5ebf29b80789e548907c707530c3c7607c4347df",
+          "codeHash": "0x6cdc2f5fa922b4f73d3e37644b0fcfc6bf153279464581611818cd88ee27aa2d"
+        },
+        "hub": {
+          "implementation": "0xdcc57797089ebd9f26e686379a4323f353a3f9c6",
+          "codeHash": "0xf97f9432aefd6f305f610fbe6c789a8f4facfc251fcaf39e06d8c1f2c2881b61"
+        }
+      }
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "openingOKB": "0.08",
+      "monthlyOKB": "0.0",
+      "protocolMintOKB": "0.00066",
+      "cpuCount": "367",
+      "pins": {
+        "registry": {
+          "implementation": "0xa85c4143d1d4a77f54b8e4ecc9e6d1418afea45f",
+          "codeHash": "0xec8c29acef66eb1bf973d6e80202258830631b7b2849f75d04365c6f80443e6d"
+        },
+        "binding": {
+          "implementation": "0x5ebf29b80789e548907c707530c3c7607c4347df",
+          "codeHash": "0x6cdc2f5fa922b4f73d3e37644b0fcfc6bf153279464581611818cd88ee27aa2d"
+        },
+        "hub": {
+          "implementation": "0xdcc57797089ebd9f26e686379a4323f353a3f9c6",
+          "codeHash": "0xf97f9432aefd6f305f610fbe6c789a8f4facfc251fcaf39e06d8c1f2c2881b61"
+        }
+      }
+    }
+  ],
+  "processors": [
+    {
+      "index": 0,
+      "address": "0x839bdD6fa7A66416A609A735e11DE5411B98574e",
+      "name": "OnlyTestXLayer",
+      "transistor": "0xbe0eeE424C49d44592e4D498740F5B031Ef8e26D",
+      "tapeoutOKB": "0.0013",
+      "mintPriceOKB": "0.0",
+      "protocolMintOKB": "0.00066",
+      "supplyCap": "100000",
+      "minted": "100000"
+    },
+    {
+      "index": 4,
+      "address": "0x68f65046fDEab90d8dB376C27B5E6AE159d240cc",
+      "name": "RTX",
+      "transistor": "0xe5fdA8dD6485833801aAeA71E5998f01416Cb0F7",
+      "tapeoutOKB": "0.0013",
+      "mintPriceOKB": "0.00066",
+      "protocolMintOKB": "0.00066",
+      "supplyCap": "100000",
+      "minted": "180"
+    },
+    {
+      "index": 6,
+      "address": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+      "name": "TapeKit",
+      "transistor": "0x37Ea91bCe83286195cB4A908920018db24F2c784",
+      "tapeoutOKB": "0.0013",
+      "mintPriceOKB": "0.001",
+      "protocolMintOKB": "0.00066",
+      "supplyCap": "100000",
+      "minted": "27"
+    }
+  ],
+  "estimates": [
+    {
+      "type": "TapeSend synthetic encrypted-size envelope",
+      "payloadBytes": 500,
+      "gas": "176876",
+      "executionOKB": "0.000003537520176876"
+    },
+    {
+      "type": "TapeSend synthetic encrypted-size envelope",
+      "payloadBytes": 1000,
+      "gas": "189456",
+      "executionOKB": "0.000003789120189456"
+    },
+    {
+      "type": "Container opening of public unopened circuit",
+      "gas": "169729",
+      "executionOKB": "0.000003394580169729",
+      "simulationValueOKB": "0.08"
+    },
+    {
+      "type": "One NAND mint on available processor 4",
+      "gas": "92951",
+      "executionOKB": "0.000001859020092951",
+      "simulationValueOKB": "0.00132"
+    },
+    {
+      "type": "TapeSend public key publication",
+      "gas": "83433",
+      "executionOKB": "0.000001668660083433",
+      "simulationValueOKB": "0.0"
+    },
+    {
+      "type": "Website binding activation",
+      "gas": "187404",
+      "executionOKB": "0.000003748080187404",
+      "simulationValueOKB": "0.0"
+    },
+    {
+      "type": "Actual production-format TAP-10 sealed dummy link",
+      "payloadBytes": 487,
+      "gas": "176666",
+      "executionOKB": "0.000003533320176666",
+      "note": "Dummy keys and illustrative URL; no customer data. URL validity not asserted."
+    },
+    {
+      "type": "Hardened SnapVaultDirect deployment",
+      "gas": "2736412",
+      "executionOKB": "0.000054728242736412",
+      "constructorNote": "Public simulation holder as hypothetical treasury/deployer; actual owner/treasury not chosen, never test A."
+    }
+  ],
+  "gasPriceWei": "20000001",
+  "simulationIdentity": {
+    "holder": "0x571d447f4f24688eC35Ccf07f1D6993655F6aF15",
+    "cpu": "0x839bdD6fa7A66416A609A735e11DE5411B98574e",
+    "tokenId": 1,
+    "container": "0xE2E5FfD861C8a0b50Ce21A7bcbDD6Bb5aaC250aB",
+    "recipient": "0x25B20D3eA6b207506340eab2Eb0f45Edc800F6b3",
+    "note": "Public third-party historical identity for unsigned simulation only; not a SnapVault-owned wallet."
+  },
+  "maxPayload": "16000",
+  "dataFeeSample": {
+    "oracle": "0x420000000000000000000000000000000000000F",
+    "unsignedDummySendL1FeeWei": "0",
+    "note": "Unsigned dummy sample only; not a guarantee for signed actual transaction or all publication transactions."
+  },
+  "frontend": {
+    "manifestSHA256": "0x3720a7de08851fa2e658c05750c8794d9ce42c42a6104a100dac4ae3c92bc46d",
+    "files": [
+      {
+        "path": "/index.html",
+        "bytes": 10432,
+        "chunks": 1,
+        "gas": "2610369"
+      },
+      {
+        "path": "/style.css",
+        "bytes": 34094,
+        "chunks": 2,
+        "gas": "8134593"
+      },
+      {
+        "path": "/app.js",
+        "bytes": 34598,
+        "chunks": 2,
+        "gas": "8245773"
+      },
+      {
+        "path": "/chat.js",
+        "bytes": 26839,
+        "chunks": 2,
+        "gas": "6537576"
+      },
+      {
+        "path": "/store.js",
+        "bytes": 7388,
+        "chunks": 1,
+        "gas": "1940060"
+      },
+      {
+        "path": "/local-delivery.js",
+        "bytes": 894,
+        "chunks": 1,
+        "gas": "510608"
+      },
+      {
+        "path": "/wallet.js",
+        "bytes": 8497,
+        "chunks": 1,
+        "gas": "2184267"
+      },
+      {
+        "path": "/wallet-chat.js",
+        "bytes": 11168,
+        "chunks": 1,
+        "gas": "2772322"
+      },
+      {
+        "path": "/vendor/ethers.min.js",
+        "bytes": 522050,
+        "chunks": 22,
+        "gas": "121863975"
+      },
+      {
+        "path": "/vendor/ethers-LICENSE.md",
+        "bytes": 1075,
+        "chunks": 1,
+        "gas": "550480"
+      },
+      {
+        "path": "/assets/mark-tape.svg",
+        "bytes": 635,
+        "chunks": 1,
+        "gas": "453597"
+      },
+      {
+        "path": "/assets/social-photos.jpg",
+        "bytes": 512682,
+        "chunks": 22,
+        "gas": "119799536"
+      },
+      {
+        "path": "/assets/studio.svg",
+        "bytes": 864,
+        "chunks": 1,
+        "gas": "503978"
+      },
+      {
+        "path": "/assets/sketch.svg",
+        "bytes": 807,
+        "chunks": 1,
+        "gas": "491540"
+      },
+      {
+        "path": "/app-config.json",
+        "bytes": 157,
+        "chunks": 1,
+        "gas": "348429"
+      }
+    ],
+    "totalBytes": 1172180,
+    "dataChunks": 60,
+    "fallbackGas": "116324",
+    "estimatedGas": "277063427",
+    "executionOKB": "0.005541268817063427",
+    "model": "Every chunk modeled as a fresh putFile with synthetic nonzero bytes and new path. Actual appendChunk has different overhead. Not an invoice; calldata source files never transmitted. eth_estimateGas uses latest, fee reads pinned to block."
+  },
+  "budget": {
+    "approvedSpend": false,
+    "roles": [
+      "Website container controlled by user",
+      "TapeSend sender C separate from operator",
+      "Demo recipient container controlled by test buyer"
+    ],
+    "freshContainers": 3,
+    "assumption": "Existing processor, one NAND per newly created minimal circuit, one separate mint per circuit. Processor availability and circuit validity must be revalidated before payment. No custom processor deployment.",
+    "protocolSubtotalOKB": {
+      "processor4": "0.24786",
+      "processor6": "0.24888"
+    },
+    "suggestedReserveOKB": "0.30",
+    "reserveIsNotAnInvoice": true,
+    "exclusions": [
+      "Backend and independent encrypted backup storage bills",
+      "Content purchase principal (transfer to creator)",
+      "Exchange withdrawal or bridge fees",
+      "Unbounded future gas-price or protocol-fee increases"
+    ],
+    "stillUnquoted": [
+      "Actual newly minted circuit tapeout gas",
+      "Final chosen accounts and actual signed transaction data fees",
+      "Actual gallery listing, purchase and withdrawal on future mainnet contract"
+    ],
+    "ordinaryUserContainersRequired": false,
+    "tapeSendMandatory": true
+  }
+}
