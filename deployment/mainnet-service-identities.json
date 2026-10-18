@@ -2,9 +2,9 @@
   "chainId": 196,
   "operator": "0xb402779Ed008DE2BeF8dA503EBE75fbAe4679309",
   "senderC": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
-  "owner": null,
-  "treasury": null,
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "treasury": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
   "funded": false,
   "uploadedToRailway": false,
-  "purpose": "New independent production service identities; no user wallet secrets; owner/treasury pending user public addresses"
+  "purpose": "Independent production service identities; owner/treasury are the new user-created OKX Wallet address verified in native receive UI. No user wallet secrets accessed."
 }

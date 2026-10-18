@@ -10,6 +10,7 @@ const hex = buf => [...new Uint8Array(buf)].map(x => x.toString(16).padStart(2, 
 let tapeLink=null;const incoming=new URLSearchParams(location.hash.slice(1));if(incoming.has('key')||incoming.has('claim')){history.replaceState(null,'',location.pathname+location.search);if(/^[0-9]+$/.test(incoming.get('id')||'')&&/^0x[0-9a-fA-F]{64}$/.test(incoming.get('key')||'')&&/^0x[0-9a-fA-F]{64}$/.test(incoming.get('claim')||''))tapeLink={id:incoming.get('id'),key:incoming.get('key'),claim:incoming.get('claim')};}
 let feed = 'creators', profileAddress = null, chat, pendingPurchase = null, purchasing = false, viewing = null, viewTask = 0, toastTimer;
 const money = c => `${c.price} ${c.token}`;
+const activeNetworkName=()=>wallet.enabled?(wallet.config?.mainnet?'X Layer 主网':wallet.config?.chainId===31337?'本地链':'X Layer 测试网'):local.enabled?'本地链':'本地演示';
 function toast(text) { $('#toast').textContent = text; $('#toast').classList.remove('hidden'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').classList.add('hidden'), 4000); }
 function go(page) {
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === page));
@@ -51,7 +52,7 @@ function render() {
     .filter(c => `${c.title} ${profile(c.creator).name} ${uidOf(c.creator)}`.toLowerCase().includes(query)).reverse();
   $('#creators-grid').innerHTML = ['creators', 'following'].includes(feed) ? creators.map(creatorCard).join('') : '';
   $('#grid').innerHTML = feed === 'creators' ? '' : items.map(c => paidCard(c.id)).join('') || `<p class="empty-state">${feed === 'following' ? '关注创作者后，这里会出现他们的公开新作。' : feed === 'purchased' ? '还没有购买记录。可以在广场或私聊里体验解锁。' : '还没有公开作品，先去创作中心发布一张吧。'}</p>`;
-  $('#discovery-summary').textContent = feed === 'creators' ? `${creators.length} 位创作者 · ${wallet.enabled?'站内资料':'当前展示演示资料'}` : feed === 'following' ? `已关注 ${follows().length} 位创作者` : feed === 'purchased' ? `${items.length} 笔${wallet.enabled?'测试链':local.enabled?'本地链':'本地演示'}购买` : `${items.length} 条公开作品 · 最新发布`;
+  $('#discovery-summary').textContent = feed === 'creators' ? `${creators.length} 位创作者 · ${wallet.enabled?'站内资料':'当前展示演示资料'}` : feed === 'following' ? `已关注 ${follows().length} 位创作者` : feed === 'purchased' ? `${items.length} 笔${activeNetworkName()}购买` : `${items.length} 条公开作品 · 最新发布`;
   $('#my-contents').innerHTML = contents().filter(c => c.creator === identity()).reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">你还没有发布内容。</p>';
   if (document.activeElement !== $('#profile-name')) $('#profile-name').value = profile(identity()).name;
   if (document.activeElement !== $('#profile-bio')) $('#profile-bio').value = profile(identity()).bio;
@@ -78,14 +79,14 @@ async function publish(e) {
     const target = $('#publish-target').value, conv = target === 'public' ? null : chat.conversations().find(c => c.id === target);
     if (target !== 'public' && !conv) throw new Error('当前身份不在这个会话中');
     if(wallet.enabled||local.enabled){
-      $('#log').textContent='正在加密上传并提交本地链上架交易…';
+      $('#log').textContent='正在加密上传并提交'+activeNetworkName()+'上架交易…';
       const result=await (wallet.enabled?publishWallet:body=>localCall('publish',body))({who:creator,image:b64(await file.arrayBuffer()),meta:{title,price,secs,max,mime:file.type,scope:conv?conv.type:'public',convId:conv?.id||null,audience:conv?[...conv.members]:[],burn:$('#content-burn').checked}});
       if(identity()!==creator)throw Error('身份已变化，上架已提交，请切回原身份查看');
       if(wallet.enabled)await walletRefresh();else await localRefresh(creator);const product=result.product;
-      $('#log').textContent=(wallet.config?.mainnet?'上架成功 #':'测试上架成功 #')+product.id+'\n'+product.publishTx+'\n密文由测试服务保存，密钥按链上订单加密交付。未使用真钱。';
+      $('#log').textContent=(wallet.config?.mainnet?'上架成功 #':'测试上架成功 #')+product.id+'\n'+product.publishTx+(wallet.config?.mainnet?'\n密文由服务保存，密钥按链上订单交付。本次为真实 OKB 交易。':'\n密文由测试服务保存，密钥按链上订单交付。仅使用测试币，未使用真钱。');
       $('#file').value='';$('#title').value='';
       if(conv){await chat.sendPaidCard(product.id,conv.id);go('chat');}else{feed='latest';document.querySelectorAll('[data-feed]').forEach(b=>b.classList.toggle('on',b.dataset.feed===feed));go('fan');}
-      render();toast('已发布 · 本地链测试');return;
+      render();toast('已发布 · '+activeNetworkName());return;
     }
     const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
     const iv = crypto.getRandomValues(new Uint8Array(12)), ciphertext = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, await file.arrayBuffer()));
@@ -263,7 +264,7 @@ if(wallet.enabled){
  '本模式使用真实钱包签名登录，聊天与图片通过站内服务同步。普通用户和创作者均无需开通容器。',
  '付费图片需在本地链或 X Layer 测试网确认交易，随后将内容密钥加密给已登录浏览器。当前不开放主网收款。',
  '测试服务会接触消息和内容密钥，不宣称平台无法读取。生产服务、正式 DeWEB 和公共内容存储尚未上线。'][i]||'');
- try{await initWallet();const mainnet=wallet.config.mainnet;$('#mode').textContent=wallet.config.networkName||(wallet.config.chainId===31337?'本地链 · 无真钱':'X Layer 测试网');$('#wallet-network').textContent='切换'+(mainnet?'主网':'测试网络');$('#token').innerHTML='<option value="OKB">'+(wallet.config.symbol||'测试 OKB')+'</option>';if(mainnet){$('#try-demo').textContent='发布图片 ↗';$('#creator > .sub').textContent='普通钱包发布内容，付款使用 X Layer 主网 OKB。';$('.preview-note span:nth-child(2)').textContent='X Layer 主网：聊天发图免费，付费图片与提现会产生真实 OKB 交易。已有可用容器时优先 TapeSend，无容器走普通交付。';$('#purchase-dialog .demo-notice').textContent='本单使用真实 OKB。请核对金额、合约和当前交付方式；付款、提现均由你在钱包确认。';$('#preview-dialog h2').textContent='SnapVault · X Layer';}$('#wallet-earnings').classList.remove('hidden');$('#delivery-settings').classList.remove('hidden');$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';}catch(e){$('#mode').textContent='服务未就绪';toast(e.message);}
+ try{await initWallet();const mainnet=wallet.config.mainnet;$('#mode').textContent=wallet.config.networkName||(wallet.config.chainId===31337?'本地链 · 无真钱':'X Layer 测试网');$('#wallet-network').textContent='切换'+(mainnet?'主网':'测试网络');$('#token').innerHTML='<option value="OKB">'+(wallet.config.symbol||'测试 OKB')+'</option>';if(mainnet){$('#try-demo').textContent='发布图片 ↗';$('#creator > .sub').textContent='普通钱包发布内容，付款使用 X Layer 主网 OKB。';$('.preview-note span:nth-child(2)').textContent='X Layer 主网：聊天发图免费，付费图片与提现会产生真实 OKB 交易。已有可用容器时优先 TapeSend，无容器走普通交付。';$('#purchase-dialog .demo-notice').textContent='本单使用真实 OKB。请核对金额、合约和当前交付方式；付款、提现均由你在钱包确认。';$('#preview-dialog h2').textContent='SnapVault · X Layer';$('#preview-dialog').querySelectorAll('p:not(.eyebrow):not(.field-note)').forEach((p,i)=>p.textContent=['本模式使用钱包签名登录，聊天与图片通过站内服务同步。普通用户和创作者无需个人容器。','付费图片在 X Layer 主网使用真实 OKB。已有可用容器和公钥时通过官方 TapeSend 交付查看链接，无容器时明确提示普通交付。','平台服务负责保存密文与交付密钥，不宣称平台无法读取。阅后即焚限制站内展示，不能防止截图或收回已保存内容。'][i]||'');}$('#wallet-earnings').classList.remove('hidden');$('#delivery-settings').classList.remove('hidden');$('#connect').textContent=wallet.token?'退出 '+identity().slice(0,6)+'…':'连接钱包';}catch(e){$('#mode').textContent='服务未就绪';toast(e.message);}
  setInterval(()=>{if(!document.hidden)walletRefresh().catch(e=>{$('#mode').textContent=e.message;});},10000);
  window.addEventListener('snapvault:delivery-route',e=>toast(e.detail));
  $('#save-delivery').onclick=async()=>{try{await walletAction('delivery-settings',{circuits:$('#delivery-circuits').value.trim(),tokenId:$('#delivery-token').value.trim()});const route=await walletAction('delivery-route');$('#delivery-feedback').textContent=route.available?'已核对，付款后通过官方 TapeSend 交付。':route.reason;}catch(e){$('#delivery-feedback').textContent=e.message;}};

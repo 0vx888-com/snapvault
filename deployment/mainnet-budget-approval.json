@@ -1,7 +1,7 @@
 {
   "recordedDate": "2026-10-18",
   "chainId": 196,
-  "status": "budget-accepted-awaiting-owner-address",
+  "status": "budget-accepted-owner-verified-awaiting-funding",
   "userApprovedReserveOKB": "0.30",
   "userApprovedReserveWei": "300000000000000000",
   "scope": [
@@ -11,8 +11,8 @@
     "SnapVaultDirect deployment and small end-to-end acceptance gas"
   ],
   "budgetSource": "deployment/deweb-tapesend-mainnet-budget.json",
-  "owner": null,
-  "treasury": null,
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "treasury": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
   "ownerEqualsTreasury": true,
   "ownerMustBeNewUserControlledWallet": true,
   "automaticSpendingAuthorized": false,

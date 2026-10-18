@@ -1,0 +1,27 @@
+{
+  "chainId": 196,
+  "mainnetEnabled": false,
+  "mainnetAcknowledgement": "",
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "treasury": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "operator": "0xb402779Ed008DE2BeF8dA503EBE75fbAe4679309",
+  "senderC": "0x8ef49aE5494aAE74edBE775228048F66c1905027",
+  "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+  "feeBps": 1000,
+  "confirmations": 6,
+  "approvedDeploymentBudgetWei": null,
+  "maxGasPriceWei": null,
+  "evidence": {
+    "testnetRecord": "xlayerTestnet-direct-v2-acceptance.json",
+    "dewebRecord": "deweb-wallet-proof.json"
+  },
+  "preparation": {
+    "status": "DRAFT_NOT_ENABLED",
+    "budgetApprovalRecord": "deployment/mainnet-budget-approval.json",
+    "pending": [
+      "DeWEB file proof",
+      "Per-transaction mainnet review and user wallet signature"
+    ],
+    "note": "Owner/treasury assigned; no private key. Mainnet switch and transaction budgets remain disabled until the exact deployment is reviewed."
+  }
+}
