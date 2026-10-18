@@ -7,5 +7,10 @@ export async function deltaUploadPlan(bundle,container,registry,provider){
  const operations=full.filter(t=>t.path===f.path);if(reusable&&size===f.bytes.length){reused.push({path:f.path,bytes:size,sha256:sha256(f.bytes)});continue;}
  if(reusable&&size===chunks*24000)pending.push(...operations.filter(t=>t.chunk>=chunks));else pending.push(...operations);
  }
- const fallback=new Contract(registry,['function fallbackPath(address) view returns(string)'],provider);if(await fallback.fallbackPath(container)!=='index.html')pending.push(full.at(-1));return {plan:pending,reused};
+ const fallback=new Contract(registry,['function fallbackPath(address) view returns(string)'],provider);if(await fallback.fallbackPath(container)!=='index.html')pending.push(full.at(-1));return {plan:dependencyFirstPlan(pending),reused};
+}
+// Existing users must never load a new entry point before its new dependencies exist.
+export function dependencyFirstPlan(plan){
+ const priority=p=>p==='fallback'?100:p==='index.html'?90:p==='app.js'?80:p==='refunds.js'?75:p==='wallet-chat.js'?70:p==='wallet.js'?60:p==='wallet-connect.js'?50:p==='transaction-guard.js'?40:10;
+ return plan.map((op,i)=>({op,i})).sort((a,b)=>priority(a.op.path)-priority(b.op.path)||a.i-b.i).map(x=>x.op);
 }

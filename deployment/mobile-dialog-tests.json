@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "realHardwareVerified": false,
+  "results": [
+    {
+      "device": "iPhone 13",
+      "status": "PASS",
+      "scope": "Chromium device emulation; real SDK initialization, simulated session URI; no app launch/signature"
+    },
+    {
+      "device": "Pixel 7",
+      "status": "PASS",
+      "scope": "Chromium device emulation; real SDK initialization, simulated session URI; no app launch/signature"
+    }
+  ]
+}

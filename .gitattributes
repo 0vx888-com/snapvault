@@ -1,0 +1,3 @@
+
+# Third-party generated bundle retains upstream license comment formatting.
+web/vendor/okx-connect.min.js -whitespace linguist-generated=true

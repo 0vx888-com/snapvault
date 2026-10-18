@@ -6,6 +6,8 @@ async function run(name,args,extra={}){const p=child(node,args,extra);let output
 async function server(cmd,args,url,extra={}){const p=child(cmd,args,extra);owned.push(p);let errors='';p.stderr.on('data',b=>errors+=b);p.stdout.on('data',()=>{});for(let n=0;n<300;n++){if(p.exitCode!==null)throw Error('Test server exited: '+errors);try{const r=await fetch(url);if(r.ok)return;}catch{}await new Promise(r=>setTimeout(r,100));}throw Error('Local test server not ready: '+errors);}
 let status='PASS';try{
  await run('all contracts/services + both official Hub browser flows',[hardhat,'test'],{SNAPVAULT_BROWSER_TEST:'1'});
+ await run('mobile adapter and transaction safety',['--test','scripts/mobile-wallet.test.mjs','scripts/transaction-guard.test.mjs']);
+ await run('mobile dialog and real SDK module load',['scripts/mobile-dialog.spec.mjs']);
  await run('browser order model',['--test','scripts/ui-model.test.mjs']);
  await server('python3',['-m','http.server','5210','--bind','127.0.0.1','--directory','web'],'http://127.0.0.1:5210/');await run('existing demo social UI',['scripts/ui-flow.spec.mjs'],{UI_URL:'http://127.0.0.1:5210'});
  await server(node,[hardhat,'run','--no-compile','scripts/wallet-local.cjs'],'http://127.0.0.1:5211/healthz',{WALLET_PORT:'5211'});await run('wallet social UI + paid image + withdrawal',['scripts/wallet-ui.spec.mjs'],{WALLET_UI_URL:'http://127.0.0.1:5211/index.html?delivery=wallet'});

@@ -31,7 +31,9 @@
     "dev:mainnet-deploy": "node scripts/serve-mainnet-deploy.mjs",
     "dev:deweb-publish": "node scripts/serve-deweb-publish.mjs",
     "prepare:service-wallets": "node scripts/prepare-service-wallets.mjs",
-    "backup:wallet": "node scripts/backup-state.mjs"
+    "backup:wallet": "node scripts/backup-state.mjs",
+    "build:wallet-sdk": "node scripts/build-wallet-sdk.mjs",
+    "test:mobile": "node --test scripts/mobile-wallet.test.mjs scripts/transaction-guard.test.mjs && node scripts/mobile-dialog.spec.mjs"
   },
   "keywords": [],
   "author": "",
@@ -51,6 +53,7 @@
     "@aws-sdk/client-s3": "3.922.0",
     "@noble/ciphers": "2.4.0",
     "@noble/curves": "2.4.0",
-    "@noble/hashes": "2.4.0"
+    "@noble/hashes": "2.4.0",
+    "@okxconnect/universal-provider": "1.9.1"
   }
 }

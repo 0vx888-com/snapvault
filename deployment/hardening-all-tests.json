@@ -7,6 +7,14 @@
       "status": "PASS"
     },
     {
+      "name": "mobile adapter and transaction safety",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile dialog and real SDK module load",
+      "status": "PASS"
+    },
+    {
       "name": "browser order model",
       "status": "PASS"
     },

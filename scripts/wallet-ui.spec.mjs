@@ -10,16 +10,18 @@ const provider=new JsonRpcProvider(new URL('/rpc',base).href,31337,{staticNetwor
 const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'}),errors=[],checks=[];
 const check=(v,m)=>{assert.ok(v,m);checks.push(m);console.log('PASS',m);};
 const image={name:'sample.png',mimeType:'image/png',buffer:await readFile(root+'/screenshots/sample.png')};
-async function user(n){
+async function user(n,remote=false){
  const account=HDNodeWallet.fromPhrase((await import('hardhat')).default.config.networks.hardhat.accounts.mnemonic,undefined,`m/44'/60'/0'/0/${n+offset}`).connect(provider),signer=new NonceManager(account);
- const context=await browser.newContext({viewport:{width:1360,height:1000}}),page=await context.newPage();page.on('pageerror',e=>{errors.push(e.message);console.log('BROWSER_ERROR',e.message);});
+ const context=await browser.newContext({viewport:remote?{width:390,height:844}:{width:1360,height:1000},...(remote?{isMobile:true,hasTouch:true,userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile Safari/604.1'}:{})}),page=await context.newPage();page.on('pageerror',e=>{errors.push(e.message);console.log('BROWSER_ERROR',e.message);});
  await page.exposeFunction('__testWalletRequest',async({method,params=[]})=>{
   if(['eth_requestAccounts','eth_accounts'].includes(method))return [account.address];
+  if(method==='wallet_switchEthereumChain')return null;
   if(method==='personal_sign')return account.signMessage(getBytes(params[0]));
   if(method==='eth_sendTransaction'){const t=params[0],tx=await signer.sendTransaction({to:t.to,data:t.data,value:t.value?BigInt(t.value):0n,...(t.gas?{gasLimit:BigInt(t.gas)}:{})});return tx.hash;}
   return provider.send(method,params);
  });
- await page.addInitScript(()=>{window.ethereum={request:r=>window.__testWalletRequest(r),on:()=>{}};});
+ if(remote)await page.route('**/vendor/okx-connect.min.js',route=>route.fulfill({contentType:'text/javascript',body:`export const OKXUniversalProvider={init:async()=>({on(){},off(){},connect:async()=>({namespaces:{eip155:{}}}),request:r=>window.__testWalletRequest(r),disconnect:async()=>{}})};`}));
+ else await page.addInitScript(()=>{window.ethereum={request:r=>window.__testWalletRequest(r),on:()=>{}};});
  await page.goto(base);await page.locator('#connect').getByText('连接钱包',{exact:true}).waitFor();await page.locator('#connect').click();await page.waitForFunction(()=>document.querySelector('#connect').textContent.startsWith('退出 '));return {account,context,page};
 }
 const chat=async p=>p.locator('nav [data-tab="chat"]').click();
@@ -28,6 +30,8 @@ async function api(p,action,b={}){return p.evaluate(async({action,b})=>{const m=
 async function refresh(p){await p.evaluate(async()=>{const m=await import('./wallet.js');await m.refresh();});}
 try{
  const a=await user(1),b=await user(2),c=await user(3);
+ const mobile=await user(4,true);check(!!await mobile.page.evaluate(()=>sessionStorage.getItem('sv:wallet-session')),'普通手机浏览器仿真：无注入钱包，通过官方适配器 mock 会话完成登录（非真机）');await mobile.page.locator('#wallet-network').click();await mobile.context.close();
+ check(await a.page.locator('#tapesend-inbox').getAttribute('href')===new URL('/tapesend/',base).href,'正式收件入口指向配置 API 的公开客户端，不携带钥匙');
  check((await api(a.page,'state')).profiles[a.account.address.toLowerCase()], '普通钱包签名登录，无容器、无用户私钥');
  await a.page.locator('nav [data-tab="creator"]').click();await a.page.locator('#profile-name').fill('小鹿测试创作者');await a.page.locator('#profile-bio').fill('跨浏览器聊天与免容器交付验证');await a.page.locator('#save-profile').click();await a.page.locator('#profile-feedback').getByText('已保存',{exact:false}).waitFor();
  await chat(a.page);await a.page.locator('#xc-fr').click();await a.page.locator('#xc-fq').fill(b.account.address);await a.page.locator('#xc-fadd').click();
@@ -63,7 +67,13 @@ try{
  check(await b.page.locator('#chat-list').getByText('🔥 已焚毁',{exact:true}).isVisible(),'群聊已查看成员到期关闭，其他成员独立查看');
  const leak=await b.page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith('key:')||k.startsWith('blob:')||k.startsWith('chat:id:')));check(leak.length===0,'真实模式没有将内容密钥、密文和私聊身份密钥写进 localStorage');
  await a.page.locator('nav [data-tab=fan]').click();await a.page.screenshot({path:'/private/tmp/snapvault-wallet-square.png',fullPage:true});await b.page.screenshot({path:'/private/tmp/snapvault-wallet-chat.png',fullPage:true});await b.page.setViewportSize({width:390,height:844});check(await b.page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'手机布局无横向溢出');await b.page.screenshot({path:'/private/tmp/snapvault-wallet-mobile.png',fullPage:true});
- assert.deepEqual(errors,[]);await a.page.locator('nav [data-tab="creator"]').click();await a.page.locator('#withdraw-earnings').click();await a.page.locator('#earnings-feedback').filter({hasText:'提现已确认'}).waitFor();check((await api(a.page,'earnings')).amount==='0.0','创作者通过现有前端真实本地链提现，到账后余额清零');
+ assert.deepEqual(errors,[]);await a.page.locator('nav [data-tab="creator"]').click();
+ await a.page.evaluate(()=>{window.__originalRequest=window.ethereum.request;window.ethereum.request=async r=>{if(r.method==='eth_sendTransaction')throw {code:4001,message:'Rejected'};return window.__originalRequest(r);};});
+ await a.page.locator('#withdraw-earnings').click();await a.page.locator('#earnings-feedback').filter({hasText:'取消钱包请求'}).waitFor();check(await a.page.locator('#withdraw-earnings').isEnabled(),'网页提现：拒绝后提示清楚且按钮恢复');
+ await a.page.evaluate(()=>{window.__withdrawSends=0;window.ethereum.request=async r=>{if(r.method==='eth_sendTransaction'){window.__withdrawSends++;await new Promise(r=>setTimeout(r,500));}return window.__originalRequest(r);};});
+ await a.page.locator('#withdraw-earnings').click();await a.page.locator('#withdraw-earnings').evaluate(b=>b.click());
+await a.page.locator('#earnings-feedback').filter({hasText:'提现已确认'}).waitFor();check((await api(a.page,'earnings')).amount==='0.0','创作者通过现有前端真实本地链提现，到账后余额清零');
+ check(await a.page.evaluate(()=>window.__withdrawSends)===1,'网页提现：连续点击只广播一次');await a.page.locator('#withdraw-earnings').click();await a.page.locator('#earnings-feedback').filter({hasText:'余额为 0'}).waitFor();check(await a.page.evaluate(()=>window.__withdrawSends)===1,'网页提现：零余额不弹钱包、不发送交易');
  await writeFile('/private/tmp/snapvault-wallet-e2e-result.json',JSON.stringify({status:'PASS',checks,browserErrors:errors},null,2));
  console.log('ALL PASS',checks.length);
 }catch(e){console.error(e);for(const ctx of browser.contexts())for(const p of ctx.pages()){console.log((await p.locator('body').innerText()).slice(-3500));}process.exitCode=1;}finally{await browser.close();await provider.destroy();}
