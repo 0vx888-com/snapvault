@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-10-19T09:40:54.770540+00:00",
+  "status": "PASS",
+  "files": [
+    "config/deweb-next-release.prepared.json",
+    "deployment/final-free-acceptance-2026-10-19.json",
+    "deployment/frozen-delta-baseline.json",
+    "deployment/frozen-delta-upload-plan.json",
+    "deployment/frozen-release-audit.json",
+    "docs/FROZEN-LAUNCH-PLAN-2026-10-19.md",
+    "scripts/publication-progress.mjs",
+    "test/PublicationProgress.test.js",
+    "deployment/local-delivery-browser.json",
+    "deployment/local-market-browser.json",
+    "deployment/mobile-release-cost-readonly.json",
+    "scripts/serve-deweb-publish-public.mjs",
+    "web/publish-deweb.js"
+  ],
+  "method": "Changed-file path/credential-literal checks plus manual scope review; no ignored runtime secrets read",
+  "mainnetTransactions": 0,
+  "signaturesExported": false,
+  "notFormalSecurityAudit": true
+}

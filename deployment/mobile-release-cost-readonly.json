@@ -6,9 +6,9 @@
     "remainingWei": "1636877601843891",
     "newModelExceedsRemaining": true
   },
-  "checkedAt": "2026-10-19T08:48:22.992Z",
+  "checkedAt": "2026-10-19T09:09:44.621Z",
   "chainId": 196,
-  "block": 73630589,
+  "block": 73631871,
   "spendingPaused": true,
   "noSignatures": true,
   "noTransactions": true,
@@ -27,13 +27,13 @@
       "path": "style.css",
       "bytes": 35736,
       "chunks": 2,
-      "modelGas": "8317249"
+      "modelGas": "8293988"
     },
     {
       "path": "app.js",
       "bytes": 36406,
       "chunks": 2,
-      "modelGas": "8467102"
+      "modelGas": "8463494"
     },
     {
       "path": "local-delivery.js",
@@ -137,8 +137,8 @@
     }
   ],
   "pendingUploadOperations": 38,
-  "uploadStorageModelAtCurrentPriceOKB": "0.00340959997047999",
-  "uploadStorageModelWith20PercentGasAndPriceMarginOKB": "0.004909823916575988",
+  "uploadStorageModelAtCurrentPriceOKB": "0.003409062590453121",
+  "uploadStorageModelWith20PercentGasAndPriceMarginOKB": "0.004909050089343745",
   "caveat": "Read-only per-chunk putFile storage model; append and gateway delivery gas may differ. NOT an authorization or guaranteed upper bound. Recheck exact plan before upload.",
   "tapeSendOldMessageReadOKB": "0",
   "newTapeSendMessagesPlanned": 0,

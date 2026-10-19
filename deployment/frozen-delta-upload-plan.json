@@ -1,0 +1,765 @@
+{
+  "status": "FROZEN_AND_SEQUENTIALLY_SIMULATED_LOCAL_FORK",
+  "preparedAt": "2026-10-19T09:28:17.963Z",
+  "release": {
+    "id": "3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+    "directory": "/Users/dingzhenzhenzhu/Documents/SnapVault/snapvault/releases/3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+    "manifestHash": "0x3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+    "apiBase": "https://snapvault-api-production.up.railway.app",
+    "files": [
+      {
+        "path": "index.html",
+        "bytes": 12299,
+        "sha256": "0x1a9c9fec8538a65d73d830188fb856f0707bc59f0442d7718fcc7fc6473d57aa"
+      },
+      {
+        "path": "style.css",
+        "bytes": 35736,
+        "sha256": "0xd2326812816de4cab3899dc54422d593ea04ca2f726ec4c69c88e8f4f619efe2"
+      },
+      {
+        "path": "app.js",
+        "bytes": 36406,
+        "sha256": "0x2ce0252b9b9aa0681117d5dd48cfc29fff9a60da5282f05023028ea9bb6d8cb9"
+      },
+      {
+        "path": "chat.js",
+        "bytes": 718,
+        "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+      },
+      {
+        "path": "store.js",
+        "bytes": 5353,
+        "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+      },
+      {
+        "path": "local-delivery.js",
+        "bytes": 983,
+        "sha256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c"
+      },
+      {
+        "path": "wallet.js",
+        "bytes": 10574,
+        "sha256": "0xd870dfdde183756cf8879d1a91de7c32f6d4f28ad7bdd98db2b9fc7876371bbd"
+      },
+      {
+        "path": "wallet-connect.js",
+        "bytes": 6062,
+        "sha256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54"
+      },
+      {
+        "path": "transaction-guard.js",
+        "bytes": 1162,
+        "sha256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268"
+      },
+      {
+        "path": "vendor/okx-connect.min.js",
+        "bytes": 613497,
+        "sha256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0"
+      },
+      {
+        "path": "vendor/okx-connect-LICENSE.md",
+        "bytes": 2855,
+        "sha256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c"
+      },
+      {
+        "path": "assets/wallet-icon.png",
+        "bytes": 4717,
+        "sha256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60"
+      },
+      {
+        "path": "wallet-chat.js",
+        "bytes": 11165,
+        "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2"
+      },
+      {
+        "path": "refunds.js",
+        "bytes": 2331,
+        "sha256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b"
+      },
+      {
+        "path": "vendor/ethers.min.js",
+        "bytes": 254372,
+        "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1"
+      },
+      {
+        "path": "vendor/ethers-LICENSE.md",
+        "bytes": 1075,
+        "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+      },
+      {
+        "path": "assets/mark-tape.svg",
+        "bytes": 635,
+        "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+      },
+      {
+        "path": "assets/social-photos.jpg",
+        "bytes": 512682,
+        "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+      },
+      {
+        "path": "assets/studio.svg",
+        "bytes": 864,
+        "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+      },
+      {
+        "path": "assets/sketch.svg",
+        "bytes": 807,
+        "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+      },
+      {
+        "path": "app-config.json",
+        "bytes": 157,
+        "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f"
+      }
+    ],
+    "spendingEnabled": false,
+    "createdAt": "2026-10-19T09:19:50.189Z"
+  },
+  "chainId": 196,
+  "simulationChainId": 196,
+  "fork": {
+    "chainId": 196,
+    "forkBlockNumber": 73631871,
+    "forkBlockHash": "0xa754acb66ca8ef2aba9bafb36f1318c0001191c9648b36a306ec3fb33ee7bf96"
+  },
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "registry": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+  "reused": [
+    {
+      "path": "chat.js",
+      "bytes": 718,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+    },
+    {
+      "path": "store.js",
+      "bytes": 5353,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+    },
+    {
+      "path": "wallet-chat.js",
+      "bytes": 11165,
+      "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2"
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "bytes": 254372,
+      "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1"
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "bytes": 1075,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "bytes": 635,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "bytes": 512682,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+    },
+    {
+      "path": "assets/studio.svg",
+      "bytes": 864,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+    },
+    {
+      "path": "assets/sketch.svg",
+      "bytes": 807,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+    },
+    {
+      "path": "app-config.json",
+      "bytes": 157,
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f"
+    }
+  ],
+  "operations": [
+    {
+      "path": "style.css",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 1,
+      "method": "putFile",
+      "dataSHA256": "0x9de6c2a8a45ba5d80c0a528191344ee4fbf41cd58b34457adcaf6c08ff411c60",
+      "estimatedGas": "5521355",
+      "localGasUsed": "5354042",
+      "gasLimit": "6625626",
+      "calldataBytes": 24324
+    },
+    {
+      "path": "style.css",
+      "chunk": 1,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 2,
+      "method": "appendChunk",
+      "dataSHA256": "0x800fd662a600e4e99a225be35d6ae224d4db40fa7dd27d38416af426093c78a2",
+      "estimatedGas": "2749551",
+      "localGasUsed": "2707251",
+      "gasLimit": "3299462",
+      "calldataBytes": 11972
+    },
+    {
+      "path": "local-delivery.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 3,
+      "method": "putFile",
+      "dataSHA256": "0x29c41901a72df06b7ce4d46142afaf3f1376322d45bca9d856af92a6198a13ad",
+      "estimatedGas": "370252",
+      "localGasUsed": "361773",
+      "gasLimit": "444303",
+      "calldataBytes": 1316
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 4,
+      "method": "putFile",
+      "dataSHA256": "0xc43bfe6736c29f0babeef6f8657a70289c00742718b12a3a560f4bcc1bafb4cd",
+      "estimatedGas": "5577755",
+      "localGasUsed": "5491944",
+      "gasLimit": "6693306",
+      "calldataBytes": 24324
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 1,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 5,
+      "method": "appendChunk",
+      "dataSHA256": "0xb6529ed5518598190db33c217679766e19064ca48c8959f6b504c0258acc8f33",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 2,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 6,
+      "method": "appendChunk",
+      "dataSHA256": "0x7168d2f3f332d408d67e1635069f8aff63a4705a4313f6c3dd6f44f943f8b576",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 3,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 7,
+      "method": "appendChunk",
+      "dataSHA256": "0xe6ddd41ebb63907fdbab45a50a3ebe70e2e5a1d2e8a7f2c9814802860cc38b92",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 4,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 8,
+      "method": "appendChunk",
+      "dataSHA256": "0x439b13cb3ce7c00261a2aab4729259e3817eb56c814c89c7a564df5c1d25fc86",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 5,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 9,
+      "method": "appendChunk",
+      "dataSHA256": "0xdc34f9d9e567abc0357daec10faa5657d19ec4e24dad031e7c4ab1915d348cb6",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 6,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 10,
+      "method": "appendChunk",
+      "dataSHA256": "0xb8b75afb43553bb8a8f97ec57f22dfb9fa83dcf49a173800235aeeefeba84cee",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 7,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 11,
+      "method": "appendChunk",
+      "dataSHA256": "0x0dfc07ea7e2cdaa22eaa4b035b24df05fb93390d707532bffc16749bebdeba8b",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 8,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 12,
+      "method": "appendChunk",
+      "dataSHA256": "0xba0cc0749c392ef02b76a4c18943d0a9ee32ccae6bf4258df798b5b37a3c7f0e",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 9,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 13,
+      "method": "appendChunk",
+      "dataSHA256": "0x3518ff4a0f88fe4c35c97680116db4fc5c8059d5e4d56d5a82f713371ce202ba",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 10,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 14,
+      "method": "appendChunk",
+      "dataSHA256": "0xd7332734b79f42d93a4c8ceb74748e5a86545e79ab448208d674ca0ae3e8f3a0",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 11,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 15,
+      "method": "appendChunk",
+      "dataSHA256": "0x484acee266d27976ee1d70e40dd7b0de0946a49e920c10d8449f509189acf3f7",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 12,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 16,
+      "method": "appendChunk",
+      "dataSHA256": "0x232fe1fc00a97f03ec35bec6c785587e16b5d409e140575c58b36d19c450e5bb",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 13,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 17,
+      "method": "appendChunk",
+      "dataSHA256": "0x66b5cbdcd2cc656e9f9c78fb291d53146c94708853f2edb5d3e47b1825c1f89b",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 14,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 18,
+      "method": "appendChunk",
+      "dataSHA256": "0x41fcb5cd177fae83e7ae14f291f93b9e8e890d4818514fb8c728644505a66b77",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 15,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 19,
+      "method": "appendChunk",
+      "dataSHA256": "0xd4e91853e2ca2d3b60223faaab2bfc223143d19d2cdd5833fcc95c83e5e0a5c4",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 16,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 20,
+      "method": "appendChunk",
+      "dataSHA256": "0x87570cf1ed11f16f485b44bde8384cbc467d1bafa22b7bcc0761cd41c68925a1",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 17,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 21,
+      "method": "appendChunk",
+      "dataSHA256": "0x9c3c118dae37af77a39bde6b9276fcf243107dc318a5ad297776d1e404dd7999",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 18,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 22,
+      "method": "appendChunk",
+      "dataSHA256": "0xb0b1ecfbb0728e3791232ee8c7b1ddb0361d14f4ca4d881437af11462cd2e32b",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 19,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 23,
+      "method": "appendChunk",
+      "dataSHA256": "0x9d54fbeccf0198e44910efb505f9f446c791a7b1928ee952ec710d71d537aec0",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 20,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 24,
+      "method": "appendChunk",
+      "dataSHA256": "0x6a6915605614081784a31b9d96c4e70d6a2114f31b9ed0d8d435c6693318cc0d",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 21,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 25,
+      "method": "appendChunk",
+      "dataSHA256": "0x38975e2e6fcfada25a1b2da31e91de48ee4bd9fb254368bef5c79a9cb367f05a",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 22,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 26,
+      "method": "appendChunk",
+      "dataSHA256": "0x4044380e6fa95282a081ae392869fb3e7f7ca12004750e5529789dc817cf3f48",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 23,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 27,
+      "method": "appendChunk",
+      "dataSHA256": "0x0ee84f6aa805ceccf34a88e4c2a5c5bebcd6377130fc4929c2a4fb490adff6db",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 24,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 28,
+      "method": "appendChunk",
+      "dataSHA256": "0x52bec22f59f8c1d6b286b93b527f81abfde73dfcd0f205a6d23b43c588b17f5c",
+      "estimatedGas": "5492431",
+      "localGasUsed": "5366651",
+      "gasLimit": "6590918",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 25,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 29,
+      "method": "appendChunk",
+      "dataSHA256": "0xa6eed3cbf9737c17584e99d102c0962799d35c1115af6392bd757fdd55fbd2a4",
+      "estimatedGas": "3143476",
+      "localGasUsed": "3089174",
+      "gasLimit": "3772172",
+      "calldataBytes": 13732
+    },
+    {
+      "path": "vendor/okx-connect-LICENSE.md",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 30,
+      "method": "putFile",
+      "dataSHA256": "0x8856439946fb1ee56b33c8ed873025e3d04ef95c979d25742de4fa7474d02d5a",
+      "estimatedGas": "921510",
+      "localGasUsed": "908206",
+      "gasLimit": "1105812",
+      "calldataBytes": 3204
+    },
+    {
+      "path": "assets/wallet-icon.png",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 31,
+      "method": "putFile",
+      "dataSHA256": "0xa019c81d9e6a1ee2bf82ec2028d841808f035a2beef918533c022bee55484853",
+      "estimatedGas": "1331462",
+      "localGasUsed": "1310978",
+      "gasLimit": "1597755",
+      "calldataBytes": 5060
+    },
+    {
+      "path": "transaction-guard.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 32,
+      "method": "putFile",
+      "dataSHA256": "0xdfd03961ec8897d9d59244441349423b302a475770829666f84238eacc40528e",
+      "estimatedGas": "549247",
+      "localGasUsed": "541317",
+      "gasLimit": "659097",
+      "calldataBytes": 1508
+    },
+    {
+      "path": "wallet-connect.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 33,
+      "method": "putFile",
+      "dataSHA256": "0x2598f2bf0b0961af37f8edc60a3abd4fb946bd0c3fdd49d03a560265550c2908",
+      "estimatedGas": "1627996",
+      "localGasUsed": "1602950",
+      "gasLimit": "1953596",
+      "calldataBytes": 6404
+    },
+    {
+      "path": "wallet.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 34,
+      "method": "putFile",
+      "dataSHA256": "0x555df106b8d5818285717da907d5688c77a3cfdcfe80339d80fe2bae78e2f2dc",
+      "estimatedGas": "2497227",
+      "localGasUsed": "2440039",
+      "gasLimit": "2996673",
+      "calldataBytes": 10916
+    },
+    {
+      "path": "refunds.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 35,
+      "method": "putFile",
+      "dataSHA256": "0x0c42026b0d36042c7c6816a467122e66f9edf39af4e11df474f6f34fd10f7997",
+      "estimatedGas": "666480",
+      "localGasUsed": "653712",
+      "gasLimit": "799776",
+      "calldataBytes": 2660
+    },
+    {
+      "path": "app.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 36,
+      "method": "putFile",
+      "dataSHA256": "0x86841a393c7097e8a73d9ee441069c68784f98f8e6c8125b16ab622ecec99215",
+      "estimatedGas": "5521405",
+      "localGasUsed": "5354090",
+      "gasLimit": "6625686",
+      "calldataBytes": 24324
+    },
+    {
+      "path": "app.js",
+      "chunk": 1,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 37,
+      "method": "appendChunk",
+      "dataSHA256": "0x9e86232112cebe53edf67a74f500f9c1e063d3bc1ed1fa0786ed7a2443573ae5",
+      "estimatedGas": "2897027",
+      "localGasUsed": "2852458",
+      "gasLimit": "3476433",
+      "calldataBytes": 12644
+    },
+    {
+      "path": "index.html",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "index": 38,
+      "method": "putFile",
+      "dataSHA256": "0x9f66fa3f3b006e9fa9b454f458d9c5b12d75b017aa2b847aece0fb685a8fa503",
+      "estimatedGas": "2885532",
+      "localGasUsed": "2814080",
+      "gasLimit": "3462639",
+      "calldataBytes": 12644
+    }
+  ],
+  "postSimulationFiles": [
+    {
+      "path": "index.html",
+      "bytes": 12299,
+      "sha256": "0x1a9c9fec8538a65d73d830188fb856f0707bc59f0442d7718fcc7fc6473d57aa"
+    },
+    {
+      "path": "style.css",
+      "bytes": 35736,
+      "sha256": "0xd2326812816de4cab3899dc54422d593ea04ca2f726ec4c69c88e8f4f619efe2"
+    },
+    {
+      "path": "app.js",
+      "bytes": 36406,
+      "sha256": "0x2ce0252b9b9aa0681117d5dd48cfc29fff9a60da5282f05023028ea9bb6d8cb9"
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 983,
+      "sha256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c"
+    },
+    {
+      "path": "wallet.js",
+      "bytes": 10574,
+      "sha256": "0xd870dfdde183756cf8879d1a91de7c32f6d4f28ad7bdd98db2b9fc7876371bbd"
+    },
+    {
+      "path": "wallet-connect.js",
+      "bytes": 6062,
+      "sha256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54"
+    },
+    {
+      "path": "transaction-guard.js",
+      "bytes": 1162,
+      "sha256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268"
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "bytes": 613497,
+      "sha256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0"
+    },
+    {
+      "path": "vendor/okx-connect-LICENSE.md",
+      "bytes": 2855,
+      "sha256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c"
+    },
+    {
+      "path": "assets/wallet-icon.png",
+      "bytes": 4717,
+      "sha256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60"
+    },
+    {
+      "path": "refunds.js",
+      "bytes": 2331,
+      "sha256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b"
+    }
+  ],
+  "fallback": "index.html",
+  "estimatedGas": "168078619",
+  "gasLimitTotal": "201694368",
+  "authorization": {
+    "upload": false,
+    "payment": false,
+    "signatures": false
+  },
+  "note": "38 real-ABI operations simulated only in isolated loopback Hardhat fork with chainId 196 for ERC-6551 owner compatibility. No public transaction was sent. Fixed manifest/plan, separate ledger and nonce recovery guards required. No upload authority.",
+  "transactionPlanHash": "0x43875a19a2f8b1a84002cf9d185f30e084afdb41488385ca292bd38806032fec",
+  "fullCalldataFile": "/Users/dingzhenzhenzhu/Documents/SnapVault/snapvault/releases/3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a/transaction-plan.json",
+  "all21FilesVerified": "11 changed files verified after sequential local execution plus 10 reused files verified through read-only live chain calls",
+  "cost": {
+    "checkedAt": "2026-10-19T09:33:18.464Z",
+    "currentGasPriceWei": "20000001",
+    "gasPriceCapWei": "24000001",
+    "uploadEstimateOKB": "0.003361572548078619",
+    "uploadWithMarginsOKB": "0.004840665033694368",
+    "optionalExistingTreasuryWebWithdrawalWithMarginsOKB": "0.000001249368052057",
+    "combinedWithMarginsOKB": "0.004841914401746425",
+    "proposedTotalLimitOKB": "0.005",
+    "oldRepairBudgetRecordedRemainingOKB": "0.001636877601843891",
+    "extraVersusOldRemainingIfFullLimitUsedOKB": "0.003363122398156109",
+    "gatewayActivationOKB": "0",
+    "gatewayContainerLive": true,
+    "newContainers": 0,
+    "newTapeSendMessages": 0,
+    "newPurchases": 0,
+    "newContractDeployments": 0,
+    "assumptions": "No files changed after freeze; execution simulated using actual registry on local X Layer fork. Fee cap not authorized; stop before signing if live estimates or total exceed approval."
+  }
+}

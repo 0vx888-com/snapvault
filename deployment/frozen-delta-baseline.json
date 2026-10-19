@@ -1,0 +1,362 @@
+{
+  "releaseId": "3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "checkedAt": "2026-10-19T09:26:50.026Z",
+  "plan": [
+    {
+      "path": "style.css",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x9de6c2a8a45ba5d80c0a528191344ee4fbf41cd58b34457adcaf6c08ff411c60",
+      "calldataBytes": 24324
+    },
+    {
+      "path": "style.css",
+      "chunk": 1,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x800fd662a600e4e99a225be35d6ae224d4db40fa7dd27d38416af426093c78a2",
+      "calldataBytes": 11972
+    },
+    {
+      "path": "local-delivery.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x29c41901a72df06b7ce4d46142afaf3f1376322d45bca9d856af92a6198a13ad",
+      "calldataBytes": 1316
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xc43bfe6736c29f0babeef6f8657a70289c00742718b12a3a560f4bcc1bafb4cd",
+      "calldataBytes": 24324
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 1,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xb6529ed5518598190db33c217679766e19064ca48c8959f6b504c0258acc8f33",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 2,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x7168d2f3f332d408d67e1635069f8aff63a4705a4313f6c3dd6f44f943f8b576",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 3,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xe6ddd41ebb63907fdbab45a50a3ebe70e2e5a1d2e8a7f2c9814802860cc38b92",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 4,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x439b13cb3ce7c00261a2aab4729259e3817eb56c814c89c7a564df5c1d25fc86",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 5,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xdc34f9d9e567abc0357daec10faa5657d19ec4e24dad031e7c4ab1915d348cb6",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 6,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xb8b75afb43553bb8a8f97ec57f22dfb9fa83dcf49a173800235aeeefeba84cee",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 7,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x0dfc07ea7e2cdaa22eaa4b035b24df05fb93390d707532bffc16749bebdeba8b",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 8,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xba0cc0749c392ef02b76a4c18943d0a9ee32ccae6bf4258df798b5b37a3c7f0e",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 9,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x3518ff4a0f88fe4c35c97680116db4fc5c8059d5e4d56d5a82f713371ce202ba",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 10,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xd7332734b79f42d93a4c8ceb74748e5a86545e79ab448208d674ca0ae3e8f3a0",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 11,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x484acee266d27976ee1d70e40dd7b0de0946a49e920c10d8449f509189acf3f7",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 12,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x232fe1fc00a97f03ec35bec6c785587e16b5d409e140575c58b36d19c450e5bb",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 13,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x66b5cbdcd2cc656e9f9c78fb291d53146c94708853f2edb5d3e47b1825c1f89b",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 14,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x41fcb5cd177fae83e7ae14f291f93b9e8e890d4818514fb8c728644505a66b77",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 15,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xd4e91853e2ca2d3b60223faaab2bfc223143d19d2cdd5833fcc95c83e5e0a5c4",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 16,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x87570cf1ed11f16f485b44bde8384cbc467d1bafa22b7bcc0761cd41c68925a1",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 17,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x9c3c118dae37af77a39bde6b9276fcf243107dc318a5ad297776d1e404dd7999",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 18,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xb0b1ecfbb0728e3791232ee8c7b1ddb0361d14f4ca4d881437af11462cd2e32b",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 19,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x9d54fbeccf0198e44910efb505f9f446c791a7b1928ee952ec710d71d537aec0",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 20,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x6a6915605614081784a31b9d96c4e70d6a2114f31b9ed0d8d435c6693318cc0d",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 21,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x38975e2e6fcfada25a1b2da31e91de48ee4bd9fb254368bef5c79a9cb367f05a",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 22,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x4044380e6fa95282a081ae392869fb3e7f7ca12004750e5529789dc817cf3f48",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 23,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x0ee84f6aa805ceccf34a88e4c2a5c5bebcd6377130fc4929c2a4fb490adff6db",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 24,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x52bec22f59f8c1d6b286b93b527f81abfde73dfcd0f205a6d23b43c588b17f5c",
+      "calldataBytes": 24228
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 25,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xa6eed3cbf9737c17584e99d102c0962799d35c1115af6392bd757fdd55fbd2a4",
+      "calldataBytes": 13732
+    },
+    {
+      "path": "vendor/okx-connect-LICENSE.md",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x8856439946fb1ee56b33c8ed873025e3d04ef95c979d25742de4fa7474d02d5a",
+      "calldataBytes": 3204
+    },
+    {
+      "path": "assets/wallet-icon.png",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xa019c81d9e6a1ee2bf82ec2028d841808f035a2beef918533c022bee55484853",
+      "calldataBytes": 5060
+    },
+    {
+      "path": "transaction-guard.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0xdfd03961ec8897d9d59244441349423b302a475770829666f84238eacc40528e",
+      "calldataBytes": 1508
+    },
+    {
+      "path": "wallet-connect.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x2598f2bf0b0961af37f8edc60a3abd4fb946bd0c3fdd49d03a560265550c2908",
+      "calldataBytes": 6404
+    },
+    {
+      "path": "wallet.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x555df106b8d5818285717da907d5688c77a3cfdcfe80339d80fe2bae78e2f2dc",
+      "calldataBytes": 10916
+    },
+    {
+      "path": "refunds.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x0c42026b0d36042c7c6816a467122e66f9edf39af4e11df474f6f34fd10f7997",
+      "calldataBytes": 2660
+    },
+    {
+      "path": "app.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x86841a393c7097e8a73d9ee441069c68784f98f8e6c8125b16ab622ecec99215",
+      "calldataBytes": 24324
+    },
+    {
+      "path": "app.js",
+      "chunk": 1,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x9e86232112cebe53edf67a74f500f9c1e063d3bc1ed1fa0786ed7a2443573ae5",
+      "calldataBytes": 12644
+    },
+    {
+      "path": "index.html",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0",
+      "dataSHA256": "0x9f66fa3f3b006e9fa9b454f458d9c5b12d75b017aa2b847aece0fb685a8fa503",
+      "calldataBytes": 12644
+    }
+  ],
+  "reused": [
+    {
+      "path": "chat.js",
+      "bytes": 718,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+    },
+    {
+      "path": "store.js",
+      "bytes": 5353,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+    },
+    {
+      "path": "wallet-chat.js",
+      "bytes": 11165,
+      "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2"
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "bytes": 254372,
+      "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1"
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "bytes": 1075,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "bytes": 635,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "bytes": 512682,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+    },
+    {
+      "path": "assets/studio.svg",
+      "bytes": 864,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+    },
+    {
+      "path": "assets/sketch.svg",
+      "bytes": 807,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+    },
+    {
+      "path": "app-config.json",
+      "bytes": 157,
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "status": "WAITING_FOR_HUMAN_FREE_ACCEPTANCE",
+  "checkedAt": "2026-10-19T09:38:55.014867+00:00",
+  "scope": "No payment, DeWEB upload, production deploy, new purchase, new TapeSend or real refund",
+  "productionCompleted": {
+    "privateTextAndImage": true,
+    "ephemeralAfterOpenAndReload": true,
+    "oldTapeSendReadAndDecrypt": true,
+    "thirdExistingWalletLoggedIn": true,
+    "thirdToBuyerFriendRequestSent": true
+  },
+  "pendingHuman": {
+    "buyerFreeLoginForGroup": "Pending; nonce expires after five minutes, regenerate if needed",
+    "realSafariProductionBackend": "Requested /formal/ login and address persistence; previous isolated Safari test is not production acceptance"
+  },
+  "pendingProduction": {
+    "threeMemberGroupSendReceive": true,
+    "existingOrderFreeRefundRequestAndProgress": "Acceptance-only helper prepared; not submitted. Current buyer is also owner, ordinary buyer UI is separately tested locally."
+  },
+  "localCompleted": {
+    "refundApplicantUIAndProgress": true,
+    "refundAndFreezePathFocusedTests": 6,
+    "frozenManifestWhitelistAndHashes": true,
+    "uploadSequentialForkSimulationOperations": 38,
+    "changedFilesVerified": 11,
+    "reusedFilesVerifiedReadOnly": 10,
+    "publicationPlanAndRecoveryFocusedTests": 8,
+    "fullTestAll": "PASS: all 11 suites; 68 contract/service/publication tests, 12 mobile/transaction unit tests, 23 wallet UI checks"
+  },
+  "releaseId": "3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "newPublicTransactions": 0,
+  "newPublicTapeSend": 0,
+  "okbSpent": "0",
+  "productDeployment": false,
+  "dewebUploads": 0,
+  "feeRecord": "frozen-delta-upload-plan.json",
+  "safetyPauseRetained": true,
+  "rebuiltSourceMatchesFrozenManifest": true,
+  "frozenAssetsUnchangedAfterAllTests": true
+}
