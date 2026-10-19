@@ -1,0 +1,328 @@
+{
+  "checkedAt": "2026-10-19T13:54:14.429Z",
+  "status": "TEXT_REMOVAL_PUBLISHED_AND_VERIFIED_ACTUAL_FEE_WITHIN_BUDGET_PRE_SIGN_REVIEW_FAILED",
+  "hash": "0x147926cc4de5681aa66308b2a0942d591d330280b1429ee9c3adbdea29892b1f",
+  "uploadedFiles": [
+    "index.html"
+  ],
+  "newTransactions": 1,
+  "otherFilesUnchanged": 20,
+  "releaseId": "7ed1b1947b4b945733d7d00ee0a9aed5b5696692b2a0b95d8a62dc4e4172c580",
+  "approvedMaximumOKB": "0.000095",
+  "actualSpentOKB": "0.000056033902801695",
+  "maximumSignedFeeOKB": "0.000125022262630454",
+  "preSignFinalFeeReviewCompleted": false,
+  "preSignFeeControlResult": "FAILED: wallet confirmation completed before final maximum was inspected; signed theoretical maximum exceeded approval, actual completed spend did not.",
+  "readers": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "block": 73649011,
+      "receiptBlock": 73648894,
+      "status": 1,
+      "type": 2,
+      "nonce": 164,
+      "gasLimit": "4630454",
+      "maxFeePerGasWei": "27000001",
+      "gasUsed": "2801695",
+      "effectiveGasPriceWei": "20000001",
+      "actualFeeWei": "56033902801695",
+      "maximumSignedFeeWei": "125022262630454",
+      "actualFeeWithinBudget": true,
+      "signedMaximumWithinBudget": false,
+      "files": [
+        {
+          "path": "index.html",
+          "bytes": 12242,
+          "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+          "fullBytesVerified": true,
+          "creditAbsent": true
+        },
+        {
+          "path": "style.css",
+          "bytes": 35736,
+          "sha256": "0xd2326812816de4cab3899dc54422d593ea04ca2f726ec4c69c88e8f4f619efe2",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "app.js",
+          "bytes": 36406,
+          "sha256": "0x2ce0252b9b9aa0681117d5dd48cfc29fff9a60da5282f05023028ea9bb6d8cb9",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "chat.js",
+          "bytes": 718,
+          "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "store.js",
+          "bytes": 5353,
+          "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "local-delivery.js",
+          "bytes": 983,
+          "sha256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "wallet.js",
+          "bytes": 10823,
+          "sha256": "0x8e9e7ace8de047a1e1ab363c37f7431be9749f3f0424156b13251e69aa04604e",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "wallet-connect.js",
+          "bytes": 6062,
+          "sha256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "transaction-guard.js",
+          "bytes": 1162,
+          "sha256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "vendor/okx-connect.min.js",
+          "bytes": 613497,
+          "sha256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "vendor/okx-connect-LICENSE.md",
+          "bytes": 2855,
+          "sha256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/wallet-icon.png",
+          "bytes": 4717,
+          "sha256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "wallet-chat.js",
+          "bytes": 11165,
+          "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "refunds.js",
+          "bytes": 2331,
+          "sha256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "vendor/ethers.min.js",
+          "bytes": 254372,
+          "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "vendor/ethers-LICENSE.md",
+          "bytes": 1075,
+          "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/mark-tape.svg",
+          "bytes": 635,
+          "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/social-photos.jpg",
+          "bytes": 512682,
+          "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/studio.svg",
+          "bytes": 864,
+          "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/sketch.svg",
+          "bytes": 807,
+          "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "app-config.json",
+          "bytes": 157,
+          "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f",
+          "fullBytesVerified": false
+        }
+      ]
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "block": 73649009,
+      "receiptBlock": 73648894,
+      "status": 1,
+      "type": 2,
+      "nonce": 164,
+      "gasLimit": "4630454",
+      "maxFeePerGasWei": "27000001",
+      "gasUsed": "2801695",
+      "effectiveGasPriceWei": "20000001",
+      "actualFeeWei": "56033902801695",
+      "maximumSignedFeeWei": "125022262630454",
+      "actualFeeWithinBudget": true,
+      "signedMaximumWithinBudget": false,
+      "files": [
+        {
+          "path": "index.html",
+          "bytes": 12242,
+          "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+          "fullBytesVerified": true,
+          "creditAbsent": true
+        },
+        {
+          "path": "style.css",
+          "bytes": 35736,
+          "sha256": "0xd2326812816de4cab3899dc54422d593ea04ca2f726ec4c69c88e8f4f619efe2",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "app.js",
+          "bytes": 36406,
+          "sha256": "0x2ce0252b9b9aa0681117d5dd48cfc29fff9a60da5282f05023028ea9bb6d8cb9",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "chat.js",
+          "bytes": 718,
+          "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "store.js",
+          "bytes": 5353,
+          "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "local-delivery.js",
+          "bytes": 983,
+          "sha256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "wallet.js",
+          "bytes": 10823,
+          "sha256": "0x8e9e7ace8de047a1e1ab363c37f7431be9749f3f0424156b13251e69aa04604e",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "wallet-connect.js",
+          "bytes": 6062,
+          "sha256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "transaction-guard.js",
+          "bytes": 1162,
+          "sha256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "vendor/okx-connect.min.js",
+          "bytes": 613497,
+          "sha256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "vendor/okx-connect-LICENSE.md",
+          "bytes": 2855,
+          "sha256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/wallet-icon.png",
+          "bytes": 4717,
+          "sha256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "wallet-chat.js",
+          "bytes": 11165,
+          "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "refunds.js",
+          "bytes": 2331,
+          "sha256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "vendor/ethers.min.js",
+          "bytes": 254372,
+          "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "vendor/ethers-LICENSE.md",
+          "bytes": 1075,
+          "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/mark-tape.svg",
+          "bytes": 635,
+          "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/social-photos.jpg",
+          "bytes": 512682,
+          "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/studio.svg",
+          "bytes": 864,
+          "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "assets/sketch.svg",
+          "bytes": 807,
+          "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697",
+          "fullBytesVerified": false
+        },
+        {
+          "path": "app-config.json",
+          "bytes": 157,
+          "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f",
+          "fullBytesVerified": false
+        }
+      ]
+    }
+  ],
+  "browserVerification": {
+    "primaryURL": "https://10-2-6.tapekit.org/?tape-reload=1",
+    "primaryFullPageTextNoLongerContainsCredit": true,
+    "primaryMainnetAndCreatorDataVisible": true,
+    "compatPublicHTML": {
+      "checkedAt": "2026-10-19T13:54:25.246Z",
+      "url": "https://10-2-6-open.tapekit.org/",
+      "status": 200,
+      "bytes": 12242,
+      "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "candidateMatches": true,
+      "creditAbsent": true
+    },
+    "screenshot": "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/remove-credit-primary-page.png"
+  },
+  "dewebFullBundleUpload": false,
+  "extraTransactions": 0,
+  "extraSpendingPaused": true,
+  "signingServerStopped": true,
+  "spendingPaused": true
+}

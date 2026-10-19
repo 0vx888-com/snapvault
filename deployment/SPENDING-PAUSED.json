@@ -1,5 +1,5 @@
 {
-  "status": "PAUSED_AFTER_APPROVED_LOGIN_EXPIRY_SINGLE_FILE_COMPLETED",
+  "status": "PAUSED_AFTER_SINGLE_HOME_PAGE_CREDIT_REMOVAL",
   "recordedAt": "2026-10-19T13:37:38.645494+00:00",
   "scope": [
     "Any additional mainnet spending",
@@ -10,8 +10,10 @@
   "remainingBudgetIsNotNewTransactionAuthorization": true,
   "resumeRequiresExplicitUserAuthorization": true,
   "latestCompletedAuthorization": {
-    "scope": "wallet.js only, one transaction, max 0.000085 OKB",
-    "hash": "0x97285037407ddec039fb0b540a286e9196619ee05917f1d26776c76fab43f885",
-    "actualOKB": "0.000049880782494039"
+    "scope": "index.html only, one transaction, max 0.000095 OKB",
+    "hash": "0x147926cc4de5681aa66308b2a0942d591d330280b1429ee9c3adbdea29892b1f",
+    "actualOKB": "0.000056033902801695",
+    "signedMaximumOKB": "0.000125022262630454",
+    "preSignMaximumReviewCompleted": false
   }
 }

@@ -1,0 +1,49 @@
+{
+  "identity": "0x7ed1b1947b4b945733d7d00ee0a9aed5b5696692b2a0b95d8a62dc4e4172c580",
+  "spentWei": "56033902801695",
+  "receipts": [
+    {
+      "hash": "0x147926cc4de5681aa66308b2a0942d591d330280b1429ee9c3adbdea29892b1f",
+      "index": 0,
+      "receiptBlock": 73648894,
+      "status": 1,
+      "type": 2,
+      "nonce": 164,
+      "gasLimit": "4630454",
+      "maxFeePerGasWei": "27000001",
+      "gasUsed": "2801695",
+      "effectiveGasPriceWei": "20000001",
+      "actualFeeWei": "56033902801695",
+      "maximumSignedFeeWei": "125022262630454",
+      "actualFeeWithinBudget": true,
+      "signedMaximumWithinBudget": false,
+      "block": 73648894
+    }
+  ],
+  "attempts": {
+    "0": {
+      "nonce": "0xa4",
+      "gasLimit": "3617543",
+      "gasPrice": "21000000"
+    }
+  },
+  "broadcastHash": "0x147926cc4de5681aa66308b2a0942d591d330280b1429ee9c3adbdea29892b1f",
+  "status": "UPLOADED_AND_FILE_VERIFIED_PRE_SIGN_FEE_REVIEW_FAILED",
+  "proof": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "block": 73649011,
+      "homepageSHA256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "creditAbsent": true,
+      "otherFilesMetadataVerified": 20
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "block": 73649009,
+      "homepageSHA256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "creditAbsent": true,
+      "otherFilesMetadataVerified": 20
+    }
+  ],
+  "signingServerStopped": true
+}
