@@ -1,3 +1,13 @@
+## SnapVault (English)
+
+SnapVault is a pay-to-unlock, time-limited content app on X Layer mainnet. Creators post encrypted photos and videos; fans pay to view them for a limited time, after which access expires automatically and the content can't be opened again. It also supports adding creators as friends, private chats via TapeSend, and paid fan groups.
+
+- Live app: https://10-2-6.tapekit.org/
+- OKX App compatible entry: https://10-2-6-open.tapekit.org/
+- Contract (X Layer mainnet, chain 196): 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f
+- Built with TapeOut components: X Layer smart contract, TapeSend messaging, DeWEB hosting
+- Built by a solo independent developer during the TapeOut hackathon.
+
 # SnapVault
 
 现有社交前端上的创作者广场、免费私聊/群聊、普通图文、自设阅后即焚与付费图片。视觉使用已确认的青柠/炭黑磁带标志；不重建前端。
