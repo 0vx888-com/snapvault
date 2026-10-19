@@ -10,7 +10,6 @@ export async function cleanPublicBuild(out){
  .replace('产品预览：人物与聊天为演示数据，购买不扣款。正式钱包、多人同步与内容交付仍在接入。','正在连接服务。连接成功后显示当前网络与可用功能。')
  .replace('了解进度 ↗','使用说明 ↗').replace('体验图片解锁','发布图片')
  .replace('AI 生成的海边示例图片','装饰性海边插画')
- .replace('图片为 AI 生成的界面示例。<br>不代表真实创作者或已售商品。','装饰插画由 AI 生成。')
  .replace('当前为本地演示，图片和密钥保存在本浏览器。','连接钱包后发布内容，价格与查看时长由你设置。')
  .replace('当前产品预览','钱包登录与内容分享').replace('正式前端计划发布到 X Layer DeWEB','前端托管于 X Layer DeWEB').replace('预览说明','使用说明')
  .replace(/<dialog id="preview-dialog"[\s\S]*?<\/dialog>/,`<dialog id="preview-dialog" class="purchase-dialog"><form method="dialog"><button class="dialog-close" aria-label="关闭使用说明">×</button></form><p class="eyebrow">SNAPVAULT</p><h2>分享，由你决定。</h2><p>连接钱包后使用私聊、群聊和图片分享。普通用户无需个人容器。</p><p>付费内容以当前网络、订单金额和钱包确认信息为准，服务未就绪时不开放付款。</p><p>平台服务保存密文并负责交付。已有可用容器和公钥时使用 TapeSend，否则明确提示普通交付。</p><p class="field-note">阅后即焚限制站内展示，无法阻止截图或收回已保存的内容。</p></dialog>`)
