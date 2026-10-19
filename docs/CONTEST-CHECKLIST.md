@@ -1,3 +1,8 @@
+> 2026-10-19 最新核对：官方报名表的 **Link to Github repo / Github 链接** 为必填，Demo 视频链接亦为必填（最长3分钟）。公开规则与表单未明确写“必须公开全部源码”；GitHub 链接是否可被评委访问仍须确认。表单读取不等于已经报名，未填写或提交任何报名信息。
+> 官方页面：https://web3.okx.com/zh-hans/xlayer/build-x-series
+> 官方页面链接的报名表：https://docs.google.com/forms/d/e/1FAIpQLScyVnDmyzxRyBxszLUWbwV5kVbpmZJ3JS6oyOxqjALRvhR1kg/viewform
+> 当前公开测试网址、主网合约和验收证明已更新到 README.md。下面的 localhost / 测试网待部署描述为早期历史记录，不能作为当前状态。资格最终由主办方审核。
+
 > 2026-10-18 更新：最新发布/交付架构以 [DEPLOYMENT.md](DEPLOYMENT.md) 为准。TapeSend 已要求接入正式交付，普通无容器交付为明确提示的回退；本文旧预算与“可选”描述只作历史记录，不是当前上线证明。
 
 # 参赛要求核对与部署阶段

@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-19T14:17:09.957Z",
+  "readOnly": true,
+  "authorization": false,
+  "results": [
+    {
+      "url": "https://rpc.xlayer.tech",
+      "balanceOKB": "0.000001",
+      "gas": "43381",
+      "gasPriceWei": "20000001",
+      "estimatedGasOKB": "0.000000867620043381",
+      "illustrativeDoubleGasAndRateReserveOKB": "0.000003470480173524"
+    },
+    {
+      "url": "https://xlayer.drpc.org",
+      "balanceOKB": "0.000001",
+      "gas": "43381",
+      "gasPriceWei": "21000000",
+      "estimatedGasOKB": "0.000000911001",
+      "illustrativeDoubleGasAndRateReserveOKB": "0.000003644004"
+    }
+  ]
+}

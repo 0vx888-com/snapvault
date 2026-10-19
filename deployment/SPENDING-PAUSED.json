@@ -1,5 +1,5 @@
 {
-  "status": "PAUSED_AFTER_SINGLE_HOME_PAGE_CREDIT_REMOVAL",
+  "status": "PAUSED_AFTER_FORMAL_WEB_WITHDRAWAL",
   "recordedAt": "2026-10-19T13:37:38.645494+00:00",
   "scope": [
     "Any additional mainnet spending",
@@ -10,10 +10,12 @@
   "remainingBudgetIsNotNewTransactionAuthorization": true,
   "resumeRequiresExplicitUserAuthorization": true,
   "latestCompletedAuthorization": {
-    "scope": "index.html only, one transaction, max 0.000095 OKB",
-    "hash": "0x147926cc4de5681aa66308b2a0942d591d330280b1429ee9c3adbdea29892b1f",
-    "actualOKB": "0.000056033902801695",
-    "signedMaximumOKB": "0.000125022262630454",
-    "preSignMaximumReviewCompleted": false
+    "scope": "one formal webpage withdrawal only",
+    "hash": "0xe8e3a40aa389f3c3b47e62ae632dcd8f0884419c521214fc83bfc99e553d22b5",
+    "approvedMaximumOKB": "0.000002082270069409",
+    "signedMaximumOKB": "0.000002082270069409",
+    "actualOKB": "0.000000669100033455",
+    "preSignReReviewThisTurnCompleted": false,
+    "additionalTransactionsAuthorized": false
   }
 }

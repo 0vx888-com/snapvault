@@ -1,0 +1,530 @@
+{
+  "startedAt": "2026-10-19T14:15:42.463Z",
+  "chainWrites": 0,
+  "walletRequests": 0,
+  "deployed": false,
+  "results": [
+    {
+      "round": 1,
+      "url": "https://10-2-6.tapekit.org/",
+      "status": 200,
+      "ms": 1190,
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "allowOrigin": null,
+      "verified": null
+    },
+    {
+      "round": 1,
+      "url": "https://10-2-6-open.tapekit.org/",
+      "status": 200,
+      "ms": 3268,
+      "bytes": 12242,
+      "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "round": 1,
+      "url": "https://snapvault-api-production.up.railway.app/healthz",
+      "status": 200,
+      "ms": 2039,
+      "bytes": 49,
+      "sha256": "0xf646d83a769a5e4c493efa819a2a3a721180cc2e352b1aa1f2c27e7c2be740b7",
+      "allowOrigin": null,
+      "verified": null,
+      "health": {
+        "status": "ok",
+        "chainId": 196,
+        "testnetOnly": false
+      }
+    },
+    {
+      "round": 1,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 289,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 1,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 1086,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6-open.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 2,
+      "url": "https://10-2-6.tapekit.org/",
+      "status": 200,
+      "ms": 317,
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "allowOrigin": null,
+      "verified": null
+    },
+    {
+      "round": 2,
+      "url": "https://10-2-6-open.tapekit.org/",
+      "status": 200,
+      "ms": 853,
+      "bytes": 12242,
+      "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "round": 2,
+      "url": "https://snapvault-api-production.up.railway.app/healthz",
+      "status": 200,
+      "ms": 275,
+      "bytes": 49,
+      "sha256": "0xf646d83a769a5e4c493efa819a2a3a721180cc2e352b1aa1f2c27e7c2be740b7",
+      "allowOrigin": null,
+      "verified": null,
+      "health": {
+        "status": "ok",
+        "chainId": 196,
+        "testnetOnly": false
+      }
+    },
+    {
+      "round": 2,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 591,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 2,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 290,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6-open.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 3,
+      "url": "https://10-2-6.tapekit.org/",
+      "status": 200,
+      "ms": 311,
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "allowOrigin": null,
+      "verified": null
+    },
+    {
+      "round": 3,
+      "url": "https://10-2-6-open.tapekit.org/",
+      "status": 200,
+      "ms": 992,
+      "bytes": 12242,
+      "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "round": 3,
+      "url": "https://snapvault-api-production.up.railway.app/healthz",
+      "status": 200,
+      "ms": 272,
+      "bytes": 49,
+      "sha256": "0xf646d83a769a5e4c493efa819a2a3a721180cc2e352b1aa1f2c27e7c2be740b7",
+      "allowOrigin": null,
+      "verified": null,
+      "health": {
+        "status": "ok",
+        "chainId": 196,
+        "testnetOnly": false
+      }
+    },
+    {
+      "round": 3,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 325,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 3,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 311,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6-open.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 4,
+      "url": "https://10-2-6.tapekit.org/",
+      "status": 200,
+      "ms": 278,
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "allowOrigin": null,
+      "verified": null
+    },
+    {
+      "round": 4,
+      "url": "https://10-2-6-open.tapekit.org/",
+      "status": 200,
+      "ms": 1268,
+      "bytes": 12242,
+      "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "round": 4,
+      "url": "https://snapvault-api-production.up.railway.app/healthz",
+      "status": 200,
+      "ms": 269,
+      "bytes": 49,
+      "sha256": "0xf646d83a769a5e4c493efa819a2a3a721180cc2e352b1aa1f2c27e7c2be740b7",
+      "allowOrigin": null,
+      "verified": null,
+      "health": {
+        "status": "ok",
+        "chainId": 196,
+        "testnetOnly": false
+      }
+    },
+    {
+      "round": 4,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 1071,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 4,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 290,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6-open.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 5,
+      "url": "https://10-2-6.tapekit.org/",
+      "status": 200,
+      "ms": 1056,
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "allowOrigin": null,
+      "verified": null
+    },
+    {
+      "round": 5,
+      "url": "https://10-2-6-open.tapekit.org/",
+      "status": 200,
+      "ms": 707,
+      "bytes": 12242,
+      "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "round": 5,
+      "url": "https://snapvault-api-production.up.railway.app/healthz",
+      "status": 200,
+      "ms": 269,
+      "bytes": 49,
+      "sha256": "0xf646d83a769a5e4c493efa819a2a3a721180cc2e352b1aa1f2c27e7c2be740b7",
+      "allowOrigin": null,
+      "verified": null,
+      "health": {
+        "status": "ok",
+        "chainId": 196,
+        "testnetOnly": false
+      }
+    },
+    {
+      "round": 5,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 286,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6.tapekit.org",
+      "verified": null
+    },
+    {
+      "round": 5,
+      "url": "https://snapvault-api-production.up.railway.app/api/wallet/config",
+      "status": 200,
+      "ms": 303,
+      "bytes": 4661,
+      "sha256": "0x9a5344800159b70dc4f9f9a40ef2c8c9bfa4ea5e77b9f4ccc412c32111423365",
+      "allowOrigin": "https://10-2-6-open.tapekit.org",
+      "verified": null
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/index.html",
+      "status": 200,
+      "ms": 612,
+      "bytes": 12242,
+      "sha256": "0x4da14651d8bd873fcdd5b8c871df174d6a076c11f723885a0bd284f9351f270a",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/style.css",
+      "status": 200,
+      "ms": 3607,
+      "bytes": 35736,
+      "sha256": "0xd2326812816de4cab3899dc54422d593ea04ca2f726ec4c69c88e8f4f619efe2",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/app.js",
+      "status": 200,
+      "ms": 4059,
+      "bytes": 36406,
+      "sha256": "0x2ce0252b9b9aa0681117d5dd48cfc29fff9a60da5282f05023028ea9bb6d8cb9",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/chat.js",
+      "status": 200,
+      "ms": 1218,
+      "bytes": 718,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/store.js",
+      "status": 200,
+      "ms": 1217,
+      "bytes": 5353,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/local-delivery.js",
+      "status": 200,
+      "ms": 852,
+      "bytes": 983,
+      "sha256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/wallet.js",
+      "status": 200,
+      "ms": 1107,
+      "bytes": 10823,
+      "sha256": "0x8e9e7ace8de047a1e1ab363c37f7431be9749f3f0424156b13251e69aa04604e",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/wallet-connect.js",
+      "status": 200,
+      "ms": 1341,
+      "bytes": 6062,
+      "sha256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/transaction-guard.js",
+      "status": 200,
+      "ms": 2866,
+      "bytes": 1162,
+      "sha256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/vendor/okx-connect.min.js",
+      "status": 200,
+      "ms": 2711,
+      "bytes": 613497,
+      "sha256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/vendor/okx-connect-LICENSE.md",
+      "status": 200,
+      "ms": 2239,
+      "bytes": 2855,
+      "sha256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/assets/wallet-icon.png",
+      "status": 200,
+      "ms": 1046,
+      "bytes": 4717,
+      "sha256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/wallet-chat.js",
+      "status": 200,
+      "ms": 1741,
+      "bytes": 11165,
+      "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/refunds.js",
+      "status": 200,
+      "ms": 1038,
+      "bytes": 2331,
+      "sha256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/vendor/ethers.min.js",
+      "status": 200,
+      "ms": 2812,
+      "bytes": 254372,
+      "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/vendor/ethers-LICENSE.md",
+      "status": 200,
+      "ms": 1138,
+      "bytes": 1075,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/assets/mark-tape.svg",
+      "status": 200,
+      "ms": 1024,
+      "bytes": 635,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/assets/social-photos.jpg",
+      "status": 200,
+      "ms": 5898,
+      "bytes": 512682,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/assets/studio.svg",
+      "status": 200,
+      "ms": 1775,
+      "bytes": 864,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/assets/sketch.svg",
+      "status": 200,
+      "ms": 1891,
+      "bytes": 807,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://10-2-6-open.tapekit.org/app-config.json",
+      "status": 200,
+      "ms": 3762,
+      "bytes": 157,
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f",
+      "hashMatches": true,
+      "allowOrigin": null,
+      "verified": "1"
+    },
+    {
+      "url": "https://rpc.xlayer.tech",
+      "status": 200,
+      "ms": 1387,
+      "rpc": {
+        "jsonrpc": "2.0",
+        "result": "0xc4",
+        "id": 1
+      },
+      "allowOrigin": "*"
+    },
+    {
+      "url": "https://xlayer.drpc.org",
+      "status": 200,
+      "ms": 1125,
+      "rpc": {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": "0xc4"
+      },
+      "allowOrigin": "*"
+    }
+  ],
+  "finishedAt": "2026-10-19T14:16:19.152Z",
+  "browserChecks": {
+    "walletRequested": false,
+    "existingPrimaryRefresh": "PASS_MAINNET_AND_ONE_CREATOR",
+    "existingCompat": "PASS_MAINNET_AND_ONE_CREATOR",
+    "newIncognitoPrimary": "PASS_EVENTUALLY_AFTER_SLOW_PREPARING_STAGE",
+    "newIncognitoCompat": "PASS_MAINNET_AND_ONE_CREATOR",
+    "incognitoWindowClosed": true,
+    "longTermAvailabilityProven": false
+  }
+}

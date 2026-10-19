@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-19T14:38:40.841Z",
+  "scope": "Original formal-web withdrawal only; no new transaction issued by audit",
+  "approvedMaximumOKB": "0.000002082270069409",
+  "preSignReReviewThisTurnCompleted": false,
+  "observation": "Confirmation page was loading at start, then closed before fee re-review. Agent did not click final financial confirmation.",
+  "proof": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0xe8e3a40aa389f3c3b47e62ae632dcd8f0884419c521214fc83bfc99e553d22b5",
+      "nonce": 165,
+      "block": 73651613,
+      "status": 1,
+      "gasLimit": "69409",
+      "maxFeePerGas": "30000001",
+      "signedMaximumOKB": "0.000002082270069409",
+      "withinApprovedMaximum": true,
+      "actualFeeOKB": "0.000000669100033455",
+      "gasUsed": "33455",
+      "remainingWithdrawableOKB": "0.0",
+      "withdrawnOKB": "0.000001"
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0xe8e3a40aa389f3c3b47e62ae632dcd8f0884419c521214fc83bfc99e553d22b5",
+      "nonce": 165,
+      "block": 73651613,
+      "status": 1,
+      "gasLimit": "69409",
+      "maxFeePerGas": "30000001",
+      "signedMaximumOKB": "0.000002082270069409",
+      "withinApprovedMaximum": true,
+      "actualFeeOKB": "0.000000669100033455",
+      "gasUsed": "33455",
+      "remainingWithdrawableOKB": "0.0",
+      "withdrawnOKB": "0.000001"
+    }
+  ],
+  "formalWebFeedback": {
+    "origin": "https://10-2-6-open.tapekit.org/",
+    "account": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+    "text": "提现已确认：0xe8e3a40aa389f3c3b47e62ae632dcd8f0884419c521214fc83bfc99e553d22b5",
+    "displayedWithdrawableOKB": "0.0",
+    "observedVia": "Chrome native accessibility UI"
+  }
+}

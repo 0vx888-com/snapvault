@@ -1,3 +1,5 @@
+// Retired: prior approval is consumed. No RPC, wallet request or server startup.
+throw new Error('Publisher retired after final wallet fee review failure; read-only audit only.');
 // One approved file only. No signer/private key; global spending pause stays in place.
 import {createServer} from 'node:http';
 import fs from 'node:fs';

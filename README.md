@@ -2,7 +2,15 @@
 
 现有社交前端上的创作者广场、免费私聊/群聊、普通图文、自设阅后即焚与付费图片。视觉使用已确认的青柠/炭黑磁带标志；不重建前端。
 
-正式目标：前端 **X Layer DeWEB**，付款合约 **X Layer 196 的 SnapVaultDirect**。先用 1952 新合约验收。当前已公开的 Railway 和旧测试合约仍是上一测试版本；本轮加固尚未由用户签名部署。
+## 公开测试版（2026-10-19）
+
+- 正式网站：[10-2-6.tapekit.org](https://10-2-6.tapekit.org/)
+- OKX / 内置浏览器兼容入口：[10-2-6-open.tapekit.org](https://10-2-6-open.tapekit.org/)
+- 前端托管于 X Layer DeWEB，网站容器 `10.2.6.tape`：`0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E`。
+- X Layer 主网（196）SnapVaultDirect：`0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f`。
+- 主网上架、购买、TapeSend 交付、看图与正式网页提现均有验收记录。最新网页提现证明见 [deployment/formal-web-withdraw-verified.json](deployment/formal-web-withdraw-verified.json)。这些记录证明特定验收成功，不代表审计认证或长期可用率保证。
+- 当前仍为公开测试版：网关首次加载可能偏慢；退款是申请与审核流程；后端托管需持续维护。免费收尾与边界见 [docs/FREE-CLOSEOUT-2026-10-19.md](docs/FREE-CLOSEOUT-2026-10-19.md)。
+- 主网花费继续暂停，旧上传自动交易通路已停用。GitHub 推送不等于部署，也不触发报名。
 
 ## 交付方式
 
