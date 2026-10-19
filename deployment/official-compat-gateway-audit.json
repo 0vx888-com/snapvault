@@ -1,0 +1,303 @@
+{
+  "startedAt": "2026-10-19T11:53:15.140Z",
+  "url": "https://10-2-6-open.tapekit.org/",
+  "sameContainer": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "sameRelease": "0x3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "newUploads": 0,
+  "spending": "0",
+  "files": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "bytes": 12299,
+      "ms": 3130,
+      "sha256": "0x1a9c9fec8538a65d73d830188fb856f0707bc59f0442d7718fcc7fc6473d57aa",
+      "matches": true,
+      "contentType": "text/html; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "style.css",
+      "status": 200,
+      "bytes": 35736,
+      "ms": 3346,
+      "sha256": "0xd2326812816de4cab3899dc54422d593ea04ca2f726ec4c69c88e8f4f619efe2",
+      "matches": true,
+      "contentType": "text/css; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "app.js",
+      "status": 200,
+      "bytes": 36406,
+      "ms": 1276,
+      "sha256": "0x2ce0252b9b9aa0681117d5dd48cfc29fff9a60da5282f05023028ea9bb6d8cb9",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "chat.js",
+      "status": 200,
+      "bytes": 718,
+      "ms": 955,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "store.js",
+      "status": 200,
+      "bytes": 5353,
+      "ms": 1155,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "local-delivery.js",
+      "status": 200,
+      "bytes": 983,
+      "ms": 1041,
+      "sha256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "wallet.js",
+      "status": 200,
+      "bytes": 10574,
+      "ms": 989,
+      "sha256": "0xd870dfdde183756cf8879d1a91de7c32f6d4f28ad7bdd98db2b9fc7876371bbd",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "wallet-connect.js",
+      "status": 200,
+      "bytes": 6062,
+      "ms": 1023,
+      "sha256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "transaction-guard.js",
+      "status": 200,
+      "bytes": 1162,
+      "ms": 1557,
+      "sha256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "status": 200,
+      "bytes": 613497,
+      "ms": 2662,
+      "sha256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "vendor/okx-connect-LICENSE.md",
+      "status": 200,
+      "bytes": 2855,
+      "ms": 911,
+      "sha256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c",
+      "matches": true,
+      "contentType": "text/markdown; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "assets/wallet-icon.png",
+      "status": 200,
+      "bytes": 4717,
+      "ms": 1189,
+      "sha256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60",
+      "matches": true,
+      "contentType": "image/png",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "wallet-chat.js",
+      "status": 200,
+      "bytes": 11165,
+      "ms": 1105,
+      "sha256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "refunds.js",
+      "status": 200,
+      "bytes": 2331,
+      "ms": 3254,
+      "sha256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "status": 200,
+      "bytes": 254372,
+      "ms": 3249,
+      "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1",
+      "matches": true,
+      "contentType": "text/javascript; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "status": 200,
+      "bytes": 1075,
+      "ms": 919,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612",
+      "matches": true,
+      "contentType": "text/markdown; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "status": 200,
+      "bytes": 635,
+      "ms": 1051,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8",
+      "matches": true,
+      "contentType": "image/svg+xml",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "status": 200,
+      "bytes": 512682,
+      "ms": 2687,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7",
+      "matches": true,
+      "contentType": "image/jpeg",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "assets/studio.svg",
+      "status": 200,
+      "bytes": 864,
+      "ms": 996,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286",
+      "matches": true,
+      "contentType": "image/svg+xml",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "assets/sketch.svg",
+      "status": 200,
+      "bytes": 807,
+      "ms": 3536,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697",
+      "matches": true,
+      "contentType": "image/svg+xml",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    },
+    {
+      "path": "app-config.json",
+      "status": 200,
+      "bytes": 157,
+      "ms": 903,
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f",
+      "matches": true,
+      "contentType": "application/json; charset=utf-8",
+      "serverVerified": "1",
+      "container": "0x618cbe9dc6ab45f7cfa0c404f3e8c9afcfedf06e",
+      "mode": "server"
+    }
+  ],
+  "rootReloads": [
+    {
+      "attempt": 1,
+      "status": 200,
+      "ms": 1047,
+      "matches": true
+    },
+    {
+      "attempt": 2,
+      "status": 200,
+      "ms": 694,
+      "matches": true
+    },
+    {
+      "attempt": 3,
+      "status": 200,
+      "ms": 727,
+      "matches": true
+    },
+    {
+      "attempt": 4,
+      "status": 200,
+      "ms": 910,
+      "matches": true
+    },
+    {
+      "attempt": 5,
+      "status": 200,
+      "ms": 1847,
+      "matches": true
+    }
+  ],
+  "all21Matched": true,
+  "all5ReloadsPassed": true,
+  "finishedAt": "2026-10-19T11:53:44.663Z",
+  "browserColdLoadPassed": false,
+  "backendOriginAllowed": false,
+  "backendOriginStatus": 403,
+  "readyForUse": false,
+  "configurationChanged": false,
+  "note": "21 raw HTTP asset hashes and 5 raw homepage loads pass, but independent browser cold load failed quorum and backend rejects this origin. Not promoted as a stable replacement."
+}

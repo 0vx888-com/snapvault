@@ -1,0 +1,170 @@
+{
+  "at": "2026-10-19T11:52:03.805Z",
+  "spending": 0,
+  "tests": [
+    {
+      "url": "https://rpc.xlayer.tech",
+      "tests": [
+        {
+          "mode": "single",
+          "status": 200,
+          "ms": 1797,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed5\",\"id\":1}\n"
+        },
+        {
+          "mode": "batch1",
+          "status": 200,
+          "ms": 1242,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "[{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed6\",\"id\":1}]\n"
+        },
+        {
+          "mode": "batch3",
+          "status": 200,
+          "ms": 475,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "[{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed7\",\"id\":1},{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed7\",\"id\":2},{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed7\",\"id\":3}]\n"
+        },
+        {
+          "mode": "preflight",
+          "status": 204,
+          "ms": 467,
+          "allowOrigin": "*",
+          "allowMethods": "POST",
+          "allowHeaders": "content-type",
+          "body": ""
+        }
+      ]
+    },
+    {
+      "url": "https://xlayerrpc.okx.com",
+      "tests": [
+        {
+          "mode": "single",
+          "status": 200,
+          "ms": 1307,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed5\",\"id\":1}\n"
+        },
+        {
+          "mode": "batch1",
+          "status": 200,
+          "ms": 1264,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "[{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed6\",\"id\":1}]\n"
+        },
+        {
+          "mode": "batch3",
+          "status": 200,
+          "ms": 473,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "[{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed6\",\"id\":1},{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed6\",\"id\":2},{\"jsonrpc\":\"2.0\",\"result\":\"0x463aed6\",\"id\":3}]\n"
+        },
+        {
+          "mode": "preflight",
+          "status": 204,
+          "ms": 474,
+          "allowOrigin": "*",
+          "allowMethods": "POST",
+          "allowHeaders": "content-type",
+          "body": ""
+        }
+      ]
+    },
+    {
+      "url": "https://xlayer.drpc.org",
+      "tests": [
+        {
+          "mode": "single",
+          "status": 200,
+          "ms": 1117,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed3\"}"
+        },
+        {
+          "mode": "batch1",
+          "status": 200,
+          "ms": 282,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "[{\"id\":1,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed3\"}]"
+        },
+        {
+          "mode": "batch3",
+          "status": 200,
+          "ms": 283,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "[{\"id\":1,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed4\"},{\"id\":2,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed4\"},{\"id\":3,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed4\"}]"
+        },
+        {
+          "mode": "preflight",
+          "status": 204,
+          "ms": 281,
+          "allowOrigin": "https://10-2-6.tapekit.org",
+          "allowMethods": "POST",
+          "allowHeaders": "content-type",
+          "body": ""
+        }
+      ]
+    },
+    {
+      "url": "https://196.rpc.thirdweb.com",
+      "tests": [
+        {
+          "mode": "single",
+          "status": 200,
+          "ms": 1371,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "{\"id\":1,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed5\"}\n"
+        },
+        {
+          "mode": "batch1",
+          "status": 200,
+          "ms": 1658,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "[{\"id\":1,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed6\"}]\n"
+        },
+        {
+          "mode": "batch3",
+          "status": 200,
+          "ms": 521,
+          "allowOrigin": "*",
+          "allowMethods": null,
+          "allowHeaders": null,
+          "body": "[{\"id\":1,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed7\"},{\"id\":2,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed7\"},{\"id\":3,\"jsonrpc\":\"2.0\",\"result\":\"0x463aed7\"}]\n"
+        },
+        {
+          "mode": "preflight",
+          "status": 204,
+          "ms": 350,
+          "allowOrigin": "*",
+          "allowMethods": "GET, POST, OPTIONS",
+          "allowHeaders": "content-type",
+          "body": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-19T12:05:42.501838+00:00",
+  "status": "PHONE_ORIGINAL_URL_RECOVERED_USER_REPORTED_LOCAL_FIX_ALL_TESTS_PASS_GATEWAY_STILL_INTERMITTENT",
+  "scope": "No deployment, DeWEB uploads, money, signatures, new containers, new purchases or TapeSend sends",
+  "primaryOrigin": "https://10-2-6.tapekit.org",
+  "phone": {
+    "originConfirmedByUser": true,
+    "directBackendHealth": "PASS_USER_REPORTED status ok chainId 196",
+    "afterExplicitPageReload": "PASS_USER_REPORTED error disappeared and connect wallet / X Layer mainnet displayed",
+    "networkFailureNotEstablished": true,
+    "newLoginOrChatAcceptance": "Not performed this run",
+    "preciseCause": "Expired-session initialization is independently reproduced and consistent with recovery; phone raw request/error logs not obtained, so not conclusively attributed."
+  },
+  "primaryBackendReadOnlyChecks": {
+    "healthz": 200,
+    "config": 200,
+    "anonymousState": 200,
+    "corsAllowedOrigin": "https://10-2-6.tapekit.org",
+    "chainId": 196
+  },
+  "gateways": {
+    "originalClientRead": "Independent browser cold load still has quorum failure; user phone can render site",
+    "officialCompatibilityURL": "https://10-2-6-open.tapekit.org/",
+    "compat21RawAssets": "PASS all bytes match frozen release",
+    "compatRepeatedRawHomepageReads": "PASS 5 of 5",
+    "compatIndependentBrowserColdLoad": "FAIL quorum unavailable",
+    "compatBackendOrigin": 403,
+    "promotedAsStable": false,
+    "remoteConfigChanged": false
+  },
+  "confirmedLocalIssue": {
+    "expiredSavedSession": "Backend returns 401, frozen initWallet clears old token but aborts initialization; app.js labels every init failure SERVER_UNAVAILABLE",
+    "phoneCauseConfirmed": false,
+    "localFix": "After 401 and cleared token only, retry public state once; do not hide transport/server errors, sign, send transactions or delete persistent device keys",
+    "unitAndMobileTransactionChecks": 16,
+    "readinessBrowserChecks": 7,
+    "fullSuite": {
+      "status": "PASS",
+      "suites": 11,
+      "contractsServicesPublicationTests": 70,
+      "mobileAndInitializationUnitTests": 16,
+      "readinessBrowserChecks": 7,
+      "walletSocialBrowserChecks": 23,
+      "marketplaceRepeated": 2
+    },
+    "deployed": false
+  },
+  "fixedReleaseUntouched": "3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "spending": "0",
+  "spendingPauseRetained": true,
+  "completedAt": "2026-10-19T12:09:09.604218+00:00",
+  "futureStability": "Controlled read-only verified DeWEB cache; not provisioned, no hosting account changes or paid service authorized"
+}

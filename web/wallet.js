@@ -44,7 +44,11 @@ export async function initWallet(){
  wallet.ready=false;wallet.config=null;
  const r=await fetch(apiURL('/api/wallet/config'),{signal:AbortSignal.timeout(10000)});if(!r.ok)throw Error(SERVER_UNAVAILABLE);
  const config=await r.json(),allowed=settings.allowedChainIds||[31337,1952];if(!allowed.includes(config.chainId))throw Error('后端链号不在本前端允许配置中');if(config.chainId===196&&(!settings.allowMainnet||!config.mainnet))throw Error('主网需前后端明确授权配置');
- wallet.config=config;await device();await refresh();wallet.ready=true;
+ wallet.config=config;await device();try{await refresh();}catch(e){
+  // Expired login is cleared by call(); keep the page usable as a signed-out visitor.
+  // Only retry public state after a 401. Network/server failures still stay visible.
+  if(e.status!==401||wallet.token)throw e;await refresh();
+ }wallet.ready=true;
 }
 async function transaction(method,args,value=0n){
  if(!wallet.ready||!wallet.config)throw Error(SERVER_UNAVAILABLE);
