@@ -1,22 +1,28 @@
 {
-  "status": "WAITING_FOR_HUMAN_FREE_ACCEPTANCE",
-  "checkedAt": "2026-10-19T09:38:55.014867+00:00",
+  "status": "PRODUCTION_GROUP_AND_REFUND_PROGRESS_PASS_SAFARI_PENDING",
+  "checkedAt": "2026-10-19T10:10:51.501242+00:00",
   "scope": "No payment, DeWEB upload, production deploy, new purchase, new TapeSend or real refund",
   "productionCompleted": {
     "privateTextAndImage": true,
     "ephemeralAfterOpenAndReload": true,
     "oldTapeSendReadAndDecrypt": true,
     "thirdExistingWalletLoggedIn": true,
-    "thirdToBuyerFriendRequestSent": true
+    "thirdToBuyerFriendRequestSent": true,
+    "buyerFreeLoginConfirmed": true,
+    "thirdFriendRequestAccepted": true,
+    "threeMemberGroupCreated": true,
+    "groupTextAndImageReceivedByThird": true,
+    "groupReplyReceivedByBuyer": true,
+    "groupMessagesRetainedAfterFullReload": true,
+    "groupEphemeralExpiredAfterOpening": true,
+    "groupEphemeralRemainsExpiredAfterReload": true,
+    "existingOrderRefundRequestSubmitted": true,
+    "refundProgressRequestedAfterFullReload": true
   },
   "pendingHuman": {
-    "buyerFreeLoginForGroup": "Pending; nonce expires after five minutes, regenerate if needed",
-    "realSafariProductionBackend": "Requested /formal/ login and address persistence; previous isolated Safari test is not production acceptance"
+    "realSafariProductionBackend": "User must open /formal/ in real Safari, login free through OKX and return to Safari, refresh and inspect group image; previous isolated Safari pass is not production acceptance"
   },
-  "pendingProduction": {
-    "threeMemberGroupSendReceive": true,
-    "existingOrderFreeRefundRequestAndProgress": "Acceptance-only helper prepared; not submitted. Current buyer is also owner, ordinary buyer UI is separately tested locally."
-  },
+  "pendingProduction": {},
   "localCompleted": {
     "refundApplicantUIAndProgress": true,
     "refundAndFreezePathFocusedTests": 6,
@@ -36,5 +42,43 @@
   "feeRecord": "frozen-delta-upload-plan.json",
   "safetyPauseRetained": true,
   "rebuiltSourceMatchesFrozenManifest": true,
-  "frozenAssetsUnchangedAfterAllTests": true
+  "frozenAssetsUnchangedAfterAllTests": true,
+  "groupAcceptance": {
+    "title": "SnapVault free group acceptanc",
+    "memberCount": 3,
+    "accounts": [
+      "0xeb55b0f0a274a72b940c10078fb46b998b53b100",
+      "0x1538ac2d29d03615d2336a2227900aab334d9402",
+      "0x6e87af3cc0907207505e3c45a1037385329009c9"
+    ],
+    "liveSendersAndObservers": [
+      "buyer",
+      "third existing test wallet"
+    ],
+    "creatorAOffline": "A was a group member; no additional A login requested this run",
+    "freeMessagesCreatedThisRun": 3,
+    "ephemeralSeconds": 10,
+    "countdownIntermediateFrameCaptured": false,
+    "observedEphemeralResult": "Unopened lock, click, expired marker; still expired after full reload",
+    "privateTestImage": "Existing harmless sample.png, sent only within user-owned private group; not seeded to public marketplace"
+  },
+  "refundAcceptance": {
+    "orderId": "1",
+    "status": "requested",
+    "progressLabel": "待平台审核",
+    "submittedBy": "existing buyer, also platform owner",
+    "productionRequestVia": "Explicit acceptance-only helper; normal public buyer submission UI tested locally separately",
+    "productionProgressVia": "Existing product refund panel, refreshed and full-page reloaded",
+    "reason": "免费验收申请与进度显示；本次不要求实际退款，不执行链上交易。",
+    "actualRefundExecuted": false,
+    "chainPaymentRefunded": false,
+    "senderCTransactionCount": 4,
+    "noNewTapeSend": true
+  },
+  "screenshots": [
+    "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/live-group-third-received.png",
+    "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/live-group-buyer-after-reload.png",
+    "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/live-refund-request-progress.png",
+    "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/live-refund-after-reload.png"
+  ]
 }

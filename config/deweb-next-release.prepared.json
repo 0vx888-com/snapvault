@@ -10,13 +10,12 @@
   "approvedBudgetWei": null,
   "maxGasPriceWei": "24000001",
   "preparation": {
-    "status": "PAUSED_AWAITING_FREE_ACCEPTANCE_AND_EXPLICIT_BUDGET_APPROVAL",
+    "status": "PAUSED_SAFARI_PENDING_BUDGET_NOT_APPROVED",
     "uploadAuthorized": false,
     "paymentAuthorized": false,
     "remaining": [
-      "Buyer free login for production group/refund checks",
-      "Real iPhone Safari production-backend acceptance",
-      "Formal webpage withdrawal is paid and not authorized"
+      "Real iPhone Safari production-backend login, refresh and group image acceptance",
+      "Formal webpage mainnet withdrawal requires separate payment approval"
     ],
     "note": "Do not use old reviewed config or inherited repair ledger for this release. Do not remove SPENDING-PAUSED.json without explicit authorization."
   },

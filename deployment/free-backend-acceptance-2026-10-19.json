@@ -1,6 +1,6 @@
 {
-  "status": "PRODUCTION_FREE_DM_IMAGE_EPHEMERAL_AND_OLD_TAPESEND_PASS",
-  "checkedAt": "2026-10-19T09:05:49.502769+00:00",
+  "status": "PRODUCTION_FREE_DM_GROUP_REFUND_AND_OLD_TAPESEND_PASS",
+  "checkedAt": "2026-10-19T10:10:51.501242+00:00",
   "userScope": "Production backend free acceptance and reading existing TapeSend messages only; no purchase, send, payment or DeWEB upload",
   "url": "https://changing-pole-where-lotus.trycloudflare.com/formal/",
   "productionAPI": "https://snapvault-api-production.up.railway.app",
@@ -103,8 +103,8 @@
   "productionUserLoginVerified": true,
   "publicClientOldMessageDecrypted": true,
   "pending": [
+    "Real Safari /formal/ production-backend login, refresh and free group image user acceptance",
     "Paid-image in-site flow passed local regression; no new production purchase authorized",
-    "Production group acceptance not performed; existing local regression only",
     "Candidate frontend not uploaded to DeWEB; spending and uploads paused",
     "Remove temporary origin after preview acceptance ends"
   ],
@@ -153,5 +153,6 @@
     ],
     "limitations": "Observed site access expiry, not physical deletion of copies or screenshot prevention. Existing paid image was already expired; new paid image viewer was tested locally, not repurchased."
   },
-  "newMessagesScope": "TapeSend only; free chat acceptance created test messages"
+  "newMessagesScope": "TapeSend only; free chat acceptance created test messages",
+  "productionGroupAndRefundEvidence": "final-free-acceptance-2026-10-19.json"
 }
