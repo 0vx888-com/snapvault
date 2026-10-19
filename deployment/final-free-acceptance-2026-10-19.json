@@ -1,5 +1,5 @@
 {
-  "status": "PRODUCTION_GROUP_AND_REFUND_PROGRESS_PASS_SAFARI_PENDING",
+  "status": "FREE_ACCEPTANCE_COMPLETE_WITH_USER_REPORTED_REAL_SAFARI",
   "checkedAt": "2026-10-19T10:10:51.501242+00:00",
   "scope": "No payment, DeWEB upload, production deploy, new purchase, new TapeSend or real refund",
   "productionCompleted": {
@@ -19,9 +19,7 @@
     "existingOrderRefundRequestSubmitted": true,
     "refundProgressRequestedAfterFullReload": true
   },
-  "pendingHuman": {
-    "realSafariProductionBackend": "User must open /formal/ in real Safari, login free through OKX and return to Safari, refresh and inspect group image; previous isolated Safari pass is not production acceptance"
-  },
+  "pendingHuman": {},
   "pendingProduction": {},
   "localCompleted": {
     "refundApplicantUIAndProgress": true,
@@ -80,5 +78,22 @@
     "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/live-group-buyer-after-reload.png",
     "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/live-refund-request-progress.png",
     "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/live-refund-after-reload.png"
+  ],
+  "realSafariProductionAcceptance": {
+    "checkedAt": "2026-10-19T10:35:57.068780+00:00",
+    "environment": "Real iPhone Safari /formal/ HTTPS preview with production backend",
+    "result": "PASS_USER_REPORTED",
+    "source": "User explicitly reported Safari login, refresh and group images normal in this conversation",
+    "signedLogin": true,
+    "refreshKeepsLogin": true,
+    "groupImageReceived": true,
+    "independentlyObserved": false,
+    "screenshots": [],
+    "paymentExecuted": false,
+    "dewebUploadExecuted": false
+  },
+  "remainingPaidAcceptance": [
+    "Formal webpage mainnet withdrawal not executed; quote reserved, requires explicit approval",
+    "DeWEB cold-load and Safari/OKX interaction checks after authorized delta publication"
   ]
 }

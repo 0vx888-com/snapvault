@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-10-19T10:36:05.084Z",
+  "chainId": 196,
+  "block": 73637127,
+  "releaseId": "3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "manifestFiles": 21,
+  "operations": 38,
+  "changedFiles": [
+    "style.css",
+    "local-delivery.js",
+    "vendor/okx-connect.min.js",
+    "vendor/okx-connect-LICENSE.md",
+    "assets/wallet-icon.png",
+    "transaction-guard.js",
+    "wallet-connect.js",
+    "wallet.js",
+    "refunds.js",
+    "app.js",
+    "index.html"
+  ],
+  "reusedFiles": [
+    "chat.js",
+    "store.js",
+    "wallet-chat.js",
+    "vendor/ethers.min.js",
+    "vendor/ethers-LICENSE.md",
+    "assets/mark-tape.svg",
+    "assets/social-photos.jpg",
+    "assets/studio.svg",
+    "assets/sketch.svg",
+    "app-config.json"
+  ],
+  "planHash": "0x43875a19a2f8b1a84002cf9d185f30e084afdb41488385ca292bd38806032fec",
+  "matchesFrozenPlan": true,
+  "currentGasPriceWei": "20000001",
+  "currentUploadEstimateOKB": "0.003361572548078619",
+  "gasPriceWithinPreparedCap": true,
+  "containerLive": true,
+  "monthlyFeeWei": "0",
+  "uploadAuthorized": false,
+  "paymentAuthorized": false,
+  "newPublicTransactions": 0
+}

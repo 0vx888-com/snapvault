@@ -10,14 +10,14 @@
   "approvedBudgetWei": null,
   "maxGasPriceWei": "24000001",
   "preparation": {
-    "status": "PAUSED_SAFARI_PENDING_BUDGET_NOT_APPROVED",
+    "status": "READY_FOR_BUDGET_REVIEW_SPENDING_PAUSED",
     "uploadAuthorized": false,
     "paymentAuthorized": false,
     "remaining": [
-      "Real iPhone Safari production-backend login, refresh and group image acceptance",
       "Formal webpage mainnet withdrawal requires separate payment approval"
     ],
-    "note": "Do not use old reviewed config or inherited repair ledger for this release. Do not remove SPENDING-PAUSED.json without explicit authorization."
+    "note": "Do not use old reviewed config or inherited repair ledger for this release. Do not remove SPENDING-PAUSED.json without explicit authorization.",
+    "safariAcceptance": "PASS_USER_REPORTED_PRODUCTION_BACKEND"
   },
   "frozenRelease": "/Users/dingzhenzhenzhu/Documents/SnapVault/snapvault/releases/3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
   "proposedTotalBudgetWei": "5000000000000000",

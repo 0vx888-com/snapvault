@@ -103,7 +103,6 @@
   "productionUserLoginVerified": true,
   "publicClientOldMessageDecrypted": true,
   "pending": [
-    "Real Safari /formal/ production-backend login, refresh and free group image user acceptance",
     "Paid-image in-site flow passed local regression; no new production purchase authorized",
     "Candidate frontend not uploaded to DeWEB; spending and uploads paused",
     "Remove temporary origin after preview acceptance ends"
@@ -143,7 +142,7 @@
     "paidImageRepurchased": false,
     "mainnetTransactions": 0,
     "newTapeSendMessages": 0,
-    "groupProductionAcceptance": false,
+    "groupProductionAcceptance": true,
     "evidenceDirectory": "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports",
     "screenshots": [
       "live-buyer-image-received.png",
@@ -154,5 +153,18 @@
     "limitations": "Observed site access expiry, not physical deletion of copies or screenshot prevention. Existing paid image was already expired; new paid image viewer was tested locally, not repurchased."
   },
   "newMessagesScope": "TapeSend only; free chat acceptance created test messages",
-  "productionGroupAndRefundEvidence": "final-free-acceptance-2026-10-19.json"
+  "productionGroupAndRefundEvidence": "final-free-acceptance-2026-10-19.json",
+  "realSafariProductionAcceptance": {
+    "checkedAt": "2026-10-19T10:35:57.068780+00:00",
+    "environment": "Real iPhone Safari /formal/ HTTPS preview with production backend",
+    "result": "PASS_USER_REPORTED",
+    "source": "User explicitly reported Safari login, refresh and group images normal in this conversation",
+    "signedLogin": true,
+    "refreshKeepsLogin": true,
+    "groupImageReceived": true,
+    "independentlyObserved": false,
+    "screenshots": [],
+    "paymentExecuted": false,
+    "dewebUploadExecuted": false
+  }
 }

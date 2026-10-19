@@ -1,5 +1,5 @@
 {
-  "status": "ISOLATED_HTTPS_PREVIEW_USER_REPORTED_PASS_PRODUCTION_PENDING",
+  "status": "ISOLATED_PHONE_AND_PRODUCTION_SAFARI_USER_REPORTED_PASS",
   "date": "2026-10-19",
   "realHardwareVerified": false,
   "candidateDirectory": "dist/phone-preview",
@@ -36,7 +36,7 @@
       "productionBackendLogin": false
     }
   ],
-  "blocker": "Phone connectivity preview passed by user report. Preview uses isolated in-memory auth and layout-only purchase screen, not production login/orders. Same-build production backend acceptance, public existing TapeSend message decryption, formal webpage withdrawal and gateway acceptance remain pending. No screenshots received.",
+  "blocker": "Production Safari acceptance passed by explicit user report; previous isolated-preview environment records retained unchanged. New DeWEB publication and formal webpage mainnet withdrawal remain paused and unperformed.",
   "notSubstitutedBy": [
     "desktop Chrome",
     "mobile viewport",
@@ -47,5 +47,18 @@
   "updatedDate": "2026-10-19",
   "realHardwareUserReportedPass": true,
   "evidenceSource": "Explicit user reports in this chat; no screenshots supplied; not independently observed",
-  "completedSignatureScope": "User confirmed isolated preview login signatures only; no standing authorization for future signatures"
+  "completedSignatureScope": "User confirmed isolated preview login signatures only; no standing authorization for future signatures",
+  "productionSafariAcceptance": {
+    "checkedAt": "2026-10-19T10:35:57.068780+00:00",
+    "environment": "Real iPhone Safari /formal/ HTTPS preview with production backend",
+    "result": "PASS_USER_REPORTED",
+    "source": "User explicitly reported Safari login, refresh and group images normal in this conversation",
+    "signedLogin": true,
+    "refreshKeepsLogin": true,
+    "groupImageReceived": true,
+    "independentlyObserved": false,
+    "screenshots": [],
+    "paymentExecuted": false,
+    "dewebUploadExecuted": false
+  }
 }
