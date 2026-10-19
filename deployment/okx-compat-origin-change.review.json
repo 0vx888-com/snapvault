@@ -1,0 +1,66 @@
+{
+  "status": "LOCAL_TESTED_REQUIRES_EXPLICIT_PRODUCTION_CONFIG_APPROVAL",
+  "issue": "OKX in-app gateway compatibility origin rejected by production API",
+  "gatewayBehavior": {
+    "source": "https://10-2-6.tapekit.org/.tape/boot.js",
+    "verifiedLive": true,
+    "fallbackOnMissingOrFailedServiceWorker": "https://10-2-6-open.tapekit.org",
+    "suffixSource": "https://10-2-6.tapekit.org/.tape/serve.js"
+  },
+  "observedAPI": {
+    "https://10-2-6.tapekit.org": 200,
+    "https://10-2-6-open.tapekit.org": 403,
+    "compatError": "网站来源不允许"
+  },
+  "compatServedFiles": {
+    "wallet.js": {
+      "bytes": 10574,
+      "sha256": "0xd870dfdde183756cf8879d1a91de7c32f6d4f28ad7bdd98db2b9fc7876371bbd",
+      "matchesPublishedBaseline": true
+    },
+    "app-config.json": {
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f",
+      "apiBase": "https://snapvault-api-production.up.railway.app"
+    }
+  },
+  "proposedChange": {
+    "service": "snapvault-api",
+    "variable": "SNAPVAULT_WALLET_CONFIG_JSON",
+    "jsonPath": "origins",
+    "operation": "Append only if absent, preserve all existing fields and origins",
+    "addExactOrigin": "https://10-2-6-open.tapekit.org",
+    "wildcard": false,
+    "runtimeRestartRequired": true,
+    "switchPrimaryURL": false,
+    "changeTapeSendPublicBaseURL": false,
+    "changeSigningKeys": false,
+    "changeOwnerTreasuryOrContract": false
+  },
+  "localTests": {
+    "file": "test/WalletCompatOrigin.test.js",
+    "passed": 2,
+    "failed": 0,
+    "checks": [
+      "Before adding origin HTTP 403; afterwards config 200 and preflight 204",
+      "Only exact origin echoed, no wildcard",
+      "Unrelated, deceptive and neighboring container origins denied",
+      "Private request without login remains 401",
+      "Login challenge uses compatibility origin",
+      "Wrong-origin nonce and cross-origin token denied"
+    ]
+  },
+  "productionAcceptanceRequired": [
+    "Compatibility-origin config 200 and OPTIONS 204 with exact ACAO",
+    "Unknown origin remains denied",
+    "Mainnet health and original origin unchanged",
+    "Real iPhone OKX in-app login, refresh and chat pictures checked after restart"
+  ],
+  "mainnetTransactions": 0,
+  "dewebUploads": 0,
+  "okbCost": "0",
+  "railwayPlanUpgrade": false,
+  "hostingBillingNote": "Existing Railway runtime usage continues under current account; no claim of zero cloud usage cost.",
+  "productionConfigChanged": false,
+  "newProductionSignatures": 0,
+  "scopeLimit": "Does not resolve expired-session frontend bug or guarantee all gateway/node availability; preserve the separately frozen single-wallet.js plan."
+}
