@@ -1,0 +1,12 @@
+{
+  "status": "PAUSED_AFTER_AUTHORIZED_DELTA_UPLOAD_COMPLETED",
+  "recordedAt": "2026-10-19T11:48:28.553934+00:00",
+  "scope": [
+    "Any additional mainnet spending",
+    "Additional uploads or deployments",
+    "New wallet signatures"
+  ],
+  "completedAuthorization": "0.005 OKB scoped frozen delta release; 38 transactions completed for 0.003285632924281638 OKB",
+  "remainingBudgetIsNotNewTransactionAuthorization": true,
+  "resumeRequiresExplicitUserAuthorization": true
+}

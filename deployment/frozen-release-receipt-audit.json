@@ -1,0 +1,360 @@
+{
+  "checkedAt": "2026-10-19T11:46:28.627Z",
+  "chainId": 196,
+  "reader": "https://rpc.xlayer.tech",
+  "secondaryReceiptAudit": "Earlier 23 receipts independently checked on xlayer.drpc.org; whole-run secondary attempt encountered free RPC 408, not represented as complete.",
+  "release": "0x3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "checkedReceipts": 38,
+  "totalPlanned": 38,
+  "allComplete": true,
+  "spentWei": "3285632924281638",
+  "spentOKB": "0.003285632924281638",
+  "approvedTotalWei": "5000000000000000",
+  "remainingTotalOKB": "0.001714367075718362",
+  "withinBudget": true,
+  "uniqueTransactions": true,
+  "receipts": [
+    {
+      "index": 0,
+      "hash": "0x7e08ea78893813e5c704dfffd1b0acf68f3716c2a13a617b6eb23f0e323356c5",
+      "nonce": 125,
+      "block": 73637522,
+      "feeWei": "107080845354042",
+      "path": "style.css",
+      "chunk": 0
+    },
+    {
+      "index": 1,
+      "hash": "0x69a7076b353bd77d0bf40f37796b2e9720bea4afa6fa73ec3b021bc88524d0ed",
+      "nonce": 126,
+      "block": 73637537,
+      "feeWei": "54145022707251",
+      "path": "style.css",
+      "chunk": 1
+    },
+    {
+      "index": 2,
+      "hash": "0xe9f67555abd00cbe358afa232bbaa446050873a137e2a6a3120cb31120b61110",
+      "nonce": 127,
+      "block": 73637544,
+      "feeWei": "7235460361773",
+      "path": "local-delivery.js",
+      "chunk": 0
+    },
+    {
+      "index": 3,
+      "hash": "0x884f76f2c9b666c4157fa1b418aa3758779570105a1cf82f0b8ef52b02a7d6a3",
+      "nonce": 128,
+      "block": 73637560,
+      "feeWei": "109838885491944",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 0
+    },
+    {
+      "index": 4,
+      "hash": "0x2e373715eb4e50ffee8d8f0b0f84b5a0183e2b24c745d63883adc316f63b307e",
+      "nonce": 129,
+      "block": 73637568,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 1
+    },
+    {
+      "index": 5,
+      "hash": "0x7a291b405fb9b338cfb4dccfc53b2b3b9ac9ee10783a100ae0905c5e004329b1",
+      "nonce": 130,
+      "block": 73637577,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 2
+    },
+    {
+      "index": 6,
+      "hash": "0x7c668177a1827a77fff359cfad1f7bf3857e4291210a93f07641a65d7717b141",
+      "nonce": 131,
+      "block": 73637588,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 3
+    },
+    {
+      "index": 7,
+      "hash": "0x8fc31e5c2bf1611f1477e96dec119e3061836d8cdcabcd51406c7910806d0373",
+      "nonce": 132,
+      "block": 73637598,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 4
+    },
+    {
+      "index": 8,
+      "hash": "0x93d40e1b2d81a7e2c18a463c11ca4ee8d39dd12754d215b8eeeece5520bbbe86",
+      "nonce": 133,
+      "block": 73637617,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 5
+    },
+    {
+      "index": 9,
+      "hash": "0xbbd117a62790407da78d777141b5e4f585620d1bdaf4371f313edfed8db70e21",
+      "nonce": 134,
+      "block": 73637649,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 6
+    },
+    {
+      "index": 10,
+      "hash": "0x494e1926f5d7d9e60344c24f4ed09dfee44e31dd0f714f3af4ce36aecf3d37d4",
+      "nonce": 135,
+      "block": 73637665,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 7
+    },
+    {
+      "index": 11,
+      "hash": "0xdc8f1381bb303094076906c290beb227aa0e7da597bb9daf11df203b507f16bb",
+      "nonce": 136,
+      "block": 73637953,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 8
+    },
+    {
+      "index": 12,
+      "hash": "0xf5e871714dc0241cb0328a1d2babacc92aca8508280f6374cb031ea2467bf306",
+      "nonce": 137,
+      "block": 73637968,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 9
+    },
+    {
+      "index": 13,
+      "hash": "0xdce0ed60c3d22162eeed42fa86c308086aa22b69821a49822a36356233d1f59c",
+      "nonce": 138,
+      "block": 73638024,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 10
+    },
+    {
+      "index": 14,
+      "hash": "0x77368a2caa981488f37a2ebc863c1ab7fbd9d040550b6c2e6a706d02d1da70a4",
+      "nonce": 139,
+      "block": 73638038,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 11
+    },
+    {
+      "index": 15,
+      "hash": "0xfbaaf000c030cdd6f7be27c85a5cbd6f49a7dda199a03132667b7b362052dad3",
+      "nonce": 140,
+      "block": 73638049,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 12
+    },
+    {
+      "index": 16,
+      "hash": "0xce25b9630fe63a252a09c37dbd265d1be641cdda52d2fda57da89e233b6ffc1d",
+      "nonce": 141,
+      "block": 73638070,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 13
+    },
+    {
+      "index": 17,
+      "hash": "0xe63fa78c5c9fc857227abde318485e5184c99e6c131291029cbacb9cfa3f7672",
+      "nonce": 142,
+      "block": 73638081,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 14
+    },
+    {
+      "index": 18,
+      "hash": "0xce8ef19e0d89b9ea39138898b6ccae11833d12d97570a1860f2159f100e2707b",
+      "nonce": 143,
+      "block": 73638106,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 15
+    },
+    {
+      "index": 19,
+      "hash": "0x534bb1aca51de6869457f54702d2a3110aeb097e2d33898ef5156547bb325138",
+      "nonce": 144,
+      "block": 73638115,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 16
+    },
+    {
+      "index": 20,
+      "hash": "0x6e8a4fb8e4fa8243db8da4641e20a7470761a2a0280ff808100fcbe4f47803be",
+      "nonce": 145,
+      "block": 73638161,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 17
+    },
+    {
+      "index": 21,
+      "hash": "0x2e592baaea6c2e9060e468dd587031b12bb3a211043fe0d6aa6375d6b78353d9",
+      "nonce": 146,
+      "block": 73638192,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 18
+    },
+    {
+      "index": 22,
+      "hash": "0x56fbb7bd477e6b85afde938fd738bf45b9e114114490e134533ba8db4548c643",
+      "nonce": 147,
+      "block": 73638221,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 19
+    },
+    {
+      "index": 23,
+      "hash": "0x0f86e33e632b54b00418ce28477e524ac6c3ad92384ed8d1c953b1f4448a48b3",
+      "nonce": 148,
+      "block": 73638333,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 20
+    },
+    {
+      "index": 24,
+      "hash": "0x44402df6c1b7eb21334af8201e10e0dd1dd5c573f8fafd7397e2a1d412a93919",
+      "nonce": 149,
+      "block": 73638343,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 21
+    },
+    {
+      "index": 25,
+      "hash": "0x362de74257e8f687ac1805185790f88b674c045cc6ee5c9da4737e8175761f2d",
+      "nonce": 150,
+      "block": 73638366,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 22
+    },
+    {
+      "index": 26,
+      "hash": "0x7418aab4472be1130eedb6409eaa534ee582a7d1e076f7ee77240c69b3fdfc4c",
+      "nonce": 151,
+      "block": 73638385,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 23
+    },
+    {
+      "index": 27,
+      "hash": "0xa3ad3b7b60b560a86a589a3f202e7841ac5786d1b45c749d3318d5efbbd80814",
+      "nonce": 152,
+      "block": 73638407,
+      "feeWei": "107333025366651",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 24
+    },
+    {
+      "index": 28,
+      "hash": "0xaeb0d929ea5be2a297bfb44e24bfa2ee7c06e3e549016c6758504827e5f4b316",
+      "nonce": 153,
+      "block": 73638416,
+      "feeWei": "61783483089174",
+      "path": "vendor/okx-connect.min.js",
+      "chunk": 25
+    },
+    {
+      "index": 29,
+      "hash": "0x0bc6ffcafc94bd4459a69ec50c98eac6ced7cf89aebf1539e9a998778cfcacb3",
+      "nonce": 154,
+      "block": 73638429,
+      "feeWei": "18164120908206",
+      "path": "vendor/okx-connect-LICENSE.md",
+      "chunk": 0
+    },
+    {
+      "index": 30,
+      "hash": "0xf93e609f72fd249d8f62d42d6da3fc2ca0b03fb0320987de892e8d194c6e85de",
+      "nonce": 155,
+      "block": 73638438,
+      "feeWei": "26219561310978",
+      "path": "assets/wallet-icon.png",
+      "chunk": 0
+    },
+    {
+      "index": 31,
+      "hash": "0x8ffb17f65ed51c3ee2481bd1aa15b250d0a64da5b50240517dc0e8ee39932b4d",
+      "nonce": 156,
+      "block": 73638467,
+      "feeWei": "10826340541317",
+      "path": "transaction-guard.js",
+      "chunk": 0
+    },
+    {
+      "index": 32,
+      "hash": "0xc7fd70c18264bfc94355af18c87284f3f67363c3d584d42cbb406346a88d569c",
+      "nonce": 157,
+      "block": 73638689,
+      "feeWei": "32059001602950",
+      "path": "wallet-connect.js",
+      "chunk": 0
+    },
+    {
+      "index": 33,
+      "hash": "0x3badc71fabced1e4f6361ebde5cd1bc63277f333faabec7b8f2828c41573bcbf",
+      "nonce": 158,
+      "block": 73639033,
+      "feeWei": "48800782440039",
+      "path": "wallet.js",
+      "chunk": 0
+    },
+    {
+      "index": 34,
+      "hash": "0xb1818674de2f07f47f7c7e4e1494027d1c249aba106319b8fa9d7e05fe9eb253",
+      "nonce": 159,
+      "block": 73639076,
+      "feeWei": "13074240653712",
+      "path": "refunds.js",
+      "chunk": 0
+    },
+    {
+      "index": 35,
+      "hash": "0x5fbfebb2b9ef902cceb87867d3b4f964b6365ab19462f6c4f915ac96bebfe411",
+      "nonce": 160,
+      "block": 73639161,
+      "feeWei": "107081805354090",
+      "path": "app.js",
+      "chunk": 0
+    },
+    {
+      "index": 36,
+      "hash": "0x872422ad81c6e9dcb3b99f7f8da4db8b8033c098c4ee8e5f45e1ba67a2188892",
+      "nonce": 161,
+      "block": 73641005,
+      "feeWei": "57049162852458",
+      "path": "app.js",
+      "chunk": 1
+    },
+    {
+      "index": 37,
+      "hash": "0x986987f24195c065077440cd3b22af1dc76a5c3e52521231508f58e80601d56a",
+      "nonce": 162,
+      "block": 73641015,
+      "feeWei": "56281602814080",
+      "path": "index.html",
+      "chunk": 0
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-10-19T11:48:28.553934+00:00",
+  "status": "CHAIN_UPLOAD_AND_TWO_RPC_FILE_VERIFICATION_PASS_PUBLIC_GATEWAY_BLOCKED",
+  "releaseId": "0x3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "planHash": "0x43875a19a2f8b1a84002cf9d185f30e084afdb41488385ca292bd38806032fec",
+  "publicURL": "https://10-2-6.tapekit.org/",
+  "changedFiles": 11,
+  "reusedFiles": 10,
+  "publicTransactions": 38,
+  "allTransactionsSuccessful": true,
+  "duplicateTransactions": false,
+  "filesVerified": 21,
+  "independentFileReaders": 2,
+  "receiptEvidence": "frozen-release-receipt-audit.json",
+  "fileEvidence": "frozen-release-file-audit.json",
+  "spentOKB": "0.003285632924281638",
+  "approvedLimitOKB": "0.005",
+  "unusedBudgetOKB": "0.001714367075718362",
+  "newTapeSend": 0,
+  "newContainers": 0,
+  "newPurchases": 0,
+  "newContracts": 0,
+  "webWithdrawalPerformed": false,
+  "browserAcceptance": {
+    "Chrome": "FAIL_GATEWAY_NOT_ENOUGH_INDEPENDENT_NODES",
+    "independentInAppColdLoad": "FAIL_GATEWAY_ONLY_ONE_NODE_RESPONDED",
+    "publicGatewayReady": false,
+    "sourceObservation": "Gateway requires OKX and dRPC operators to agree; dRPC returned repeated HTTP 408 free-plan timeouts during read-only audits. Sequential small-range reads ultimately verified both providers, but ordinary browser gateway still fails.",
+    "rawHttpLimitation": "Server returns bootstrap HTML; raw HTTP asset hashes cannot establish browser Service Worker file delivery.",
+    "screenshot": "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/frozen-release-public-gateway-blocked.png"
+  },
+  "pending": [
+    "Public gateway must reliably obtain two independent node results before public launch",
+    "Post-publication real iPhone Safari and OKX cold-load checks",
+    "Formal webpage mainnet withdrawal remains unperformed and requires wallet confirmation"
+  ],
+  "remediation": "No further chain upload or file changes are indicated by the verified hashes. Investigate gateway reader/node availability; do not switch gateway, pay for RPC or redeploy without authorization.",
+  "spendingPausedAgain": true
+}

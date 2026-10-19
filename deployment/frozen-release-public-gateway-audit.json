@@ -1,0 +1,203 @@
+{
+  "checkedAt": "2026-10-19T11:42:11.062Z",
+  "url": "https://10-2-6.tapekit.org/",
+  "manifest": "0x3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "checkedFiles": 21,
+  "files": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x1a9c9fec8538a65d73d830188fb856f0707bc59f0442d7718fcc7fc6473d57aa",
+      "match": false
+    },
+    {
+      "path": "style.css",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0xd2326812816de4cab3899dc54422d593ea04ca2f726ec4c69c88e8f4f619efe2",
+      "match": false
+    },
+    {
+      "path": "app.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x2ce0252b9b9aa0681117d5dd48cfc29fff9a60da5282f05023028ea9bb6d8cb9",
+      "match": false
+    },
+    {
+      "path": "chat.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7",
+      "match": false
+    },
+    {
+      "path": "store.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147",
+      "match": false
+    },
+    {
+      "path": "local-delivery.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c",
+      "match": false
+    },
+    {
+      "path": "wallet.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0xd870dfdde183756cf8879d1a91de7c32f6d4f28ad7bdd98db2b9fc7876371bbd",
+      "match": false
+    },
+    {
+      "path": "wallet-connect.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54",
+      "match": false
+    },
+    {
+      "path": "transaction-guard.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268",
+      "match": false
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0",
+      "match": false
+    },
+    {
+      "path": "vendor/okx-connect-LICENSE.md",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c",
+      "match": false
+    },
+    {
+      "path": "assets/wallet-icon.png",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60",
+      "match": false
+    },
+    {
+      "path": "wallet-chat.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x2fba3e705d02c3bfd86ee2518ff4212440575498c264c257365ad6dcdf6d61b2",
+      "match": false
+    },
+    {
+      "path": "refunds.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b",
+      "match": false
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1",
+      "match": false
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612",
+      "match": false
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8",
+      "match": false
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7",
+      "match": false
+    },
+    {
+      "path": "assets/studio.svg",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286",
+      "match": false
+    },
+    {
+      "path": "assets/sketch.svg",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697",
+      "match": false
+    },
+    {
+      "path": "app-config.json",
+      "status": 200,
+      "contentType": "text/html",
+      "bytes": 2817,
+      "sha256": "0x3cae50fd41819c41851cc8fe28d07d2f3c686298571194857033ac1d61da1941",
+      "expectedSHA256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f",
+      "match": false
+    }
+  ],
+  "rawResponseMatchesFrozenAssets": false,
+  "allMatched": null,
+  "status": "RAW_HTTP_RETURNS_SERVICE_WORKER_BOOTSTRAP_BROWSER_VERIFICATION_REQUIRED",
+  "explanation": "Gateway server explicitly returns the same bootstrap HTML for all site paths; actual on-chain assets are served by browser Service Worker. Raw HTTP hashes are not asset-corruption evidence and cannot establish browser asset acceptance.",
+  "browserObserved": "Not enough nodes; cannot read the chain",
+  "spending": 0
+}

@@ -10,9 +10,9 @@
   "approvedBudgetWei": "4998750631947943",
   "maxGasPriceWei": "24000001",
   "preparation": {
-    "status": "AUTHORIZED_WALLET_CONFIRMATIONS_REQUIRED",
-    "uploadAuthorized": true,
-    "paymentAuthorized": true,
+    "status": "UPLOAD_COMPLETE_READONLY_VERIFIED_GATEWAY_BLOCKED",
+    "uploadAuthorized": false,
+    "paymentAuthorized": false,
     "remaining": [
       "Formal webpage mainnet withdrawal requires separate payment approval"
     ],

@@ -73,3 +73,11 @@
 ## 本轮恢复授权
 
 用户明确同意“0.005 OKB 总上限，恢复差量上传，别整包重传，需要钱包确认直接叫我，超预算就停”。授权记录为 deployment/frozen-release-authorization.json，执行配置为 config/deweb-next-release.reviewed.json。原暂停记录完整保存在 deployment/spending-pause-before-frozen-release.json。新上传账本按冻结 manifest 单独记录，不改旧 45 笔账本。预算中为正式网页提现预留 gas，但本发布工具只执行差量上传；不创建容器、部署合约、购买或发送 TapeSend。每笔由用户在 OKX Wallet 确认。
+
+## 实际完成与最终核验
+
+38/38 笔主网上传成功，共花费 **0.003285632924281638 OKB**，低于 0.005 OKB 总限额，未用额度为 0.001714367075718362 OKB。仅更新 11 个差异文件，10 个复用；交易哈希及 nonce 唯一。两家独立 RPC 在同一固定区块逐字节读取全部 21 文件，SHA-256 均与冻结包一致。完整证据见 frozen-release-receipt-audit.json、frozen-release-file-audit.json、deweb-wallet-public-proof.json。
+
+公共网页验收**尚未通过**：Chrome 与独立内置浏览器冷加载都被网关“独立节点不足”错误阻挡；读取过程中 dRPC 免费节点多次 HTTP 408，低并发 24KB 分段重试后双节点文件核验通过，但网关正常浏览器读取仍失败。原始 HTTP 返回 Service Worker 引导页，不能当成资产损坏或完整网页验收。不得为此重复上传。需要处理网关读取/节点可用性，当前不切换网关、不升级付费 RPC。
+
+没有新发 TapeSend、开容器、部署合约、购买或执行正式网页提现。已重新写入 SPENDING-PAUSED.json，停止后续支出；剩余额度不等于额外交易授权。页面源码未更改，费用不会因本轮只读核验增加。最终结果见 deployment/frozen-release-final-acceptance.json。
