@@ -12,3 +12,10 @@ export function assertPublicationPlan(setup,manifestHash,plan){
  if(!setup.expectedPlanHash||planHash(plan)!==setup.expectedPlanHash)throw Error('Prepared transaction plan changed; re-review before signing');
  if(plan.some(x=>x.value!=='0x0'||x.path==='activation'))throw Error('Prepared free-value upload plan cannot add activation or payment');
 }
+
+// Public RPC pending counts may lag a transaction whose receipt is already confirmed.
+export function nextPublicationNonce(pending,latest,confirmedNonce){
+ const values=[BigInt(pending),BigInt(latest),confirmedNonce==null?0n:BigInt(confirmedNonce)+1n];
+ if(values.some(x=>x<0n))throw Error("Invalid publication nonce");
+ return "0x"+values.reduce((a,b)=>a>b?a:b,0n).toString(16);
+}

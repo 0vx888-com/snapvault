@@ -1,0 +1,9 @@
+{
+  "source": "同意 0.005 OKB 总上限，恢复差量上传，别整包重传，需要钱包确认直接叫我，超预算就停。",
+  "recordedAt": "2026-10-19T10:40:58.420054+00:00",
+  "totalLimitWei": "5000000000000000",
+  "uploadLimitWei": "4998750631947943",
+  "withdrawalGasReservedWei": "1249368052057",
+  "walletConfirmationRequired": true,
+  "scope": "Frozen delta upload only; no new container, contract, purchase or TapeSend; webpage withdrawal reserved but not executed by this publisher"
+}

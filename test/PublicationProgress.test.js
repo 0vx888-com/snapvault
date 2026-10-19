@@ -2,6 +2,8 @@ const{expect}=require('chai');
 describe('冻结发布计划和独立续传记录',function(){
  let m,manifest,plan,setup;
  before(async()=>{m=await import('../scripts/publication-progress.mjs');manifest='0x'+'ab'.repeat(32);plan=[{path:'index.html',chunk:0,to:'0x'+'12'.repeat(20),value:'0x0',data:'0x1234'}];setup={releaseScopedProgress:true,expectedManifestHash:manifest,expectedPlanHash:m.planHash(plan)};});
+ it('RPC pending 落后时不复用上一笔已确认 nonce',()=>{expect(m.nextPublicationNonce('0x87','0x88',135)).eq('0x88');expect(m.nextPublicationNonce('0x87','0x87',135)).eq('0x88');});
+ it('不覆盖账户其他待确认交易占用的 nonce',()=>{expect(m.nextPublicationNonce('0x90','0x88',135)).eq('0x90');expect(()=>m.nextPublicationNonce('-1','0x88',135)).throws('Invalid');});
  it('新版本单独进度文件，不复用旧修复预算记录',()=>{const r=m.publicationRecord(setup,manifest);expect(r.scoped).eq(true);expect(r.name).eq('deweb-release-'+manifest.slice(2)+'-progress.json');expect(r.name).not.eq(m.publicationRecord({},manifest).name);});
  it('冻结文件版本变化则拒绝',()=>expect(()=>m.publicationRecord(setup,'0x'+'cd'.repeat(32))).throws('manifest mismatch'));
  it('相同冻结交易计划可继续核对',()=>expect(()=>m.assertPublicationPlan(setup,manifest,plan)).not.throws());

@@ -69,3 +69,7 @@
 | 合计 | 38 |
 
 38 笔中 26 笔用于手机连接 SDK。其他 10 文件完整复用。TapeSend 继续读取已有消息，不重新发信；不新增容器或部署合约。0.005 OKB 为待确认的新总上限，包含上传和一次已有收入正式网页提现的 gas 预留，不能理解为旧修复预算仍完整可用。实际上传前重新估算，超限停止。本轮没有上传或付款。最新主网只读差量与 gas 记录见 deployment/final-release-readonly-preflight.json。
+
+## 本轮恢复授权
+
+用户明确同意“0.005 OKB 总上限，恢复差量上传，别整包重传，需要钱包确认直接叫我，超预算就停”。授权记录为 deployment/frozen-release-authorization.json，执行配置为 config/deweb-next-release.reviewed.json。原暂停记录完整保存在 deployment/spending-pause-before-frozen-release.json。新上传账本按冻结 manifest 单独记录，不改旧 45 笔账本。预算中为正式网页提现预留 gas，但本发布工具只执行差量上传；不创建容器、部署合约、购买或发送 TapeSend。每笔由用户在 OKX Wallet 确认。

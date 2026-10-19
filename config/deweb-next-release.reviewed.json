@@ -1,0 +1,38 @@
+{
+  "chainId": 196,
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "circuits": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+  "tokenId": 10,
+  "cpuIndex": 6,
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "name": "10.2.6.tape",
+  "publicURL": "https://10-2-6.tapekit.org/",
+  "approvedBudgetWei": "4998750631947943",
+  "maxGasPriceWei": "24000001",
+  "preparation": {
+    "status": "AUTHORIZED_WALLET_CONFIRMATIONS_REQUIRED",
+    "uploadAuthorized": true,
+    "paymentAuthorized": true,
+    "remaining": [
+      "Formal webpage mainnet withdrawal requires separate payment approval"
+    ],
+    "note": "Do not use old reviewed config or inherited repair ledger for this release. Do not remove SPENDING-PAUSED.json without explicit authorization.",
+    "safariAcceptance": "PASS_USER_REPORTED_PRODUCTION_BACKEND"
+  },
+  "frozenRelease": "/Users/dingzhenzhenzhu/Documents/SnapVault/snapvault/releases/3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "proposedTotalBudgetWei": "5000000000000000",
+  "releaseScopedProgress": true,
+  "expectedManifestHash": "0x3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
+  "expectedPlanHash": "0x43875a19a2f8b1a84002cf9d185f30e084afdb41488385ca292bd38806032fec",
+  "proposedUploadBudgetWei": "4998750631947943",
+  "reservedWebWithdrawalGasBudgetWei": "1249368052057",
+  "authorization": {
+    "source": "同意 0.005 OKB 总上限，恢复差量上传，别整包重传，需要钱包确认直接叫我，超预算就停。",
+    "recordedAt": "2026-10-19T10:40:58.420054+00:00",
+    "totalLimitWei": "5000000000000000",
+    "uploadLimitWei": "4998750631947943",
+    "withdrawalGasReservedWei": "1249368052057",
+    "walletConfirmationRequired": true,
+    "scope": "Frozen delta upload only; no new container, contract, purchase or TapeSend; webpage withdrawal reserved but not executed by this publisher"
+  }
+}
