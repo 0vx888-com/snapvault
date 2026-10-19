@@ -1,6 +1,6 @@
 {
-  "status": "PRODUCTION_LOGIN_READONLY_AND_PUBLIC_OLD_MESSAGE_PASS",
-  "checkedAt": "2026-10-19T08:43:39.169Z",
+  "status": "PRODUCTION_FREE_DM_IMAGE_EPHEMERAL_AND_OLD_TAPESEND_PASS",
+  "checkedAt": "2026-10-19T09:05:49.502769+00:00",
   "userScope": "Production backend free acceptance and reading existing TapeSend messages only; no purchase, send, payment or DeWEB upload",
   "url": "https://changing-pole-where-lotus.trycloudflare.com/formal/",
   "productionAPI": "https://snapvault-api-production.up.railway.app",
@@ -103,9 +103,10 @@
   "productionUserLoginVerified": true,
   "publicClientOldMessageDecrypted": true,
   "pending": [
-    "In-site delivery frontend changes under local regression testing",
-    "Production free chat actual send/receive not yet verified",
-    "Remove temporary origin after acceptance; no removal until candidate testing finishes"
+    "Paid-image in-site flow passed local regression; no new production purchase authorized",
+    "Production group acceptance not performed; existing local regression only",
+    "Candidate frontend not uploaded to DeWEB; spending and uploads paused",
+    "Remove temporary origin after preview acceptance ends"
   ],
   "secretHandling": "No user private keys, seed phrases, signatures, viewing-link fragments, session tokens or server env secrets in this record",
   "authenticatedPhoneReadOnlyCheck": {
@@ -126,5 +127,31 @@
         "ok": true
       }
     }
-  }
+  },
+  "productionFreeChat": {
+    "environment": "Real production WalletService; guarded HTTPS candidate; desktop Chrome",
+    "accounts": "Creator A and buyer, both user owned",
+    "friendAccepted": true,
+    "dmCreated": true,
+    "textAndImageReceivedInSite": true,
+    "ephemeralSeconds": 10,
+    "unopenedStayedLocked": true,
+    "countdownObservedSeconds": 7,
+    "expiredInUI": true,
+    "expiredAfterFullReload": true,
+    "loginRetainedAfterReload": true,
+    "paidImageRepurchased": false,
+    "mainnetTransactions": 0,
+    "newTapeSendMessages": 0,
+    "groupProductionAcceptance": false,
+    "evidenceDirectory": "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports",
+    "screenshots": [
+      "live-buyer-image-received.png",
+      "live-buyer-ephemeral-countdown.png",
+      "live-buyer-ephemeral-expired.png",
+      "live-buyer-expired-after-reload.png"
+    ],
+    "limitations": "Observed site access expiry, not physical deletion of copies or screenshot prevention. Existing paid image was already expired; new paid image viewer was tested locally, not repurchased."
+  },
+  "newMessagesScope": "TapeSend only; free chat acceptance created test messages"
 }
