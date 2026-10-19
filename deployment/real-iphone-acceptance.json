@@ -1,16 +1,51 @@
 {
-  "status": "PENDING_USER_AND_HTTPS_CANDIDATE",
+  "status": "ISOLATED_HTTPS_PREVIEW_USER_REPORTED_PASS_PRODUCTION_PENDING",
   "date": "2026-10-19",
   "realHardwareVerified": false,
-  "candidateDirectory": "dist/mobile-candidate",
-  "publicCandidateURL": null,
+  "candidateDirectory": "dist/phone-preview",
+  "publicCandidateURL": "https://changing-pole-where-lotus.trycloudflare.com/",
   "signaturesAuthorized": false,
   "paymentsAuthorized": false,
   "dewebUploadAuthorized": false,
   "environments": [
-    {"device": "real iPhone", "browser": "Safari", "opened": null, "connected": null, "signedLogin": null, "mainnetSelected": null, "purchasePageWithoutPayment": null, "screenshots": []},
-    {"device": "real iPhone", "browser": "OKX App Web3 browser", "opened": null, "connected": null, "signedLogin": null, "mainnetSelected": null, "purchasePageWithoutPayment": null, "screenshots": []}
+    {
+      "device": "real iPhone",
+      "browser": "Safari",
+      "opened": true,
+      "connected": true,
+      "signedLogin": true,
+      "mainnetSelected": true,
+      "purchasePageWithoutPayment": true,
+      "screenshots": [],
+      "paymentDisabled": true,
+      "result": "PASS_USER_REPORTED",
+      "productionBackendLogin": false,
+      "refreshKeepsAddress": true
+    },
+    {
+      "device": "real iPhone",
+      "browser": "OKX App Web3 browser",
+      "opened": true,
+      "connected": true,
+      "signedLogin": true,
+      "mainnetSelected": true,
+      "purchasePageWithoutPayment": true,
+      "screenshots": [],
+      "paymentDisabled": true,
+      "result": "PASS_USER_REPORTED",
+      "productionBackendLogin": false
+    }
   ],
-  "blocker": "User paused signatures and uploads. Updated frontend is local only; real-device access and free login signatures need user cooperation and a reviewed HTTPS preview path.",
-  "notSubstitutedBy": ["desktop Chrome", "mobile viewport", "mobile user agent", "mock wallet session"]
+  "blocker": "Phone connectivity preview passed by user report. Preview uses isolated in-memory auth and layout-only purchase screen, not production login/orders. Same-build production backend acceptance, public existing TapeSend message decryption, formal webpage withdrawal and gateway acceptance remain pending. No screenshots received.",
+  "notSubstitutedBy": [
+    "desktop Chrome",
+    "mobile viewport",
+    "mobile user agent",
+    "mock wallet session",
+    "isolated preview login does not establish production backend acceptance"
+  ],
+  "updatedDate": "2026-10-19",
+  "realHardwareUserReportedPass": true,
+  "evidenceSource": "Explicit user reports in this chat; no screenshots supplied; not independently observed",
+  "completedSignatureScope": "User confirmed isolated preview login signatures only; no standing authorization for future signatures"
 }

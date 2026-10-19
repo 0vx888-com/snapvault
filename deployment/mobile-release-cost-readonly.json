@@ -6,9 +6,9 @@
     "remainingWei": "1636877601843891",
     "newModelExceedsRemaining": true
   },
-  "checkedAt": "2026-10-18T20:40:56.659Z",
+  "checkedAt": "2026-10-19T08:48:22.992Z",
   "chainId": 196,
-  "block": 73586946,
+  "block": 73630589,
   "spendingPaused": true,
   "noSignatures": true,
   "noTransactions": true,
@@ -19,21 +19,21 @@
   "changedFiles": [
     {
       "path": "index.html",
-      "bytes": 11525,
+      "bytes": 12299,
       "chunks": 1,
-      "modelGas": "2733846"
+      "modelGas": "2886302"
     },
     {
       "path": "style.css",
-      "bytes": 34672,
+      "bytes": 35736,
       "chunks": 2,
-      "modelGas": "8075883"
+      "modelGas": "8317249"
     },
     {
       "path": "app.js",
-      "bytes": 34222,
+      "bytes": 36406,
       "chunks": 2,
-      "modelGas": "7975427"
+      "modelGas": "8467102"
     },
     {
       "path": "local-delivery.js",
@@ -43,9 +43,9 @@
     },
     {
       "path": "wallet.js",
-      "bytes": 10374,
+      "bytes": 10574,
       "chunks": 1,
-      "modelGas": "2476483"
+      "modelGas": "2521144"
     },
     {
       "path": "wallet-connect.js",
@@ -137,8 +137,8 @@
     }
   ],
   "pendingUploadOperations": 38,
-  "uploadStorageModelAtCurrentPriceOKB": "0.003390996809549832",
-  "uploadStorageModelWith20PercentGasAndPriceMarginOKB": "0.004883035365059798",
+  "uploadStorageModelAtCurrentPriceOKB": "0.00340959997047999",
+  "uploadStorageModelWith20PercentGasAndPriceMarginOKB": "0.004909823916575988",
   "caveat": "Read-only per-chunk putFile storage model; append and gateway delivery gas may differ. NOT an authorization or guaranteed upper bound. Recheck exact plan before upload.",
   "tapeSendOldMessageReadOKB": "0",
   "newTapeSendMessagesPlanned": 0,

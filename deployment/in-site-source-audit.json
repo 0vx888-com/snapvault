@@ -1,0 +1,119 @@
+{
+  "status": "PASS",
+  "method": "Candidate path and credential-literal scan plus manual scope review; no secret values logged",
+  "files": [
+    {
+      "path": "deployment/free-backend-acceptance-2026-10-19.json",
+      "bytes": 5012,
+      "sha256": "5dfa103401d0d4dcefe57d2ddb2dbc2ce59c1574ec7c1e07b0cfc4b3e0259bfd"
+    },
+    {
+      "path": "deployment/local-delivery-browser.json",
+      "bytes": 1228,
+      "sha256": "d2466c75e205b921f8dcad3c3d9508d83e7ad61cff7b9e48d91d6a44e17a8927"
+    },
+    {
+      "path": "deployment/local-market-browser.json",
+      "bytes": 3321,
+      "sha256": "486df0894f8150082b0f84381bce5e663f3ad2c4b7fbd254ea772303c4b7086a"
+    },
+    {
+      "path": "deployment/mobile-release-cost-readonly.json",
+      "bytes": 4287,
+      "sha256": "e9dfd5d47535ed52ff5bf3e854138d92365f5903d3ea154896df6c65871c9816"
+    },
+    {
+      "path": "deployment/real-iphone-acceptance.json",
+      "bytes": 1996,
+      "sha256": "64cb5e9f34b763112f9b274c6466b6989d5f2c7bd610da773fa76f858995fca3"
+    },
+    {
+      "path": "docs/IN-SITE-DELIVERY-2026-10-19.md",
+      "bytes": 3323,
+      "sha256": "8a1f22b4092476f7001d110a51b21c31d78b108467d1ccd50d121d84beb9646b"
+    },
+    {
+      "path": "screenshots/integrated-local-chat.png",
+      "bytes": 139227,
+      "sha256": "e7e0c72e3a8e136b463c277d90590f419abb08509f172866c6b4b4120d4c3be4"
+    },
+    {
+      "path": "screenshots/integrated-local-mobile.png",
+      "bytes": 83382,
+      "sha256": "0ea18a24e759aafb1237afff85a4b6ce6a365e0a849770bf1b43131af42cdab6"
+    },
+    {
+      "path": "screenshots/integrated-local-square.png",
+      "bytes": 680752,
+      "sha256": "15a6e55e00a877683b2feffe8bf241ed8f926dd0e4d48b9709154d182689577c"
+    },
+    {
+      "path": "screenshots/mvp-chat-paid-images.png",
+      "bytes": 141398,
+      "sha256": "49f15520efb35d13e32ffcf0c093c3ecb3b1486ad37c899d8cd222347a556f77"
+    },
+    {
+      "path": "screenshots/mvp-creator-square.png",
+      "bytes": 678717,
+      "sha256": "4e3fde627530bcc0647994bd3dc7086db5e87cd5818d4fdfcdc9110ccefbb8d5"
+    },
+    {
+      "path": "screenshots/mvp-mobile-chat.png",
+      "bytes": 86380,
+      "sha256": "df99c75498e8cdab5ac6dd33a24d39d5494b8579b07ed0ecd4e49523341b4501"
+    },
+    {
+      "path": "screenshots/refund-request-local.png",
+      "bytes": 93913,
+      "sha256": "bcfeb6800c779300c67c83f43fd8feabc8c958765652838151e178c994ca4dc7"
+    },
+    {
+      "path": "screenshots/wallet-in-site-delivery.png",
+      "bytes": 287227,
+      "sha256": "1784b574933a565f534e752771d057208396a8271b00dae4ec061a58c1599223"
+    },
+    {
+      "path": "screenshots/wallet-tapesend-verified.png",
+      "bytes": 87469,
+      "sha256": "dd99e8990d2cfec25ab1a883784903a7ceef6ef2ff7184bf929d49583cfc3e99"
+    },
+    {
+      "path": "screenshots/wallet-tapesend-viewer.png",
+      "bytes": 196126,
+      "sha256": "aa560f548822238887e3ff7c7ad8b7fe468898f95534160dedd5290b2f89dced"
+    },
+    {
+      "path": "server/wallet-service.mjs",
+      "bytes": 23405,
+      "sha256": "8ed9d3a2ac1a49dbab761c8d9fc279e6c1770753db94d4d80708ddcda7daf440"
+    },
+    {
+      "path": "test/WalletTapeSend.test.js",
+      "bytes": 16729,
+      "sha256": "5ad9ad2f071ed0abb310fd273130652a648584223aa124f1cbde3a3ef9ce62c3"
+    },
+    {
+      "path": "web/app.js",
+      "bytes": 38548,
+      "sha256": "9ba996929c1bd22c1d914c4bcba60236bde866287ec4838bd10fb37d914d209a"
+    },
+    {
+      "path": "web/index.html",
+      "bytes": 12944,
+      "sha256": "df7f2617fac4ad66b3fe57e7b3d36daa821686f155c10a800b7fb33959511f31"
+    },
+    {
+      "path": "web/style.css",
+      "bytes": 35736,
+      "sha256": "d2326812816de4cab3899dc54422d593ea04ca2f726ec4c69c88e8f4f619efe2"
+    },
+    {
+      "path": "web/wallet.js",
+      "bytes": 10538,
+      "sha256": "dd72b883ae9d4aface88d505de9fca051728a572ea753c1bb79c7a95a2157425"
+    }
+  ],
+  "issues": [],
+  "excluded": "Ignored credential files not staged; no force-add",
+  "mainnetTransactions": false
+}

@@ -31,13 +31,25 @@ function renderStories(){
  $('#creator-stories').innerHTML=`<button class="story-item story-create" data-go-create><span class="story-avatar">＋</span><b>开始分享</b><small>你的创作空间</small></button>`+list.map(p=>`<button class="story-item" data-profile="${p.address}"><span class="story-avatar ${wallet.enabled?'':`photo-tile ${creatorPhoto(p.address)}`}">${wallet.enabled?esc(p.av):''}</span><b>${esc(p.name)}</b><small>${esc(p.tag||'看看新日常')}</small></button>`).join('')+`<div class="story-greeting"><span>YOUR PEOPLE.<br>YOUR MOMENTS.</span><i>✳</i></div>`;
 }
 
+function deliveryNote(c,who,state){
+  if(!wallet.enabled)return '';const receipt=order(c.id,who);if(!receipt)return '';
+  const copy=state==='expired'?'站内查看权限已结束；重新打开收件箱不会恢复图片。':state==='delivering'?'付款已确认，正在自动交付。完成后可在本站打开，无需重新付款。':receipt.route==='tapesend'?'TapeSend 已送达 · 直接在本站查看图片。':'图片已交付 · 直接在本站查看。';
+  const tx=receipt.deliveryTx,proof=wallet.config?.chainId===196&&/^0x[0-9a-fA-F]{64}$/.test(tx||'')?` <a href="https://www.oklink.com/x-layer/tx/${tx}" target="_blank" rel="noopener noreferrer">交付交易 ↗</a>`:'';
+  return `<p class="delivery-status" data-delivery-state="${state}">${copy}${proof}</p>`;
+}
+function renderReceived(items){
+  const show=wallet.enabled&&feed==='purchased';$('#received-summary').classList.toggle('hidden',!show);$('#received-images').classList.toggle('hidden',!wallet.enabled||!wallet.account);if(!show)return;
+  const states=items.map(c=>orderState(c)),ready=states.filter(x=>x==='ready'||x==='viewing').length,pending=states.filter(x=>x==='delivering').length,expired=states.filter(x=>x==='expired').length;
+  $('#received-summary-copy').textContent=wallet.account?`${ready} 张可查看 · ${pending} 张交付中 · ${expired} 张已结束。图片在本站打开；点击后才开始限时查看。`:'连接钱包后查看你收到的付费图片。';$('#refresh-delivery').disabled=!wallet.ready||!wallet.account;
+}
+function showReceived(){feed='purchased';profileAddress=null;$('#search').value='';document.querySelectorAll('[data-feed]').forEach(b=>b.classList.toggle('on',b.dataset.feed===feed));go('fan');render();$('#received-summary').scrollIntoView({block:'start',behavior:'smooth'});}
 function paidCard(id, who = identity(), variant = 'grid') {
   const c = content(id); if (!c || !eligible(c, who)) return '<div class="muted">这张图片未向当前身份开放</div>';
   const state = orderState(c, who), p = profile(c.creator), soldout = !!c.max && c.sold >= c.max;
   const label = state === 'creator' ? '预览我的图片' : state === 'expired' ? '展示已结束' : state === 'delivering' ? '付款已确认 · 密钥交付中' : state === 'ready' ? '已购买 · 点击查看' : state === 'viewing' ? '继续查看' : soldout ? '已售罄' : `🔒 ${money(c)} 解锁`;
   const disabled = state === 'delivering' || state === 'expired' || (state === 'locked' && soldout);
   const image = c.thumb && c.showPreview ? `<img src="${c.thumb}" alt="创作者允许的模糊预览" class="ph">` : '<div class="ph placeholder-art"></div>';
-  return `<article class="${variant === 'chat' ? 'paid-chat-card' : 'card content-card'}" data-product-id="${c.id}"><div class="thumb">${image}<div class="lock"><span class="lock-icon">${state === 'expired' ? '⌛' : '🔒'}</span><span>${c.burn ? `打开后展示 ${c.secs} 秒` : '购买后 24 小时内可看'}</span></div></div><div class="meta"><b>${esc(c.title)}</b><button class="creator-link" data-profile="${c.creator}">${p.av} ${esc(p.name)}</button><div class="muted">${c.scope === 'public' ? '公开作品' : '会话专属'} · 已售 ${c.sold || 0}${c.max ? '/' + c.max : ''}</div><button class="${disabled ? 'primary done' : 'primary'}" data-content-action="${state === 'locked' ? 'buy' : 'view'}" data-content-id="${c.id}" ${disabled ? 'disabled' : ''}>${label}</button>${who === c.creator ? `<button class="secondary" data-content-action="share" data-content-id="${c.id}">发送到聊天</button>` : ''}<small class="card-demo">${wallet.enabled ? (wallet.config?.chainId===31337?'本地链 · 免容器交付':(wallet.config?.mainnet?'X Layer 主网 · 自动交付':'X Layer 测试网 · 免容器交付')) : local.enabled ? '本地链 31337 · 测试付款 / 自动交付' : '本地演示 · 不扣款'}</small></div></article>`;
+  return `<article class="${variant === 'chat' ? 'paid-chat-card' : 'card content-card'}" data-product-id="${c.id}"><div class="thumb">${image}<div class="lock"><span class="lock-icon">${state === 'expired' ? '⌛' : '🔒'}</span><span>${c.burn ? `打开后展示 ${c.secs} 秒` : '购买后 24 小时内可看'}</span></div></div><div class="meta"><b>${esc(c.title)}</b><button class="creator-link" data-profile="${c.creator}">${p.av} ${esc(p.name)}</button><div class="muted">${c.scope === 'public' ? '公开作品' : '会话专属'} · 已售 ${c.sold || 0}${c.max ? '/' + c.max : ''}</div><button class="${disabled ? 'primary done' : 'primary'}" data-content-action="${state === 'locked' ? 'buy' : 'view'}" data-content-id="${c.id}" ${disabled ? 'disabled' : ''}>${label}</button>${deliveryNote(c,who,state)}${who === c.creator ? `<button class="secondary" data-content-action="share" data-content-id="${c.id}">发送到聊天</button>` : ''}<small class="card-demo">${wallet.enabled ? (wallet.config?.chainId===31337?'本地链 · 免容器交付':(wallet.config?.mainnet?'X Layer 主网 · 自动交付':'X Layer 测试网 · 免容器交付')) : local.enabled ? '本地链 31337 · 测试付款 / 自动交付' : '本地演示 · 不扣款'}</small></div></article>`;
 }
 function renderProfile() {
   const panel = $('#creator-profile'); panel.classList.toggle('hidden', !profileAddress);
@@ -58,7 +70,7 @@ function render() {
   $('#my-contents').innerHTML = contents().filter(c => c.creator === identity()).reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">你还没有发布内容。</p>';
   if (document.activeElement !== $('#profile-name')) $('#profile-name').value = profile(identity()).name;
   if (document.activeElement !== $('#profile-bio')) $('#profile-bio').value = profile(identity()).bio;
-  renderProfile();
+  renderProfile();renderReceived(items);
 }
 function renderTargets(selected) {
   const old = selected ?? $('#publish-target').value, convs = chat?.conversations() || [];
@@ -209,6 +221,8 @@ $('#try-demo').onclick = async () => {
     if(order(product.id))await view(product.id);else openPurchase(product.id);
   }catch(error){toast(error.message);}finally{button.disabled=false;}
 };
+$('#received-images').onclick=$('#delivery-view-purchases').onclick=showReceived;
+$('#refresh-delivery').onclick=async()=>{const button=$('#refresh-delivery');button.disabled=true;try{await walletRefresh();toast('交付状态已更新；未发起付款或发信。');}catch(e){toast(e.message);}finally{button.disabled=false;}};
 $('#open-chat').onclick=()=>go('chat');
 $('#about-preview').onclick=$('#preview-details').onclick=()=>$('#preview-dialog').showModal();
 // Local integration links are useful only on the developer's own machine.

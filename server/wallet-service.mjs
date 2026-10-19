@@ -152,7 +152,7 @@ export class WalletService {
   if(action==='open')return this.serial(async()=>{
    const {p,c}=await this.product(String(b.id),who),preview=p.creator===who,accessUntil=preview?Date.now()+86400000:Number(await this.vault.accessUntil(b.id,who))*1000;
    if(!preview&&(!accessUntil||accessUntil<=Date.now()||!await this.confirmed(b.id,who)))fail('订单尚未确认或已过期',403);
-   if(!preview&&this.state.orderIndex.orders[String(b.id)+':'+who]?.route==='tapesend'&&this.state.tapeJobs[this.jobRef(b.id,who)]?.status!=='sent')fail('TapeSend 正在自动交付，请稍后查看官方收件箱',409);
+   if(!preview&&this.state.orderIndex.orders[String(b.id)+':'+who]?.route==='tapesend'&&this.state.tapeJobs[this.jobRef(b.id,who)]?.status!=='sent')fail('TapeSend 正在自动交付，请稍后在本站刷新查看，无需重新付款',409);
    const ref=`${b.id}:${who}`;let viewUntil=null;if(p.burn){viewUntil=preview?Date.now()+p.secs*1000:this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();}}
    await this.flushBackup();const a=this.state.assets[c.blobHash],encryptedKey=publicEncrypt({key:createPublicKey({key:s.publicKey,format:'jwk'}),padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(a.key,'hex')).toString('base64');
    return {encryptedKey,hash:p.hash,mime:a.mime,uri:'/api/wallet/blob/'+p.hash.slice(2),accessUntil,viewUntil,preview};

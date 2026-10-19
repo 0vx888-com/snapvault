@@ -1,0 +1,130 @@
+{
+  "status": "PRODUCTION_LOGIN_READONLY_AND_PUBLIC_OLD_MESSAGE_PASS",
+  "checkedAt": "2026-10-19T08:43:39.169Z",
+  "userScope": "Production backend free acceptance and reading existing TapeSend messages only; no purchase, send, payment or DeWEB upload",
+  "url": "https://changing-pole-where-lotus.trycloudflare.com/formal/",
+  "productionAPI": "https://snapvault-api-production.up.railway.app",
+  "backendCheck": {
+    "status": "REAL_IPHONE_OKX_PRODUCTION_LOGIN_SCREENSHOT_VERIFIED",
+    "url": "https://changing-pole-where-lotus.trycloudflare.com/formal/",
+    "api": "https://snapvault-api-production.up.railway.app",
+    "exactCORS": true,
+    "unapprovedOriginDenied": true,
+    "unauthenticatedPrivateAPIDenied": true,
+    "realProductionConfigAndPublicState": true,
+    "paidCallsBlocked": 7,
+    "chainTransactions": 0,
+    "productionLogin": true,
+    "checkedAt": "2026-10-19T08:18:27.374Z",
+    "errors": [],
+    "requestPaths": [
+      {
+        "path": "/api/wallet/config",
+        "method": "GET"
+      },
+      {
+        "path": "/api/wallet/state",
+        "method": "POST"
+      }
+    ],
+    "productionLoginEvidence": {
+      "source": "User-supplied real iPhone OKX browser screenshot",
+      "path": "/Users/dingzhenzhenzhu/Downloads/截屏 2026-10-19 16.26.16.png",
+      "displayedAccount": "0xeb55b0f0a274a72b940c10078fb46b998b53b100",
+      "displayedBanner": "正式后端已登录",
+      "network": "X Layer 主网",
+      "scope": "Authenticated login and rendered real public state only; no payment or full chat/refund acceptance yet"
+    }
+  },
+  "existingInbox": {
+    "checkedAt": "2026-10-19T08:37:54.338Z",
+    "chainId": 196,
+    "receiver": {
+      "circuits": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+      "tokenId": "10",
+      "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+      "holder": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+      "opened": true,
+      "keyUsable": true,
+      "keyIndex": "0",
+      "publicKey": "0xdff9b18bd0ab6b3f4a0bec8b65a1c0e104215e64aa36865e93cbc28d06b85f31",
+      "version": "1",
+      "inboxCount": "1"
+    },
+    "oldSend": {
+      "hash": "0xd4fc1c3b39e2ac2d4ec87059d8e2d3d4f4cd87689e337722626b7681606f5f4d",
+      "status": 1,
+      "block": 73580677,
+      "recipientEndpointMatches": true,
+      "senderContainer": "0x5fC3d6B95Ea28832468C6c227351298015DB16bc",
+      "inboxIndex": "0",
+      "payloadBytes": 488
+    },
+    "senderCTransactionCount": 4,
+    "newTransactions": 0,
+    "decryptedOnPublicClient": true,
+    "publicClientEvidence": {
+      "url": "https://snapvault-api-production.up.railway.app/tapesend/",
+      "method": "Agent-observed native Chrome UI: encrypted placeholder changed to authenticated plaintext title/body preview after user-operated wallet confirmation",
+      "holder": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+      "receiver": "10.2.6 · X Layer",
+      "sender": "11.2.6 · X Layer",
+      "title": "SnapVault 已购图片",
+      "bodyPreview": "付款已确认。此链接含查看密钥，请勿转发：",
+      "screenshot": "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/tapesend-public-old-message-unlocked.png",
+      "fullViewingLinkOpenedOrExported": false,
+      "signaturesOrPrivateKeysCaptured": false,
+      "newMessageCount": 0,
+      "keyVersionStill": 1,
+      "senderCNonceStill": 4
+    }
+  },
+  "runtimeChange": {
+    "service": "snapvault-api",
+    "projectId": "b8f93089-284c-4212-86f8-8590bf8385a2",
+    "onlyChangedField": "SNAPVAULT_WALLET_CONFIG_JSON.origins",
+    "temporarilyAdded": "https://changing-pole-where-lotus.trycloudflare.com",
+    "originalOrigins": [
+      "https://10-2-6.tapekit.org",
+      "https://snapvault-api-production.up.railway.app"
+    ],
+    "requiresCleanupAfterAcceptance": true,
+    "planUpgrade": false,
+    "newResources": false,
+    "keysChanged": false,
+    "configurationReloadDeploymentId": "43f70b2a-51bf-4d9d-a63c-48a041b0aa17",
+    "healthRestored": true
+  },
+  "payments": 0,
+  "newPurchases": 0,
+  "newMessages": 0,
+  "dewebUploads": 0,
+  "okbSpent": "0",
+  "productionUserLoginVerified": true,
+  "publicClientOldMessageDecrypted": true,
+  "pending": [
+    "In-site delivery frontend changes under local regression testing",
+    "Production free chat actual send/receive not yet verified",
+    "Remove temporary origin after acceptance; no removal until candidate testing finishes"
+  ],
+  "secretHandling": "No user private keys, seed phrases, signatures, viewing-link fragments, session tokens or server env secrets in this record",
+  "authenticatedPhoneReadOnlyCheck": {
+    "receivedAt": "2026-10-19T08:32:08.918Z",
+    "source": "User-clicked diagnostics in authenticated phone page; no independent server-session observation",
+    "readOnly": true,
+    "checks": {
+      "state": {
+        "ok": true
+      },
+      "earnings": {
+        "ok": true
+      },
+      "refund-list": {
+        "ok": true
+      },
+      "delivery-route": {
+        "ok": true
+      }
+    }
+  }
+}
