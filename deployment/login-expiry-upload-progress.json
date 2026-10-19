@@ -1,0 +1,49 @@
+{
+  "identity": "0x816ce6a62c84e4a45270c139a67698881c6b66db7b7257ed83070c9fc6ff0f90",
+  "spentWei": "49880782494039",
+  "receipts": [
+    {
+      "hash": "0x97285037407ddec039fb0b540a286e9196619ee05917f1d26776c76fab43f885",
+      "index": 0,
+      "receiptBlock": 73647703,
+      "status": 1,
+      "gasLimit": "4122913",
+      "requestedGasLimit": "3221027",
+      "walletAdjustedGasLimit": true,
+      "maximumSignedFeeWei": "111318655122913",
+      "gasUsed": "2494039",
+      "gasPriceWei": "20000001",
+      "feeWei": "49880782494039",
+      "block": 73647703,
+      "type": 2,
+      "maxFeePerGasWei": "27000001",
+      "maxPriorityFeePerGasWei": "1",
+      "signedMaximumExceededApproval": true,
+      "actualFeeWithinApproval": true
+    }
+  ],
+  "attempts": {
+    "0": {
+      "nonce": "0xa3",
+      "gasLimit": "3221027",
+      "gasPrice": "21000000"
+    }
+  },
+  "broadcastHash": "0x97285037407ddec039fb0b540a286e9196619ee05917f1d26776c76fab43f885",
+  "proof": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "block": 73647857,
+      "walletSHA256": "0x8e9e7ace8de047a1e1ab363c37f7431be9749f3f0424156b13251e69aa04604e",
+      "otherFilesMetadataVerified": 20
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "block": 73647856,
+      "walletSHA256": "0x8e9e7ace8de047a1e1ab363c37f7431be9749f3f0424156b13251e69aa04604e",
+      "otherFilesMetadataVerified": 20
+    }
+  ],
+  "status": "CHAIN_AND_FILE_VERIFIED_ACTUAL_SPEND_WITHIN_CAP_SIGNED_CAP_CONTROL_FAILED",
+  "reconciliation": "Wallet converted request to EIP-1559 and increased gasLimit/maxFeePerGas. Signed theoretical maximum 0.000111318655122913 OKB exceeded approval; actual completed fee 0.000049880782494039 OKB remained below 0.000085. Earlier ceiling used effective gasPrice and was incorrect. Scope, nonce, calldata and successful file upload verified; no resend. Local receipt UI correctly did not mark unreviewed parameters as matching."
+}

@@ -1,5 +1,5 @@
 {
-  "status": "PREPARED_NOT_APPROVED_NOT_UPLOADED",
+  "status": "COMPLETED_NO_FURTHER_SPENDING",
   "checkedAt": "2026-10-19T12:47:22.562Z",
   "chainId": 196,
   "baseRelease": "3a2787f6043cdeb65f42585cb974dcfa21eaeb1e0da56b33e5188d543329d97a",
@@ -276,14 +276,14 @@
   "newTapeSend": 0,
   "paidWithdrawal": 0,
   "newPurchases": 0,
-  "uploadsExecuted": 0,
-  "spentOKB": "0",
+  "uploadsExecuted": 1,
+  "spentOKB": "0.000049880782494039",
   "spendingPaused": true,
   "fallbackChange": false,
   "entryPointChange": false,
   "publicationGate": "Fresh preflight must check current file bytes/hash; if candidate already present skip. Recheck price and exact unsigned transaction; stop above approved total. Verify readRange full bytes/hash on two RPCs after any later authorized upload. Browser gateway verification still required.",
   "proposedApprovalLimitOKB": "0.000085",
-  "approvalGranted": false,
+  "approvalGranted": true,
   "frozenCandidateTests": {
     "passed": 4,
     "failed": 0,
@@ -294,5 +294,20 @@
       "Real server and network failures remain failures",
       "Anonymous 401 retries at most once"
     ]
-  }
+  },
+  "approvedBudgetWei": "85000000000000",
+  "authorization": "User confirmed OKX phone login/refresh/private/group/old-order acceptance and authorized at most 0.000085 OKB for wallet.js only, wallet confirmation required.",
+  "scopedExceptionOnly": "Only the single exact wallet.js calldata in this plan; global SPENDING-PAUSED.json remains in place.",
+  "realPhoneAcceptance": {
+    "source": "User reported in this conversation",
+    "browser": "Real iPhone OKX in-app browser",
+    "login": true,
+    "refresh": true,
+    "privateImage": true,
+    "groupImage": true,
+    "oldOrder": true,
+    "independentlyObserved": false
+  },
+  "transactionHash": "0x97285037407ddec039fb0b540a286e9196619ee05917f1d26776c76fab43f885",
+  "signedFeeControl": "Wallet-adjusted EIP-1559 theoretical ceiling exceeded planned/approved maximum; actual completed spend did not exceed budget. No more transactions authorized."
 }

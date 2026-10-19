@@ -1,6 +1,6 @@
 {
-  "status": "PAUSED_AFTER_AUTHORIZED_DELTA_UPLOAD_COMPLETED",
-  "recordedAt": "2026-10-19T11:48:28.553934+00:00",
+  "status": "PAUSED_AFTER_APPROVED_LOGIN_EXPIRY_SINGLE_FILE_COMPLETED",
+  "recordedAt": "2026-10-19T13:37:38.645494+00:00",
   "scope": [
     "Any additional mainnet spending",
     "Additional uploads or deployments",
@@ -8,5 +8,10 @@
   ],
   "completedAuthorization": "0.005 OKB scoped frozen delta release; 38 transactions completed for 0.003285632924281638 OKB",
   "remainingBudgetIsNotNewTransactionAuthorization": true,
-  "resumeRequiresExplicitUserAuthorization": true
+  "resumeRequiresExplicitUserAuthorization": true,
+  "latestCompletedAuthorization": {
+    "scope": "wallet.js only, one transaction, max 0.000085 OKB",
+    "hash": "0x97285037407ddec039fb0b540a286e9196619ee05917f1d26776c76fab43f885",
+    "actualOKB": "0.000049880782494039"
+  }
 }
