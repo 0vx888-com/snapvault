@@ -1,5 +1,5 @@
 {
-  "status": "LOCAL_TESTED_REQUIRES_EXPLICIT_PRODUCTION_CONFIG_APPROVAL",
+  "status": "PRODUCTION_CONFIG_APPLIED_API_AND_DESKTOP_COMPAT_PAGE_PASS_REAL_PHONE_PENDING",
   "issue": "OKX in-app gateway compatibility origin rejected by production API",
   "gatewayBehavior": {
     "source": "https://10-2-6.tapekit.org/.tape/boot.js",
@@ -60,7 +60,71 @@
   "okbCost": "0",
   "railwayPlanUpgrade": false,
   "hostingBillingNote": "Existing Railway runtime usage continues under current account; no claim of zero cloud usage cost.",
-  "productionConfigChanged": false,
+  "productionConfigChanged": true,
   "newProductionSignatures": 0,
-  "scopeLimit": "Does not resolve expired-session frontend bug or guarantee all gateway/node availability; preserve the separately frozen single-wallet.js plan."
+  "scopeLimit": "Does not resolve expired-session frontend bug or guarantee all gateway/node availability; preserve the separately frozen single-wallet.js plan.",
+  "authorization": "User directed execution after review: 那你快干啊 弄一天了 能不能不要浪费我时间了",
+  "deploymentId": "ea6b22fa-2633-45eb-b444-12cf61b006e0",
+  "runtimeRestartSucceeded": true,
+  "liveChecks": [
+    {
+      "name": "health",
+      "status": 200,
+      "allowedOrigin": null,
+      "chainId": 196
+    },
+    {
+      "name": "primary-config",
+      "status": 200,
+      "allowedOrigin": "https://10-2-6.tapekit.org",
+      "chainId": 196,
+      "mainnet": true,
+      "tapeSendEnabled": true
+    },
+    {
+      "name": "compat-config",
+      "status": 200,
+      "allowedOrigin": "https://10-2-6-open.tapekit.org",
+      "chainId": 196,
+      "mainnet": true,
+      "tapeSendEnabled": true
+    },
+    {
+      "name": "compat-state",
+      "status": 200,
+      "allowedOrigin": "https://10-2-6-open.tapekit.org",
+      "chainId": 196
+    },
+    {
+      "name": "compat-login-preflight",
+      "status": 204,
+      "allowedOrigin": "https://10-2-6-open.tapekit.org"
+    },
+    {
+      "name": "compat-private-without-login",
+      "status": 401,
+      "allowedOrigin": "https://10-2-6-open.tapekit.org",
+      "error": "请连接钱包并签名登录"
+    },
+    {
+      "name": "unapproved-origin",
+      "status": 403,
+      "allowedOrigin": null,
+      "error": "网站来源不允许"
+    }
+  ],
+  "checkedAt": "2026-10-19T13:22:24.592Z",
+  "desktopCompatPage": {
+    "url": "https://10-2-6-open.tapekit.org/",
+    "mainnetShown": true,
+    "creatorDataVisible": true,
+    "serverErrorAbsent": true,
+    "newLoginSignatureRequested": false
+  },
+  "realPhoneAfterFix": "Pending user refresh; not independently observed",
+  "screenshots": [
+    "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/okx-compat-backend-deployed.png",
+    "/Users/dingzhenzhenzhu/Documents/ChatGPT/tapeout开放项目/reports/okx-compat-page-restored.png"
+  ],
+  "actualConfigChange": "Only appended exact compatibility origin to existing origins; all other config fields retained"
 }
