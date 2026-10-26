@@ -8,6 +8,7 @@ import {walletHttp} from './wallet-http.mjs';
 import {networkPolicy} from './network-policy.mjs';
 import {startWorkers} from './workers.mjs';
 import {s3BackupFromEnv} from './s3-backup.mjs';
+import {mainnetAppOrigins} from './wallet-origins.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const config=process.env.SNAPVAULT_WALLET_CONFIG_JSON?JSON.parse(process.env.SNAPVAULT_WALLET_CONFIG_JSON):JSON.parse(readFileSync(process.env.SNAPVAULT_WALLET_CONFIG||resolve(root,'config/wallet.json'),'utf8'));
 const policy=networkPolicy(config);
@@ -16,6 +17,7 @@ if(publicHost){if(!/^[a-z0-9.-]+$/.test(publicHost))throw Error('Invalid public 
 if(process.env.RAILWAY_ENVIRONMENT_ID){const mount=process.env.RAILWAY_VOLUME_MOUNT_PATH;if(!mount||!config.dataDir||(resolve(config.dataDir)!==resolve(mount)&&!resolve(config.dataDir).startsWith(resolve(mount)+'/')))throw Error('Persistent volume/dataDir required');}
 if(!Number.isSafeInteger(config.deploymentBlock)||config.deploymentBlock<=0)throw Error('Real deploymentBlock required');
 if(!Array.isArray(config.origins)||!config.origins.length||config.origins.some(o=>{try{const u=new URL(o);return u.protocol!=='https:'||u.origin!==o;}catch{return true;}}))throw Error('Exact HTTPS origins required; no wildcard CORS');
+if(policy.mainnet)config.origins=mainnetAppOrigins(config.origins);
 async function signingWallet(prefix){const encrypted=process.env[prefix+'_KEYSTORE_JSON']||(process.env[prefix+'_KEYSTORE']?readFileSync(process.env[prefix+'_KEYSTORE'],'utf8'):null),password=process.env[prefix+'_PASSWORD'];if(!encrypted||!password)throw Error(prefix+' encrypted keystore/password required');return Wallet.fromEncryptedJson(encrypted,password);}
 const provider=new JsonRpcProvider(config.rpc,config.chainId,{staticNetwork:true});if(Number(BigInt(await provider.send('eth_chainId',[])))!==config.chainId)throw Error('RPC chain mismatch');
 const operator=await signingWallet('RELAYER');if(config.operator&&operator.address.toLowerCase()!==config.operator.toLowerCase())throw Error('Configured operator mismatch');

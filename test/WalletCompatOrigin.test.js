@@ -20,6 +20,30 @@ describe('DeWEB 兼容域名精确授权（仅本地）',function(){
   for(const origin of ['https://evil.test','https://10-2-6-open.tapekit.org.evil.test','https://11-2-6-open.tapekit.org']){const r=await request(origin,'config');expect(r.status).to.equal(403);expect(r.headers.get('access-control-allow-origin')).to.equal(null);}
   expect((await request(compat,'profile',{name:'unauthenticated'})).status).to.equal(401);
  });
+ it('主网追加自定义域名并保留 tapekit；精确 CORS 和登录边界不变',async function(){
+  const {mainnetAppOrigins}=await import('../server/wallet-origins.mjs');
+  const custom=['https://www.snapvault.cc','https://snapvault.cc'];
+  const existing=[...service.origins,compat,'https://existing.example'];
+  service.origins=mainnetAppOrigins(existing);
+  expect(service.origins).to.deep.equal([...existing,...custom]);
+  expect(mainnetAppOrigins(service.origins)).to.deep.equal(service.origins);
+  for(const origin of [primary,compat,...custom]){
+   const pre=await fetch(base+'/api/wallet/login',{method:'OPTIONS',headers:{Origin:origin,'Access-Control-Request-Method':'POST','Access-Control-Request-Headers':'Content-Type, Authorization'}});
+   expect(pre.status).to.equal(204);expect(pre.headers.get('access-control-allow-origin')).to.equal(origin);
+   const config=await request(origin,'config');expect(config.status).to.equal(200);expect(config.headers.get('access-control-allow-origin')).to.equal(origin);
+   expect((await request(origin,'profile',{name:'unauthenticated'})).status).to.equal(401);
+  }
+  for(const origin of ['http://snapvault.cc','https://snapvault.cc.evil.test','https://www.snapvault.cc.evil.test','https://other.snapvault.cc']){
+   const config=await request(origin,'config');expect(config.status).to.equal(403);expect(config.headers.get('access-control-allow-origin')).to.equal(null);
+  }
+  const pair=crypto.generateKeyPairSync('rsa',{modulusLength:2048}),publicKey=pair.publicKey.export({format:'jwk'});
+  for(const origin of custom){
+   const q=await(await request(origin,'challenge',{address:signer.address,publicKey})).json();expect(q.message).to.include('URI: '+origin);
+   const session=await(await request(origin,'login',{nonce:q.nonce,signature:await signer.signMessage(q.message)})).json();expect(session.token).to.be.a('string');
+   expect((await request(origin,'profile',{name:'custom acceptance'},session.token)).status).to.equal(200);
+   expect((await request(primary,'profile',{name:'wrong origin'},session.token)).status).to.equal(401);
+  }
+ });
  it('兼容来源登录绑定自身域名；不能复用正式来源 nonce 或跨来源 token',async function(){
   service.origins.push(compat);const pair=crypto.generateKeyPairSync('rsa',{modulusLength:2048}),publicKey=pair.publicKey.export({format:'jwk'});
   const primaryChallenge=await(await request(primary,'challenge',{address:signer.address,publicKey})).json();const wrong=await request(compat,'login',{nonce:primaryChallenge.nonce,signature:await signer.signMessage(primaryChallenge.message)});expect(wrong.status).to.equal(401);
