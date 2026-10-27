@@ -1,0 +1,12 @@
+{
+  "scope": "This frozen DeWEB release only",
+  "approvedBudgetWei": "1200000000000000",
+  "confirmationRequired": "Human wallet final confirmation; no unattended signing/session keys",
+  "batchRequested": true,
+  "firstUploadHash": "0xabbef5ed2c54afbe369552bfed3181f989cc4a7ebce7216f8521c4a976d3e47c",
+  "actualFirstFeeWei": "107080845354042",
+  "remainingBudgetWei": "1092919154645958",
+  "globalSpendingPauseUnchanged": true,
+  "fullyPublished": false,
+  "guards": "3 pure fee/envelope tests PASS; 6 isolated page flow checks PASS"
+}

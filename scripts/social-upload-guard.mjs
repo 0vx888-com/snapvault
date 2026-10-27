@@ -1,0 +1,4 @@
+// Transaction envelope checks. No signer or network calls.
+export function maximumCost(tx){const price=BigInt(tx.maxFeePerGas??tx.gasPrice??0),gas=BigInt(tx.gasLimit??tx.gas??0),value=BigInt(tx.value??0);if(price<=0n||gas<=0n||value<0n)throw Error('无效的交易费用');return gas*price+value;}
+export function assertBudget({spent,limit,transaction}){const cost=maximumCost(transaction);if(BigInt(spent)+cost>BigInt(limit))throw Error('本笔最高费用会超过 0.0012 OKB 总预算，已停止');return cost;}
+export function assertEnvelope(tx,expected){if(BigInt(tx.chainId)!==196n||tx.from?.toLowerCase()!==expected.from.toLowerCase()||tx.to?.toLowerCase()!==expected.to.toLowerCase()||tx.data!==expected.data||BigInt(tx.value)!==0n||BigInt(tx.nonce)!==BigInt(expected.nonce))throw Error('钱包交易与本次批准内容不一致，已停止');if(BigInt(tx.gasLimit)>BigInt(expected.gas)||BigInt(tx.maxFeePerGas??tx.gasPrice)>BigInt(expected.gasPrice))throw Error('钱包实际最高费用高于本笔预览，已停止');return maximumCost(tx);}

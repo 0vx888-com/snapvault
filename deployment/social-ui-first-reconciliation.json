@@ -1,0 +1,52 @@
+{
+  "checkedAt": "2026-10-27T11:06:33.961Z",
+  "results": [
+    {
+      "rpc": "https://rpc.xlayer.tech",
+      "hash": "0xabbef5ed2c54afbe369552bfed3181f989cc4a7ebce7216f8521c4a976d3e47c",
+      "chainId": "196",
+      "from": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+      "to": "0xd6EFb7adCc9c83dC4924Ad56f6a8E4e969b9ADB6",
+      "nonce": 167,
+      "type": 2,
+      "gasLimit": "8844364",
+      "gasPrice": "20000001",
+      "maxFeePerGas": "27000001",
+      "signedMaximumOKB": "0.000238797836844364",
+      "receipt": {
+        "status": 1,
+        "block": 74330073,
+        "blockHash": "0x1fb5453f8f8768cc2c83e27dad97bdd9123cd6b685d2dd65006fd32a5d965758",
+        "gasUsed": "5354042",
+        "feeWei": "107080845354042",
+        "feeOKB": "0.000107080845354042"
+      },
+      "expectedPayloadMatches": true,
+      "expectedSenderMatches": true
+    },
+    {
+      "rpc": "https://xlayer.drpc.org",
+      "hash": "0xabbef5ed2c54afbe369552bfed3181f989cc4a7ebce7216f8521c4a976d3e47c",
+      "chainId": "196",
+      "from": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+      "to": "0xd6EFb7adCc9c83dC4924Ad56f6a8E4e969b9ADB6",
+      "nonce": 167,
+      "type": 2,
+      "gasLimit": "8844364",
+      "gasPrice": "20000001",
+      "maxFeePerGas": "27000001",
+      "signedMaximumOKB": "0.000238797836844364",
+      "receipt": {
+        "status": 1,
+        "block": 74330073,
+        "blockHash": "0x1fb5453f8f8768cc2c83e27dad97bdd9123cd6b685d2dd65006fd32a5d965758",
+        "gasUsed": "5354042",
+        "feeWei": "107080845354042",
+        "feeOKB": "0.000107080845354042"
+      },
+      "expectedPayloadMatches": true,
+      "expectedSenderMatches": true
+    }
+  ],
+  "continuationStopped": true
+}

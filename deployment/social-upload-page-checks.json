@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "checks": [
+    "loading does not request wallet connection or transaction",
+    "wallet connection is separate from transaction request",
+    "one explicit preview opens one mock transaction only",
+    "receipt advances plan without requesting next signature",
+    "reload never resubmits",
+    "ten zero-value calls require atomic batching and produce one mock wallet request with no sequential fallback"
+  ],
+  "realWallets": false,
+  "realTransactions": 0
+}
