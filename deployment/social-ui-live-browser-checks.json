@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-27T12:40:48.253Z",
+  "status": "PASS",
+  "originalURL": "https://10-2-6.tapekit.org/",
+  "compatibilityURL": "https://10-2-6-open.tapekit.org/",
+  "desktopViewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "mobileViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "checks": [
+    "Both gateways loaded the released social UI and real API data",
+    "Messages navigation and signed-out state",
+    "UID card opens from desktop account and mobile header",
+    "UID copy disabled without connected wallet",
+    "Publish page uses OKB and mainnet configuration",
+    "No visible demo identity or local preview copy",
+    "No horizontal document overflow at tested widths",
+    "No console errors on either gateway"
+  ],
+  "signedInProductionActions": false,
+  "extraTransactions": 0,
+  "screenshots": [
+    "screenshots/social-ui-live-desktop.png",
+    "screenshots/social-ui-live-mobile-publish.png",
+    "screenshots/social-ui-live-mobile-messages.png",
+    "screenshots/social-ui-live-mobile-uid.png"
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "verifiedAt": "2026-10-27T12:40:48.253Z",
+  "chainId": 196,
+  "registry": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "manifestHash": "0xcdd17b97082b32769fdf9a4bb0db54d2bfdfd3674838074606cc432239b8727b",
+  "url": "https://10-2-6.tapekit.org/",
+  "block": 74335640,
+  "independentRPCs": 2,
+  "rpcURLs": [
+    "https://rpc.xlayer.tech",
+    "https://xlayer.drpc.org"
+  ],
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 18074,
+      "sha256": "0xf4ebdcc63352d630e57e840bebbe3591473d21f421421d0d62ce1c547ce503a1"
+    },
+    {
+      "path": "style.css",
+      "bytes": 76665,
+      "sha256": "0x1c6b4e1df4b9ad325473658112adc4dec95d77f6924c7d0598af56155ac43d9d"
+    },
+    {
+      "path": "app.js",
+      "bytes": 44673,
+      "sha256": "0x99776ae307c0944bd46632336638e4093a4aa16e8201597cef95c01c4a4af3f1"
+    },
+    {
+      "path": "ui-icons.js",
+      "bytes": 754,
+      "sha256": "0xe926eee32ecbbd1d60e18b6d89b75c7a386b25ed1617c73c226599e91a29140a"
+    },
+    {
+      "path": "publish-ui.js",
+      "bytes": 3330,
+      "sha256": "0x0a453d4da8e9eb98bacb77d5819d0f108216b40906d297e0f38788bd090dfcba"
+    },
+    {
+      "path": "chat.js",
+      "bytes": 718,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+    },
+    {
+      "path": "chat-ui.js",
+      "bytes": 13585,
+      "sha256": "0x8edc31fe9d2d2f3858552603820a41957eff1b4dbc552db6412c159ff0394688"
+    },
+    {
+      "path": "store.js",
+      "bytes": 5353,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 983,
+      "sha256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c"
+    },
+    {
+      "path": "wallet.js",
+      "bytes": 10823,
+      "sha256": "0x8e9e7ace8de047a1e1ab363c37f7431be9749f3f0424156b13251e69aa04604e"
+    },
+    {
+      "path": "wallet-connect.js",
+      "bytes": 6062,
+      "sha256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54"
+    },
+    {
+      "path": "transaction-guard.js",
+      "bytes": 1162,
+      "sha256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268"
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "bytes": 613497,
+      "sha256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0"
+    },
+    {
+      "path": "vendor/okx-connect-LICENSE.md",
+      "bytes": 2855,
+      "sha256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c"
+    },
+    {
+      "path": "assets/wallet-icon.png",
+      "bytes": 4717,
+      "sha256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60"
+    },
+    {
+      "path": "wallet-chat.js",
+      "bytes": 13459,
+      "sha256": "0xcd1159bd3442f507a0516e772788c63463046c92327212a1b9625ecba324c6fd"
+    },
+    {
+      "path": "refunds.js",
+      "bytes": 2331,
+      "sha256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b"
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "bytes": 254372,
+      "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1"
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "bytes": 1075,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "bytes": 635,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "bytes": 512682,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+    },
+    {
+      "path": "assets/studio.svg",
+      "bytes": 864,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+    },
+    {
+      "path": "assets/sketch.svg",
+      "bytes": 807,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+    },
+    {
+      "path": "app-config.json",
+      "bytes": 157,
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f"
+    }
+  ],
+  "receipts": [
+    {
+      "index": 0,
+      "hash": "0xabbef5ed2c54afbe369552bfed3181f989cc4a7ebce7216f8521c4a976d3e47c",
+      "nonce": 167,
+      "block": 74330073,
+      "feeWei": "107080845354042",
+      "success": true,
+      "reconciledFromIndependentRPCs": 2,
+      "walletEnvelopeExceededPagePreview": true
+    },
+    {
+      "index": 1,
+      "hash": "0x1892ed8064b0a67fcf5ee91b0c2e7913de2458dc9c9927b50d3d823bb2a6ebdb",
+      "nonce": 168,
+      "block": 74334808,
+      "feeWei": "107329185366459",
+      "success": true,
+      "signedMaximumWei": "239136875856921"
+    },
+    {
+      "index": 2,
+      "hash": "0xfc5f69e811949349853ce51c55ead5b53bacc691d177e958379e078e08576af2",
+      "nonce": 169,
+      "block": 74334977,
+      "feeWei": "107329185366459",
+      "success": true,
+      "signedMaximumWei": "239136875856921"
+    },
+    {
+      "index": 3,
+      "hash": "0xc78c45300c422d19c7b5112342c1b0d8950704e056f4c4ae2355e9be7f0ec812",
+      "nonce": 170,
+      "block": 74335032,
+      "feeWei": "23496061174803",
+      "success": true,
+      "signedMaximumWei": "51657994913259"
+    },
+    {
+      "index": 4,
+      "hash": "0x12180223a358b56f1997e34c56a31533a3597e42032e1f9829c9f54abad7edde",
+      "nonce": 171,
+      "block": 74335092,
+      "feeWei": "9055740452787",
+      "success": true,
+      "signedMaximumWei": "19971792739696"
+    },
+    {
+      "index": 5,
+      "hash": "0x22b04a758d39ca0e5882ba637a02d07d26b70308d79b7fa27ba9fc616a677edb",
+      "nonce": 172,
+      "block": 74335164,
+      "feeWei": "20219561010978",
+      "success": true,
+      "signedMaximumWei": "44468380646977"
+    },
+    {
+      "index": 6,
+      "hash": "0xb4d35535b1a2f3feb2d1383580db232d73d7f4a31ee13691d07c19b0491d1e9b",
+      "nonce": 173,
+      "block": 74335386,
+      "feeWei": "64667943233397",
+      "success": true,
+      "signedMaximumWei": "142000862259291"
+    },
+    {
+      "index": 7,
+      "hash": "0xe6ee2b9418322cc0ee40fbc2b4a903931949cc5f08f64b24a7b73d33ca0566eb",
+      "nonce": 174,
+      "block": 74335435,
+      "feeWei": "61308943065447",
+      "success": true,
+      "signedMaximumWei": "136770287065566"
+    },
+    {
+      "index": 8,
+      "hash": "0x1e19c0c2b296b7323890b86c5e991f17329f60a39d6780a816a21a02e6442f52",
+      "nonce": 175,
+      "block": 74335484,
+      "feeWei": "107081805354090",
+      "success": true,
+      "signedMaximumWei": "238799996844444"
+    },
+    {
+      "index": 9,
+      "hash": "0xdfef78fd0948f857e9f3a1bb0ebcb07d960c53b8a49cb4597a64a03cad7dd392",
+      "nonce": 176,
+      "block": 74335548,
+      "feeWei": "92899664644983",
+      "success": true,
+      "signedMaximumWei": "207000961666702"
+    },
+    {
+      "index": 10,
+      "hash": "0xf0e87a56622e17d59adf2523e20ec4cedf020ec3cf2080e9d791a1096032869e",
+      "nonce": 177,
+      "block": 74335625,
+      "feeWei": "81321004066050",
+      "success": true,
+      "signedMaximumWei": "181339080716262"
+    }
+  ],
+  "spentWei": "781789939089495",
+  "spentOKB": "0.000781789939089495",
+  "approvedBudgetOKB": "0.0012",
+  "remainingBudgetOKB": "0.000418210060910505"
+}

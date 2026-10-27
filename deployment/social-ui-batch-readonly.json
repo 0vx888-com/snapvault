@@ -1,0 +1,20 @@
+[
+  {
+    "rpc": "https://rpc.xlayer.tech",
+    "block": 74333937,
+    "latest": 168,
+    "pending": 168,
+    "balanceOKB": "0.006617786656839366",
+    "delegation": null,
+    "codeHash": "0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "rpc": "https://xlayer.drpc.org",
+    "block": 74333938,
+    "latest": 168,
+    "pending": 168,
+    "balanceOKB": "0.006617786656839366",
+    "delegation": null,
+    "codeHash": "0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

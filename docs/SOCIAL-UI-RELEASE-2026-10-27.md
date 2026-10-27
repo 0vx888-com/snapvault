@@ -18,10 +18,16 @@ The reviewed build is frozen with `node scripts/freeze-release.mjs`. `node scrip
 
 Existing DeWEB site: https://10-2-6.tapekit.org/ . Compatibility site: https://10-2-6-open.tapekit.org/ . Existing container, contract and service are retained. No new container or contract is required for this UI update.
 
-Do not remove the spending pause, reuse an old approval or restart the retired publisher. The deployment remains pending a specific new budget approval and user wallet confirmation. Source synchronization to GitHub does not publish DeWEB or trigger paid actions.
+Do not remove the spending pause, reuse an old approval or restart the retired publisher. For this frozen release, the user explicitly approved a 0.0012 OKB maximum and individually confirmed all eleven upload transactions in the wallet. Source synchronization to GitHub does not publish DeWEB or trigger paid actions.
 
 ## Update workflow
 
 Group related edits into a checked commit, review a preview, then release that commit. Tiny local edits do not each require a GitHub push or on-chain upload. Keep the previous frozen bundle for recovery. A GitHub rollback by itself does not roll back the on-chain site; restoring changed DeWEB files is a separate wallet-signed upload that also needs gas.
 
-Final validation: the full `test-all.mjs` suite and `social-release.spec.mjs` passed. Wallet UI integration includes 23 checks against the isolated local chain, including signed login, cross-browser images, payment/decryption, group timers and withdrawal. See `deployment/social-ui-validation.json`. Mainnet signatures and uploads remain zero.
+Final validation: the full `test-all.mjs` suite and `social-release.spec.mjs` passed. Wallet UI integration includes 23 checks against the isolated local chain, including signed login, cross-browser images, payment/decryption, group timers and withdrawal. See `deployment/social-ui-validation.json`. The eleven mainnet uploads are now complete; each was confirmed by the user in their wallet. Actual fees total 0.000781789939089495 OKB, leaving 0.000418210060910505 OKB of the approved cap unused. Both independent RPCs verified every byte of all 24 frozen files and reconciled each successful receipt. See `deployment/social-ui-published-proof.json`.
+
+## Production verification
+
+Both the original and compatibility DeWEB sites loaded the new UI and real service data after upload. Desktop (1440 × 900) and mobile (390 × 844) checks covered messages, UID/account cards and publishing. Navigation and signed-out states worked, no horizontal overflow or demo identity/copy was observed, and neither site reported browser console errors. Screenshots are saved under `screenshots/social-ui-live-*`. No production chat, purchase, refund or publishing action was submitted during these read-only checks.
+
+The initial stalled batch request was retired after the user chose sequential uploads and explicitly authorized disconnecting/reconnecting only the local publishing site. There was no batch broadcast; fees in the proof cover exactly the eleven individually confirmed transactions. The global spending pause remains unchanged.

@@ -1,12 +1,20 @@
 {
   "scope": "This frozen DeWEB release only",
+  "manifestHash": "0xcdd17b97082b32769fdf9a4bb0db54d2bfdfd3674838074606cc432239b8727b",
   "approvedBudgetWei": "1200000000000000",
-  "confirmationRequired": "Human wallet final confirmation; no unattended signing/session keys",
-  "batchRequested": true,
-  "firstUploadHash": "0xabbef5ed2c54afbe369552bfed3181f989cc4a7ebce7216f8521c4a976d3e47c",
-  "actualFirstFeeWei": "107080845354042",
-  "remainingBudgetWei": "1092919154645958",
+  "confirmationRequired": "Human wallet final confirmation; all eleven uploads confirmed individually",
+  "executionMode": "sequential",
+  "batchRetiredByUser": true,
+  "batchBroadcastVerified": false,
+  "siteReconnectExplicitlyApproved": true,
   "globalSpendingPauseUnchanged": true,
-  "fullyPublished": false,
-  "guards": "3 pure fee/envelope tests PASS; 6 isolated page flow checks PASS"
+  "fullyPublished": true,
+  "state": "DEPLOYED_AND_VERIFIED",
+  "receipts": 11,
+  "spentWei": "781789939089495",
+  "spentOKB": "0.000781789939089495",
+  "remainingBudgetOKB": "0.000418210060910505",
+  "fileVerification": "24 files, exact bytes, two independent RPCs",
+  "browserChecks": "social-ui-live-browser-checks.json",
+  "proof": "social-ui-published-proof.json"
 }

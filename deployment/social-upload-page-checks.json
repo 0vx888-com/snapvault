@@ -6,7 +6,7 @@
     "one explicit preview opens one mock transaction only",
     "receipt advances plan without requesting next signature",
     "reload never resubmits",
-    "ten zero-value calls require atomic batching and produce one mock wallet request with no sequential fallback"
+    "retired batch controls remain hidden and never request wallet calls"
   ],
   "realWallets": false,
   "realTransactions": 0
