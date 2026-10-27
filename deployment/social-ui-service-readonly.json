@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-27",
+  "api": "https://snapvault-api-production.up.railway.app",
+  "chainId": 196,
+  "mainnet": true,
+  "vault": "0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f",
+  "confirmations": 6,
+  "configReadable": true,
+  "anonymousStateReadable": true,
+  "originalSiteOriginAllowed": true,
+  "publicProfileCount": 3,
+  "publicContentCount": 1,
+  "authenticatedActionsTestedAgainstProduction": false,
+  "productionTransactions": 0
+}

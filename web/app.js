@@ -1,3 +1,5 @@
+import {icon} from './ui-icons.js';
+import {initPublishComposer,syncPublishComposer} from './publish-ui.js';
 import {walletError} from './transaction-guard.js';
 import {initRefunds} from './refunds.js';
 import {wallet,connect,disconnect,initWallet,refresh as walletRefresh,publishWallet,purchaseWallet,openWallet,walletAction,setupNetwork,withdrawWallet,apiURL,SERVER_UNAVAILABLE} from './wallet.js';
@@ -19,16 +21,26 @@ function go(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== page));
   if (page === 'creator') renderTargets();
   document.body.dataset.page=page;
+  const route=new URL(location.href);route.searchParams.set('view',({fan:'discover',chat:'messages',creator:'publish'})[page]);history.replaceState(null,'',route.pathname+route.search+route.hash);
+  $('#workspace-title').textContent=({fan:'发现',chat:'消息',creator:'发布'})[page];
+  if(page==='chat')window.dispatchEvent(new Event('snapvault:chat-view'));
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===page?'page':'false'));
   window.scrollTo({top:0,behavior:'instant'});
 }
 function creatorPhoto(address){return !wallet.enabled && address===CREATOR?'photo-travel':!wallet.enabled && address==='0xFaN3000000000000000000000000000000000003'?'photo-maker':'photo-sea';}
-function creatorCard(p) {
-  const count = contents().filter(c => c.creator === p.address && c.scope === 'public').length, picture=creatorPhoto(p.address);
-  return `<article class="card creator-card"><div class="creator-cover photo-tile ${picture}" role="img" aria-label="${wallet.enabled?'示例风景封面':'AI 生成的创作者示例封面'}"><span class="creator-tag">${esc(p.tag || '日常分享')}</span><span class="cover-label">${wallet.enabled?'示例封面':'界面示例'}</span></div><div class="creator-info"><div class="creator-identity"><span class="creator-avatar ${wallet.enabled?'':`photo-tile ${picture}`}">${wallet.enabled?p.av:''}</span><div><h3>${esc(p.name)}</h3><span class="creator-uid">${uidOf(p.address)}</span></div><span class="creator-flower" aria-hidden="true">✦</span></div><p>${esc(p.bio || '关于生活，关于我。')}</p><div class="creator-meta"><span>${count} 条公开作品</span><span>${wallet.enabled?'站内资料':'演示创作者'}</span></div><div class="creator-actions"><button class="secondary" data-profile="${p.address}">看看 TA 的日常</button>${identity() === p.address ? '<span class="pill">这是我</span>' : `<button class="${follows().includes(p.address) ? 'secondary' : 'primary'}" data-follow="${p.address}">${follows().includes(p.address) ? '已关注' : '＋ 关注'}</button>`}</div></div></article>`;
+function creatorCard(p,index) {
+ const mine=identity()===p.address,count=contents().filter(c=>c.creator===p.address&&c.scope==='public').length,picture=creatorPhoto(p.address),following=follows().includes(p.address),friend=Friends.isFriend(identity(),p.address);
+ return `<article class="creator-card"><div class="frame-caption"><span>${esc(p.tag||'日常分享')}</span><small>${wallet.enabled?'创作者':'演示资料'}</small></div><button class="creator-cover ${wallet.enabled?'photo-empty':`photo-tile ${picture}`}" data-profile="${p.address}" aria-label="打开 ${esc(p.name)} 的主页">${wallet.enabled?`<span class="photo-initial">${esc(p.name.slice(0,1))}</span>`:''}<span class="cover-visit">查看主页 <span aria-hidden="true">↗</span></span></button><div class="creator-info"><div class="creator-identity"><span class="creator-avatar ${wallet.enabled?'':`photo-tile ${picture}`}">${wallet.enabled?esc(p.name.slice(0,1)):''}</span><div><h3>${esc(p.name)}</h3><button class="creator-uid" data-copy-uid="${uidOf(p.address)}" aria-label="复制 ${esc(p.name)} 的 UID">UID ${uidOf(p.address)} <span aria-hidden="true">⧉</span></button></div><div class="creator-actions">${mine?'<span class="pill">我自己</span>':`<button class="${following?'secondary':'primary'}" data-follow="${p.address}">${following?'已关注':'关注 ＋'}</button>`}</div></div><p>${esc(p.bio||'还没有填写简介。')}</p><div class="creator-bottom"><span>${count} 条公开作品</span>${mine?'<button class="text-button" data-edit-profile>编辑资料 ↗</button>':`<button class="text-button" data-message="${p.address}">${friend?'发消息':'添加好友'} <span aria-hidden="true">↗</span></button>`}</div></div></article>`;
 }
-function renderStories(){
- const list=profiles().slice(0,8);
- $('#creator-stories').innerHTML=`<button class="story-item story-create" data-go-create><span class="story-avatar">＋</span><b>开始分享</b><small>你的创作空间</small></button>`+list.map(p=>`<button class="story-item" data-profile="${p.address}"><span class="story-avatar ${wallet.enabled?'':`photo-tile ${creatorPhoto(p.address)}`}">${wallet.enabled?esc(p.av):''}</span><b>${esc(p.name)}</b><small>${esc(p.tag||'看看新日常')}</small></button>`).join('')+`<div class="story-greeting"><span>YOUR PEOPLE.<br>YOUR MOMENTS.</span><i>✳</i></div>`;
+function renderAccount(){
+ const who=identity(),uid=who?uidOf(who):'未连接钱包',p=who?profile(who):{name:'未登录'};
+ for(const id of ['account-header-uid','mobile-account-uid','account-uid'])$('#'+id).textContent=uid;
+ $('#account-wallet').textContent=wallet.enabled?(wallet.token?'退出钱包登录':'连接钱包'):'钱包接入说明';
+ $('#demo-identity').classList.toggle('hidden',wallet.enabled);
+ $('#account-orders').classList.toggle('hidden',!wallet.enabled);$('#account-network').classList.toggle('hidden',!wallet.enabled);$('#account-network').disabled=!wallet.ready;$('#account-network').textContent=wallet.config?.mainnet?'切换 X Layer 主网':'切换网络';
+ $('#rail-account-name').textContent=p.name;$('#account-title').textContent=p.name;
+ $('#account-address').textContent=who||'连接钱包后显示地址与 UID';
+ document.querySelectorAll('[data-copy-self]').forEach(b=>b.disabled=!who);
 }
 
 function deliveryNote(c,who,state){
@@ -42,35 +54,45 @@ function renderReceived(items){
   const states=items.map(c=>orderState(c)),ready=states.filter(x=>x==='ready'||x==='viewing').length,pending=states.filter(x=>x==='delivering').length,expired=states.filter(x=>x==='expired').length;
   $('#received-summary-copy').textContent=wallet.account?`${ready} 张可查看 · ${pending} 张交付中 · ${expired} 张已结束。图片在本站打开；点击后才开始限时查看。`:'连接钱包后查看你收到的付费图片。';$('#refresh-delivery').disabled=!wallet.ready||!wallet.account;
 }
-function showReceived(){feed='purchased';profileAddress=null;$('#search').value='';document.querySelectorAll('[data-feed]').forEach(b=>b.classList.toggle('on',b.dataset.feed===feed));go('fan');render();$('#received-summary').scrollIntoView({block:'start',behavior:'smooth'});}
+function showReceived(){feed='purchased';profileAddress=null;$('#search').value='';document.querySelectorAll('[data-feed]').forEach(b=>b.classList.toggle('on',b.dataset.feed===feed));go('fan');render();if(!$('#received-summary').classList.contains('hidden'))$('#received-summary').scrollIntoView({block:'start',behavior:'smooth'});}
 function paidCard(id, who = identity(), variant = 'grid') {
-  const c = content(id); if (!c || !eligible(c, who)) return '<div class="muted">这张图片未向当前身份开放</div>';
-  const state = orderState(c, who), p = profile(c.creator), soldout = !!c.max && c.sold >= c.max;
-  const label = state === 'creator' ? '预览我的图片' : state === 'expired' ? '展示已结束' : state === 'delivering' ? '付款已确认 · 密钥交付中' : state === 'ready' ? '已购买 · 点击查看' : state === 'viewing' ? '继续查看' : soldout ? '已售罄' : `🔒 ${money(c)} 解锁`;
-  const disabled = state === 'delivering' || state === 'expired' || (state === 'locked' && soldout);
-  const image = c.thumb && c.showPreview ? `<img src="${c.thumb}" alt="创作者允许的模糊预览" class="ph">` : '<div class="ph placeholder-art"></div>';
-  return `<article class="${variant === 'chat' ? 'paid-chat-card' : 'card content-card'}" data-product-id="${c.id}"><div class="thumb">${image}<div class="lock"><span class="lock-icon">${state === 'expired' ? '⌛' : '🔒'}</span><span>${c.burn ? `打开后展示 ${c.secs} 秒` : '购买后 24 小时内可看'}</span></div></div><div class="meta"><b>${esc(c.title)}</b><button class="creator-link" data-profile="${c.creator}">${p.av} ${esc(p.name)}</button><div class="muted">${c.scope === 'public' ? '公开作品' : '会话专属'} · 已售 ${c.sold || 0}${c.max ? '/' + c.max : ''}</div><button class="${disabled ? 'primary done' : 'primary'}" data-content-action="${state === 'locked' ? 'buy' : 'view'}" data-content-id="${c.id}" ${disabled ? 'disabled' : ''}>${label}</button>${deliveryNote(c,who,state)}${who === c.creator ? `<button class="secondary" data-content-action="share" data-content-id="${c.id}">发送到聊天</button>` : ''}<small class="card-demo">${wallet.enabled ? (wallet.config?.chainId===31337?'本地链 · 免容器交付':(wallet.config?.mainnet?'X Layer 主网 · 自动交付':'X Layer 测试网 · 免容器交付')) : local.enabled ? '本地链 31337 · 测试付款 / 自动交付' : '本地演示 · 不扣款'}</small></div></article>`;
+ const c=content(id);if(!c||!eligible(c,who))return '<div class="muted">这张图片未向当前身份开放</div>';
+ const state=orderState(c,who),p=profile(c.creator),soldout=!!c.max&&c.sold>=c.max,ended=state==='expired';
+ const disabled=ended||state==='delivering'||(state==='locked'&&soldout);
+ const status=ended?'已结束':state==='creator'?'我的作品':state==='delivering'?'交付中':state==='ready'||state==='viewing'?'已购买':soldout?'已售罄':'待解锁';
+ const action=ended?'查看已结束':state==='creator'?'预览图片':state==='delivering'?'等待交付':state==='ready'?'打开图片':state==='viewing'?'继续查看':soldout?'已售罄':'解锁图片';
+ const icons={lock:'<rect x="6" y="10" width="12" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2"/>',expired:'<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2M5.8 5.8l12.4 12.4"/>',image:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8" cy="9" r="1.5"/><path d="m4 17 5-5 4 4 3-3 5 5"/>'};
+ const icon=ended?icons.expired:state==='locked'?icons.lock:icons.image;
+ const english=ended?'View ended':state==='delivering'?'Preparing your photo':state==='creator'?'Private photo':state==='ready'||state==='viewing'?'Ready to view':soldout?'Sold out':'Private photo';
+ const hint=ended?'本次查看权限已结束':state==='delivering'?'付款已确认，正在交付':c.burn?`首次打开后可看 ${c.secs} 秒`:'购买后 24 小时内可查看';
+ const preview=!ended&&c.thumb&&c.showPreview?`<img src="${c.thumb}" alt="创作者允许的模糊预览" class="ph">`:'<div class="ph placeholder-art"></div>';
+ const avatar=!wallet.enabled&&[CREATOR,'0xFaN3000000000000000000000000000000000003'].includes(c.creator)?`photo-tile ${creatorPhoto(c.creator)}`:'';
+ const footnote=wallet.enabled?(wallet.config?.mainnet?'X Layer 主网':wallet.config?.chainId===31337?'本地链 · 测试订单':'测试网订单'):local.enabled?'本地链 · 测试订单':'本地演示 · 不扣款';
+ return `<article class="${variant==='chat'?'paid-chat-card':'card content-card'} media-card media-${state}" data-product-id="${c.id}" data-media-state="${state}"><div class="thumb"><div class="media-cover-top"><span>${ended?'VIEW ENDED':'PRIVATE PHOTO'}</span><span>${c.burn?c.secs+'s':'24h'}</span></div>${preview}<div class="lock"><span class="media-symbol"><svg viewBox="0 0 24 24" aria-hidden="true">${icon}</svg></span><strong>${english}</strong><span>${hint}</span></div></div><div class="meta"><div class="media-author-row"><button class="creator-link" data-profile="${c.creator}"><span class="media-avatar ${avatar}">${avatar?'':esc(p.name.slice(0,1))}</span><span>${esc(p.name)}</span></button><span class="media-state">${status}</span></div><b>${esc(c.title)}</b><div class="media-context">${c.scope==='public'?'公开作品':'会话专属'}<span>·</span>已售 ${c.sold||0}${c.max?'/'+c.max:''}</div><div class="media-card-footer"><span class="media-price">${state==='creator'?'作者预览':state==='locked'?money(c):'已购买'}</span><button class="media-action ${disabled?'done':''}" data-content-action="${state==='locked'?'buy':'view'}" data-content-id="${c.id}" ${disabled?'disabled':''}>${action}${disabled?'':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>'}</button></div>${deliveryNote(c,who,state)}${who===c.creator?`<button class="media-share" data-content-action="share" data-content-id="${c.id}">发送到聊天 <span aria-hidden="true">↗</span></button>`:''}<small class="card-demo">${footnote}</small></div></article>`;
 }
+
 function renderProfile() {
   const panel = $('#creator-profile'); panel.classList.toggle('hidden', !profileAddress);
+  $('#fan').classList.toggle('profile-open',!!profileAddress);
   if (!profileAddress) return;
   const p = profile(profileAddress), mine = profileAddress === identity();
-  panel.innerHTML = `<button class="secondary" data-close-profile>← 返回广场</button><div class="profile-header"><div class="profile-avatar">${p.av}</div><div><h2>${esc(p.name)}</h2><div class="muted">${uidOf(profileAddress)}</div><p>${esc(p.bio)}</p></div><div class="profile-actions">${mine ? '<button class="secondary" data-go-create>编辑我的资料</button>' : `<button class="primary" data-follow="${profileAddress}">${follows().includes(profileAddress) ? '已关注' : '＋ 关注'}</button><button class="secondary" data-message="${profileAddress}">申请 / 打开私聊</button>`}</div></div><h3>公开作品</h3><div class="grid">${contents().filter(c => c.creator === profileAddress && c.scope === 'public').reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">还没有发布公开作品。</p>'}</div>`;
+  panel.innerHTML = `<button class="secondary" data-close-profile>← 返回广场</button><div class="profile-header"><div class="profile-avatar ${!wallet.enabled&&[CREATOR,'0xFaN3000000000000000000000000000000000003'].includes(profileAddress)?'photo-tile '+creatorPhoto(profileAddress):''}">${!wallet.enabled&&[CREATOR,'0xFaN3000000000000000000000000000000000003'].includes(profileAddress)?'':esc(p.name.slice(0,1))}</div><div><h2>${esc(p.name)}</h2><button class="peer-uid" data-copy-uid="${uidOf(profileAddress)}">UID ${uidOf(profileAddress)} ⧉</button><p>${esc(p.bio)}</p></div><div class="profile-actions">${mine ? '<button class="secondary" data-edit-profile>编辑我的资料</button>' : `<button class="primary" data-follow="${profileAddress}">${follows().includes(profileAddress) ? '已关注' : '关注 ＋'}</button><button class="secondary" data-message="${profileAddress}">申请 / 打开私聊</button>`}</div></div><h3>公开作品</h3><div class="grid">${contents().filter(c => c.creator === profileAddress && c.scope === 'public').reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">还没有发布公开作品。</p>'}</div>`;
 }
 function render() {
-  renderStories();
-  $('#identity').innerHTML = Object.keys(PEOPLE).map(a => `<option value="${a}">${profile(a).av} ${esc(profile(a).name)}</option>`).join(''); $('#identity').value = identity();
+  renderAccount();
+  if (!$('#file').files.length) resetUploadPreview();
+  $('#identity').innerHTML = Object.keys(PEOPLE).map(a => `<option value="${a}">${esc(profile(a).name)}</option>`).join(''); $('#identity').value = identity();
   const query = $('#search').value.trim().toLowerCase();
   const creators = profiles().filter(p => `${p.name} ${uidOf(p.address)} ${p.bio} ${p.tag||''}`.toLowerCase().includes(query) && (feed !== 'following' || follows().includes(p.address)));
   const items = contents().filter(c => eligible(c) && (feed === 'purchased' ? !!order(c.id) : c.scope === 'public' && (feed !== 'following' || follows().includes(c.creator))))
     .filter(c => `${c.title} ${profile(c.creator).name} ${uidOf(c.creator)}`.toLowerCase().includes(query)).reverse();
-  $('#creators-grid').innerHTML = ['creators', 'following'].includes(feed) ? creators.map(creatorCard).join('') : '';
-  $('#grid').innerHTML = feed === 'creators' ? '' : items.map(c => paidCard(c.id)).join('') || `<p class="empty-state">${feed === 'following' ? '关注创作者后，这里会出现他们的公开新作。' : feed === 'purchased' ? '还没有购买记录。可以在广场或私聊里体验解锁。' : '还没有公开作品，先去创作中心发布一张吧。'}</p>`;
+  $('#creators-grid').innerHTML = ['creators', 'following'].includes(feed) ? creators.map(creatorCard).join('')||(feed==='creators'?'<div class="empty-state"><b>没有找到匹配的创作者</b><p>试试昵称或 UID。</p><button class="secondary" data-reset-search>清空搜索</button></div>':'') : '';
+  $('#grid').innerHTML = feed === 'creators' ? '' : items.map(c => paidCard(c.id)).join('') || `<p class="empty-state">${feed === 'following' ? '关注创作者后，这里会出现他们的公开新作。' : feed === 'purchased' ? '还没有购买记录。可以在广场或私聊里体验解锁。' : '还没有公开作品，点「发布」分享第一张图片吧。'}</p>`;
   $('#discovery-summary').textContent = feed === 'creators' ? `${creators.length} 位创作者 · ${wallet.enabled?'站内资料':'当前展示演示资料'}` : feed === 'following' ? `已关注 ${follows().length} 位创作者` : feed === 'purchased' ? `${items.length} 笔${activeNetworkName()}购买` : `${items.length} 条公开作品 · 最新发布`;
   $('#my-contents').innerHTML = contents().filter(c => c.creator === identity()).reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">你还没有发布内容。</p>';
-  if (document.activeElement !== $('#profile-name')) $('#profile-name').value = profile(identity()).name;
-  if (document.activeElement !== $('#profile-bio')) $('#profile-bio').value = profile(identity()).bio;
-  renderProfile();renderReceived(items);
+  if (!$('#profile-edit-dialog').open && document.activeElement !== $('#profile-name')) $('#profile-name').value = profile(identity()).name;
+  if (!$('#profile-edit-dialog').open && document.activeElement !== $('#profile-bio')) $('#profile-bio').value = profile(identity()).bio;
+  renderProfile();renderReceived(items);syncPublishComposer();
 }
 function renderTargets(selected) {
   const old = selected ?? $('#publish-target').value, convs = chat?.conversations() || [];
@@ -78,7 +100,8 @@ function renderTargets(selected) {
   if ([...$('#publish-target').options].some(o => o.value === old)) $('#publish-target').value = old;
   const conv = convs.find(c => c.id === $('#publish-target').value);
   $('#compose-context').classList.toggle('hidden', !conv);
-  $('#compose-context').textContent = conv ? `正在给「${conv.label}」发布付费图片 · 仅发布时的会话成员可购买，不会上广场` : '';
+  $('#compose-context').textContent = conv ? `仅发送到「${conv.label}」，不会出现在广场。` : '';
+  syncPublishComposer();
 }
 async function publish(e) {
   e.preventDefault(); const submit = $('#form button[type="submit"]'); submit.disabled = true; $('#log').textContent = '';
@@ -126,7 +149,7 @@ async function openPurchase(id) {
   if (c.creator === identity() || order(id)) return view(id).catch(e => toast(e.message));
   if(wallet.enabled){try{const route=await walletAction('delivery-route');$('#purchase-route').textContent=route.available?'本单付款后由平台 C 自动通过官方 TapeSend 发送查看链接。':route.reason;}catch(e){return toast(e.message);}}else $('#purchase-route').textContent='本地演示交付。';
   pendingPurchase = { id: c.id, buyer: identity() }; $('#purchase-error').textContent = '';
-  $('#purchase-detail').innerHTML = `<h3>${esc(c.title)}</h3><p>创作者：${esc(profile(c.creator).name)}</p><strong class="purchase-price">${money(c)}</strong><p>${c.burn ? `首次打开后展示 ${c.secs} 秒` : '购买后 24 小时内重复查看'}，请在付款后 24 小时内打开。</p><p class="muted">平台费 ${wallet.enabled?((wallet.config?.feeBps??1000)/100)+'%':'10%（演示）'}。买家：${esc(profile(identity()).name)}</p>`;
+  $('#purchase-detail').innerHTML = `<div class="purchase-heading"><span class="purchase-photo-icon">${icon('photo')}</span><div><h3>${esc(c.title)}</h3><button class="creator-link" data-profile="${c.creator}">${esc(profile(c.creator).name)}</button></div></div><strong class="purchase-price">${money(c)}</strong><dl class="purchase-facts"><div><dt>查看方式</dt><dd>${c.burn?c.secs+' 秒限时查看':'24 小时内可重复查看'}</dd></div><div><dt>打开期限</dt><dd>付款后 24 小时内</dd></div><div><dt>发布范围</dt><dd>${c.scope==='public'?'广场作品':'会话专属'}</dd></div></dl><p class="purchase-cost-note">平台费 ${wallet.enabled?((wallet.config?.feeBps??1000)/100)+'%':'10%（演示）'} · 买家 ${esc(profile(identity()).name)}</p>`;
   $('#confirm-purchase').disabled = false; $('#confirm-purchase').textContent = wallet.enabled?(wallet.config?.mainnet?'钱包确认付款（真实 OKB）':'钱包确认测试付款'):local.enabled?'确认本地测试付款':'模拟付款并解锁'; $('#purchase-dialog').showModal();
 }
 async function confirmPurchase() {
@@ -178,16 +201,20 @@ async function view(id) {
 function openShare(id) {
   const c = content(id); if (!c || c.creator !== identity()) return toast('只能发送自己的作品');
   const convs = chat.conversations().filter(conv => c.scope === 'public' || conv.id === c.convId); $('#share-error').textContent = '';
-  $('#share-list').innerHTML = convs.map(conv => `<button class="secondary" data-share-content="${c.id}" data-share-conv="${conv.id}">${conv.type === 'group' ? '👥' : '💬'} ${esc(conv.label)}</button>`).join('') || '<p>还没有可发送的会话，先去消息中添加好友或创建群聊。</p>'; $('#share-dialog').showModal();
+  $('#share-list').innerHTML = convs.map(conv => `<button class="secondary" data-share-content="${c.id}" data-share-conv="${conv.id}"><span class="share-conversation-icon">${icon(conv.type==='group'?'people':'photo')}</span><span>${esc(conv.label)}<small>${conv.type==='group'?'群聊':'私聊'}</small></span>${icon('arrow')}</button>`).join('') || '<p>还没有可发送的会话，先去消息中添加好友或创建群聊。</p>'; $('#share-dialog').showModal();
 }
 document.addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b) return;
   try {
-    if (b.dataset.tab) go(b.dataset.tab);
+    if (b.hasAttribute('data-reset-search')) {$('#search').value='';render();}
+    else if (b.hasAttribute('data-go-friends')) openFriends();
+    else if (b.hasAttribute('data-demo-sample')) $('#try-demo').click();
+    else if (b.dataset.tab) go(b.dataset.tab);
+    else if (b.hasAttribute('data-edit-profile')) openProfileEditor();
     else if (b.hasAttribute('data-go-create')) { go('creator'); $('#form').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     else if (b.dataset.feed) { feed = b.dataset.feed; profileAddress = null; document.querySelectorAll('[data-feed]').forEach(x => x.classList.toggle('on', x === b)); render(); }
-    else if (b.dataset.profile) { profileAddress = b.dataset.profile; go('fan'); render(); $('#creator-profile').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-    else if (b.hasAttribute('data-close-profile')) { profileAddress = null; render(); }
+    else if (b.dataset.profile) { $('#purchase-dialog').close(); profileAddress = b.dataset.profile; go('fan'); render(); $('#creator-profile').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    else if (b.hasAttribute('data-close-profile')) { profileAddress = null; render();window.scrollTo({top:0,behavior:'instant'}); }
     else if (b.dataset.follow) toggleFollow(b.dataset.follow);
     else if (b.dataset.message) {
       const address = b.dataset.message;
@@ -227,28 +254,61 @@ $('#open-chat').onclick=()=>go('chat');
 $('#about-preview').onclick=$('#preview-details').onclick=()=>$('#preview-dialog').showModal();
 // Local integration links are useful only on the developer's own machine.
 if(!['localhost','127.0.0.1','[::1]'].includes(location.hostname))document.querySelector('.dev-tools')?.remove();
+
+const openAccount=()=>{$('#account-copy-status').textContent='';renderAccount();if(!$('#account-dialog').open)$('#account-dialog').showModal();};
+$('#my-account').onclick=openAccount;
+document.querySelectorAll('[data-open-account]').forEach(b=>b.onclick=openAccount);
+async function copyUID(value){
+ let copied=false;
+ try{await navigator.clipboard.writeText(value);copied=true;}catch{
+  const field=document.createElement('textarea');field.value=value;field.className='clipboard-fallback';field.setAttribute('readonly','');document.body.append(field);field.select();try{copied=document.execCommand('copy');}catch{}field.remove();
+ }
+ if(copied){$('#account-copy-status').textContent='已复制 '+value;toast('已复制 UID：'+value);}else{openAccount();$('#account-copy-status').textContent='复制未完成，请选中上方 UID 手动复制。';}
+}
+function openFriends(){
+ const box=$('#xc-frbox');if(!box)return toast('消息正在准备，请稍后再试');
+ $('#account-dialog').close();go('chat');$('#chat .xchat').classList.remove('conversation-open');if(box.classList.contains('hidden'))$('#xc-fr').click();$('#xc-fq')?.focus();
+}
+document.addEventListener('click',e=>{const own=e.target.closest('[data-copy-self]'),other=e.target.closest('[data-copy-uid]');if(own&&identity())copyUID(uidOf(identity()));if(other)copyUID(other.dataset.copyUid);});
+$('#account-wallet').onclick=()=>{$('#account-dialog').close();$('#connect').click();};
+function openProfileEditor(){$('#profile-name').value=profile(identity()).name;$('#profile-bio').value=profile(identity()).bio;$('#account-dialog').close();$('#profile-feedback').textContent='';if(!$('#profile-edit-dialog').open)$('#profile-edit-dialog').showModal();$('#profile-name').focus();}
+$('#account-edit').onclick=openProfileEditor;
+$('#account-orders').onclick=()=>{$('#account-dialog').close();$('#orders-dialog').showModal();$('#refund-refresh').click();};
+$('#account-friends').onclick=openFriends;
+$('#account-network').onclick=()=>{$('#account-dialog').close();$('#wallet-network')?.click();};
+$('#account-purchases').onclick=()=>{$('#account-dialog').close();showReceived();};
+document.querySelectorAll('.logo,.mobile-logo').forEach(a=>a.onclick=e=>{e.preventDefault();go('fan');});
+let uploadURL=null;
+function resetUploadPreview(){if(uploadURL){URL.revokeObjectURL(uploadURL);uploadURL=null;}$('#upload-preview').classList.add('hidden');$('#upload-preview img').removeAttribute('src');$('.upload-field').classList.remove('has-file');$('#upload-description').textContent='选一张要分享的图片';}
+$('#file').onchange=()=>{resetUploadPreview();const file=$('#file').files[0];if(!file)return;if(!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)||file.size>2*1024*1024){$('#file').value='';return toast('请选择 2 MB 以内的 PNG、JPEG、WebP 或 GIF 图片');}uploadURL=URL.createObjectURL(file);$('#upload-preview img').src=uploadURL;$('#upload-preview').classList.remove('hidden');$('.upload-field').classList.add('has-file');$('#upload-description').textContent=file.name;};
+$('#clear-upload').onclick=()=>{$('#file').value='';resetUploadPreview();syncPublishComposer();$('#file').click();};
+
 $('#identity').onchange = e => setIdentity(e.target.value);
 $('#search').oninput = render; $('#publish-target').onchange = () => renderTargets();
 $('#content-burn').onchange = () => { $('#secs').disabled = !$('#content-burn').checked; };
-$('#form').onsubmit = publish; $('#confirm-purchase').onclick = confirmPurchase;
+$('#form').onsubmit = async e=>{const form=$('#form');form.dataset.sending='true';syncPublishComposer();try{await publish(e);}finally{delete form.dataset.sending;syncPublishComposer();}}; $('#confirm-purchase').onclick = confirmPurchase;
 $('#cancel-purchase').onclick = () => $('#purchase-dialog').close(); $('#close-viewer').onclick = closeViewer;
 $('#connect').onclick = () => toast('当前只演示前端流程，真实钱包付款与 TapeSend 交付尚未接入；不会发起交易。');
 $('#save-profile').onclick = async () => {
- try {
-  const name = $('#profile-name').value.trim(); if (!name) return toast('请填写昵称');
-  await saveProfile(identity(), { name, bio: $('#profile-bio').value.trim() }); $('#profile-feedback').textContent = '已保存 · 资料会出现在创作者广场';
- }catch(error){toast(error.message);}
+ const button=$('#save-profile');if(button.disabled)return;const name=$('#profile-name').value.trim();
+ if(!name){$('#profile-feedback').textContent='请填写昵称';$('#profile-name').focus();return;}
+ button.disabled=true;button.textContent='正在保存…';$('#profile-feedback').textContent='';
+ try{await saveProfile(identity(),{name,bio:$('#profile-bio').value.trim()});$('#profile-feedback').textContent='资料已保存';}
+ catch(error){$('#profile-feedback').textContent=error.message;}
+ finally{button.disabled=false;button.textContent='保存资料';}
 };
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && viewing) closeViewer(); });
 document.addEventListener('visibilitychange', () => { $('#viewer').classList.toggle('viewer-obscured', document.hidden); });
 window.addEventListener('snapvault:change', render);
 window.addEventListener('snapvault:identity', () => {
   if(local.enabled)localRefresh(identity()).catch(e=>toast(e.message));
-  closeViewer(); $('#purchase-dialog').close(); $('#share-dialog').close(); pendingPurchase = null; profileAddress = null; $('#profile-feedback').textContent = ''; renderTargets('public'); render();
+  closeViewer(); $('#purchase-dialog').close(); $('#share-dialog').close(); pendingPurchase = null; profileAddress = null; $('#profile-feedback').textContent = '';$('#profile-edit-dialog').close(); renderTargets('public'); render();
 });
 window.addEventListener('storage', e => { if (['contents', 'sv:orders', 'sv:profiles'].includes(e.key) || e.key?.startsWith('sv:follows:')) render(); });
+initPublishComposer();
 chat = await initChat($('#chat'), { renderPaidCard: paidCard, compose: conv => { go('creator'); renderTargets(conv.id); $('#title').focus(); }, notify: toast });
 renderTargets(); render();
+const initialView=new URLSearchParams(location.search).get('view');if(initialView==='publish')go('creator');else if(initialView==='messages')go('chat');else go('fan');
 
 if(local.enabled){
  $('.preview-note span:nth-child(2)').textContent='本地链联调：付款和密钥交付使用公开测试账户；普通文字聊天仍为本机演示。不花真钱。';

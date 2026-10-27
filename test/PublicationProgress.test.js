@@ -14,7 +14,7 @@ describe('冻结发布计划和独立续传记录',function(){
 });
 
 describe('上传页中断恢复不会重复弹钱包',function(){this.timeout(30000);
- (process.env.SNAPVAULT_BROWSER_TEST?it:it.skip)('nonce 已占用则阻止重发；已有哈希只查回执；不同版本不复用旧哈希',async()=>{
+ (process.env.SNAPVAULT_BROWSER_TEST?it:it.skip)('旧上传通路停用；有无旧哈希都不能弹钱包或广播',async()=>{
   const fs=require('node:fs'),path=require('node:path'),http=require('node:http');const{launchOptions}=require('../scripts/browser-test-config.cjs');const{chromium}=await import('playwright');
   const owner='0x'+'12'.repeat(20),hash='0x'+'34'.repeat(32);let done=false,receipts=0,expectedHash=hash;
   const plan={identity:'release-B',recoveryRequired:true,index:0,total:1,owner,chainId:196,path:'index.html',chunk:0,valueOKB:'0',maximumFeeOKB:'0.0001',spentOKB:'0',transaction:{from:owner,to:owner,data:'0x1234',value:'0x0',nonce:'0x4'}};
@@ -22,9 +22,7 @@ describe('上传页中断恢复不会重复弹钱包',function(){this.timeout(30
   const server=http.createServer(async(req,res)=>{res.setHeader('Content-Type','application/json');if(req.url==='/api/plan')return res.end(JSON.stringify(done?{...plan,complete:true}:plan));if(req.url==='/api/receipt'){let raw='';for await(const b of req)raw+=b;const d=JSON.parse(raw);expect(d.hash).eq(expectedHash);receipts++;done=true;return res.end(JSON.stringify({verified:true}));}if(req.url==='/publish.js'){res.setHeader('Content-Type','text/javascript; charset=utf-8');return res.end(script);}res.setHeader('Content-Type','text/html; charset=utf-8');res.end('<meta charset="utf-8"><pre id="plan"></pre><button id="send">send</button><button id="verify">verify</button><pre id="log"></pre><script src="/publish.js"></script>');});await new Promise(r=>server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+server.address().port;
   const browser=await chromium.launch(launchOptions());try{
    async function make(pendingIdentity){const page=await browser.newPage();page.setDefaultTimeout(5000);await page.addInitScript(({owner,hash,pendingIdentity})=>{window.__sends=0;window.ethereum={request:async r=>{if(r.method==='eth_requestAccounts')return[owner];if(r.method==='eth_chainId')return'0xc4';if(r.method==='eth_sendTransaction'){window.__sends++;throw Error('Fixture must never send');}}};if(pendingIdentity)sessionStorage.setItem('snapvault-deweb-pending:'+location.origin+':'+pendingIdentity,JSON.stringify({index:0,hash}));},{owner,hash,pendingIdentity});await page.goto(base);await page.locator('#plan').filter({hasText:'第 1/1'}).waitFor();return page;}
-   const noHash=await make();await noHash.locator('#send').click();await noHash.locator('#log').filter({hasText:'禁止重复发送'}).waitFor();expect(await noHash.evaluate(()=>window.__sends)).eq(0);expect(receipts).eq(0);await noHash.close();
-   const old=await make('release-A');await old.locator('#send').click();await old.locator('#log').filter({hasText:'禁止重复发送'}).waitFor();expect(await old.evaluate(()=>window.__sends)).eq(0);expect(receipts).eq(0);await old.close();
-   const resumed=await make('release-B');await resumed.locator('#send').click();await resumed.locator('#plan').filter({hasText:'全部交易已确认'}).waitFor();expect(await resumed.evaluate(()=>window.__sends)).eq(0);expect(receipts).eq(1);await resumed.close();
+   for(const identity of [undefined,'release-A','release-B']){const page=await make(identity);expect(await page.locator('#send').isDisabled()).eq(true);await page.locator('#send').evaluate(b=>b.onclick());await page.locator('#log').filter({hasText:'上传通路已停用'}).waitFor();expect(await page.evaluate(()=>window.__sends)).eq(0);expect(receipts).eq(0);await page.close();}
   }finally{await browser.close();await new Promise(r=>server.close(r));}
  });
 });

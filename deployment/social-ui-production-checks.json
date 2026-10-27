@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "checks": [
+    "production pages contain no visible demo/sample copy across five screen widths",
+    "demo identity and sample unlock entry stay hidden",
+    "wallet entry remains reachable on mobile; no signing or transactions during checks"
+  ],
+  "pageErrors": [],
+  "scope": "production static build with intercepted API; real backend checked separately read-only",
+  "realTransactions": 0
+}

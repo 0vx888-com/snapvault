@@ -1,0 +1,206 @@
+{
+  "releaseId": "cdd17b97082b32769fdf9a4bb0db54d2bfdfd3674838074606cc432239b8727b",
+  "manifestHash": "0xcdd17b97082b32769fdf9a4bb0db54d2bfdfd3674838074606cc432239b8727b",
+  "apiBase": "https://snapvault-api-production.up.railway.app",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 18074,
+      "sha256": "0xf4ebdcc63352d630e57e840bebbe3591473d21f421421d0d62ce1c547ce503a1"
+    },
+    {
+      "path": "style.css",
+      "bytes": 76665,
+      "sha256": "0x1c6b4e1df4b9ad325473658112adc4dec95d77f6924c7d0598af56155ac43d9d"
+    },
+    {
+      "path": "app.js",
+      "bytes": 44673,
+      "sha256": "0x99776ae307c0944bd46632336638e4093a4aa16e8201597cef95c01c4a4af3f1"
+    },
+    {
+      "path": "ui-icons.js",
+      "bytes": 754,
+      "sha256": "0xe926eee32ecbbd1d60e18b6d89b75c7a386b25ed1617c73c226599e91a29140a"
+    },
+    {
+      "path": "publish-ui.js",
+      "bytes": 3330,
+      "sha256": "0x0a453d4da8e9eb98bacb77d5819d0f108216b40906d297e0f38788bd090dfcba"
+    },
+    {
+      "path": "chat.js",
+      "bytes": 718,
+      "sha256": "0x2d155e7db10b72271efe2f97c7be6ef1f8dd6be9b5b78a7e06744454b79731c7"
+    },
+    {
+      "path": "chat-ui.js",
+      "bytes": 13585,
+      "sha256": "0x8edc31fe9d2d2f3858552603820a41957eff1b4dbc552db6412c159ff0394688"
+    },
+    {
+      "path": "store.js",
+      "bytes": 5353,
+      "sha256": "0x74c6159a1a24d1cadf4957f68638fdb50a93d30445eb7f7221bf4f87c8438147"
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 983,
+      "sha256": "0x99c9123d825b152a820611ba650731a71ec89387f35c3733c6e9d5584c35c90c"
+    },
+    {
+      "path": "wallet.js",
+      "bytes": 10823,
+      "sha256": "0x8e9e7ace8de047a1e1ab363c37f7431be9749f3f0424156b13251e69aa04604e"
+    },
+    {
+      "path": "wallet-connect.js",
+      "bytes": 6062,
+      "sha256": "0xb18b0eff379724746772c4eed86035f004ae9a2bc065d3e31b6f3f6c54931a54"
+    },
+    {
+      "path": "transaction-guard.js",
+      "bytes": 1162,
+      "sha256": "0x6c4696491ec388b26948fc503cfadc8c0f7f5cfa987bbfd2a964328fe6561268"
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "bytes": 613497,
+      "sha256": "0x3771060bc036e7c661a5b3c358a31d40fe9a6cef9accd844f2e5eaef1245ccd0"
+    },
+    {
+      "path": "vendor/okx-connect-LICENSE.md",
+      "bytes": 2855,
+      "sha256": "0x5ed2ddfa385391e9df5bb4caee341024f1ebdf62676eff2f198fd506a6e5a91c"
+    },
+    {
+      "path": "assets/wallet-icon.png",
+      "bytes": 4717,
+      "sha256": "0x72bcb40989a596892e58b3c3254b448a0c12eacf990a227de3ae85030ffc9a60"
+    },
+    {
+      "path": "wallet-chat.js",
+      "bytes": 13459,
+      "sha256": "0xcd1159bd3442f507a0516e772788c63463046c92327212a1b9625ecba324c6fd"
+    },
+    {
+      "path": "refunds.js",
+      "bytes": 2331,
+      "sha256": "0x07b314e76fec871e22171e635b09f125bc5e947c3423f7793148beeeaecde51b"
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "bytes": 254372,
+      "sha256": "0xcb6e86ecb6b339d526112f24fa4f3ff398960e4d29e63e0ada3a1d498d3edeb1"
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "bytes": 1075,
+      "sha256": "0x44eea86637405118248327fbe9d9fa95d04c7a57221c7e8c155f736db9f1b612"
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "bytes": 635,
+      "sha256": "0x3a8b5b4e9c1ae972e195863675f4105e6301982f27cd2f48cd2d4ef20be819c8"
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "bytes": 512682,
+      "sha256": "0x9b4d99fa110a1bd67238ce0c59bbd9e36afbb27762407254caabd027e1f3fec7"
+    },
+    {
+      "path": "assets/studio.svg",
+      "bytes": 864,
+      "sha256": "0x25a1f767c16abdba3e8fd1270e0a5bd078e3267d1e4ab9c7524a2a93e60e7286"
+    },
+    {
+      "path": "assets/sketch.svg",
+      "bytes": 807,
+      "sha256": "0x53e64956c5a9b999b758faf51d9fa2bd920d2b05b0493ff9e1dfd3d2dc536697"
+    },
+    {
+      "path": "app-config.json",
+      "bytes": 157,
+      "sha256": "0xd49bab598b8f2737011fb7929e0a960b4941f8519923a3e516b2768bbdc19e4f"
+    }
+  ],
+  "changedFiles": [
+    "style.css",
+    "ui-icons.js",
+    "publish-ui.js",
+    "chat-ui.js",
+    "wallet-chat.js",
+    "app.js",
+    "index.html"
+  ],
+  "planHash": "0x30695654eea5e7692142c472a11e3648a0b320602e5ef0a26da6e1035f648f9e",
+  "operations": [
+    {
+      "path": "style.css",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "style.css",
+      "chunk": 1,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "style.css",
+      "chunk": 2,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "style.css",
+      "chunk": 3,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "ui-icons.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "publish-ui.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "chat-ui.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "wallet-chat.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "app.js",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "app.js",
+      "chunk": 1,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    },
+    {
+      "path": "index.html",
+      "chunk": 0,
+      "to": "0xd6efb7adcc9c83dc4924ad56f6a8e4e969b9adb6",
+      "value": "0x0"
+    }
+  ],
+  "uploaded": false
+}

@@ -1,0 +1,23 @@
+{
+  "chainId": 196,
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "circuits": "0x90b3ba18C32E9E9e6EA5E2ccA3E68B86AFBE7cDB",
+  "tokenId": 10,
+  "cpuIndex": 6,
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "name": "10.2.6.tape",
+  "publicURL": "https://10-2-6.tapekit.org/",
+  "approvedBudgetWei": null,
+  "proposedTotalBudgetWei": "1200000000000000",
+  "maxGasPriceWei": "24000001",
+  "frozenRelease": "releases/cdd17b97082b32769fdf9a4bb0db54d2bfdfd3674838074606cc432239b8727b",
+  "releaseScopedProgress": true,
+  "expectedManifestHash": "0xcdd17b97082b32769fdf9a4bb0db54d2bfdfd3674838074606cc432239b8727b",
+  "expectedPlanHash": "0x30695654eea5e7692142c472a11e3648a0b320602e5ef0a26da6e1035f648f9e",
+  "preparation": {
+    "uploadAuthorized": false,
+    "transactionsSent": 0,
+    "status": "AWAITING_VALIDATION_AND_NEW_BUDGET_APPROVAL",
+    "legacyPublisherRetired": true
+  }
+}

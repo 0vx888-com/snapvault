@@ -1,3 +1,4 @@
+import {fileURLToPath} from 'node:url';
 import {launchOptions,tempPath} from './browser-test-config.cjs';
 // Isolated browser regression for the LOCAL demo. No wallets, transactions or real payments.
 // Start: python3 -m http.server 5173 --bind 127.0.0.1 --directory web
@@ -15,17 +16,17 @@ const checks = [];
 const check = (condition, message) => { assert.ok(condition, message); checks.push(message); };
 const wait = (p, selector) => p.locator(selector).first().waitFor({ state: 'visible', timeout: 8000 });
 const chat = p => p.locator('[data-tab="chat"]').click();
-const select = (p, who) => p.locator('#identity').selectOption(who);
+const select = async(p,who)=>{await p.locator('#my-account').click();await p.locator('#demo-identity summary').click();await p.locator('#identity').selectOption(who);await p.locator('#account-dialog .dialog-close').click();};
 const openConv = (p, name) => (name === '小鹿' ? p.locator('.xc-item').filter({ hasText: name }).filter({ hasNotText: '付费粉丝团' }) : p.locator('.xc-item').filter({ hasText: name })).click();
 const card = (p, title) => p.locator('#chat-list .paid-chat-card').filter({ hasText: title });
-const buy = async (p, title) => { await card(p, title).locator('[data-content-action="buy"]').click(); await p.locator('#confirm-purchase').click(); await card(p, title).getByRole('button', { name: '已购买 · 点击查看', exact: true }).waitFor(); };
+const buy = async (p, title) => { await card(p, title).locator('[data-content-action="buy"]').click(); await p.locator('#confirm-purchase').click(); await card(p, title).getByRole('button', { name: '打开图片', exact: true }).waitFor(); };
 async function publish(p, title, scope, burn = true) {
   if (scope) await p.locator('#chat-paid').click(); else await p.locator('[data-tab="creator"]').click();
   await p.locator('#file').setInputFiles(image); await p.locator('#title').fill(title); await p.locator('#secs').fill('5');
   await p.locator('#content-burn').setChecked(burn);
   if (!scope) await p.locator('#publish-target').selectOption('public');
   await p.locator('#form button[type="submit"]').click();
-  await p.waitForFunction(() => !document.querySelector('#form button[type="submit"]').disabled);
+  await p.waitForFunction(() => document.querySelector('#form').dataset.sending!=='true');
   if (scope) await card(p, title).waitFor(); else await p.locator('#grid').getByText(title, { exact: true }).waitFor();
 }
 try {
@@ -36,9 +37,9 @@ try {
   await cp.locator('[data-feed="creators"]').click(); await cp.locator('#search').fill('Mia');
   check(await cp.locator('.creator-card').count() === 1 && (await cp.locator('.creator-card').innerText()).includes('Mia'), '昵称搜索生效');
   await cp.locator('#search').fill(''); await select(cp, creator); await chat(cp); await openConv(cp, '演示粉丝');
-  await cp.locator('#chat-burn').check(); await cp.locator('#chat-secs').selectOption('30'); await cp.locator('.chat-settings summary').click(); await cp.locator('#chat-shot').selectOption('forbid'); await cp.locator('.chat-settings summary').click();
+  await cp.locator('.expiry-control summary').click();await cp.locator('#chat-burn').check(); await cp.locator('[data-expiry="30"]').click();await cp.locator('.expiry-control summary').press('Escape'); await cp.locator('.chat-settings summary').click(); await cp.locator('#chat-shot').selectOption('forbid'); await cp.locator('.chat-settings summary').click();
   await cp.locator('#chat-text').fill('保留原有自定义阅后即焚'); await cp.locator('#chat-form button[type="submit"], #chat-form .primary').click();
-  await cp.locator('#chat-list').getByText('阅后即焚 · 30 秒', { exact: false }).waitFor();
+  await cp.locator('#chat-list').getByText('限时消息 · 30 秒', { exact: false }).waitFor();
   check(await cp.locator('#chat-burn').isChecked() && await cp.locator('#chat-secs').inputValue() === '30', '发送后仍保留自定义阅后即焚和时长设置');
   await publish(cp, '私聊独家花絮', true);
   check((await cp.locator('#xc-pane').innerText()).includes('私聊独家花絮'), '会话内发布后回到原聊天并插入锁定图片卡片');
@@ -53,32 +54,32 @@ try {
   await fp.locator('#vimg').evaluate(img => img.decode());
   check(await fp.locator('#vimg').evaluate(img => img.naturalWidth > 0), 'AES-GCM 解密图片可实际显示');
   await fp.locator('#viewer').waitFor({ state: 'hidden', timeout: 8000 });
-  await card(fp, '私聊独家花絮').getByRole('button', { name: '展示已结束', exact: true }).waitFor();
+  await card(fp, '私聊独家花絮').getByRole('button', { name: '查看已结束', exact: true }).waitFor();
   await fp.reload(); await chat(fp);
-  check(await card(fp, '私聊独家花絮').getByRole('button', { name: '展示已结束', exact: true }).isDisabled(), '刷新不会重置图片倒计时');
+  check(await card(fp, '私聊独家花絮').getByRole('button', { name: '查看已结束', exact: true }).isDisabled(), '刷新不会重置图片倒计时');
   check(await fp.evaluate(() => JSON.parse(localStorage.getItem('sv:orders')).length) === 1, '购买与再次访问不重复创建订单');
   await openConv(fp, '付费粉丝团'); await fp.locator('#xc-join').click();
   await openConv(cp, '付费粉丝团'); await publish(cp, '群聊付费照片', true);
   await buy(fp, '群聊付费照片');
   const op = await context.newPage(); await op.goto(base); await wait(op, '.creator-card'); await select(op, other); await chat(op); await openConv(op, '付费粉丝团'); await buy(op, '群聊付费照片');
   await card(fp, '群聊付费照片').locator('[data-content-action="view"]').click(); await wait(fp, '#viewer:not(.hidden)'); await fp.locator('#viewer').waitFor({ state: 'hidden', timeout: 8000 });
-  check(await card(op, '群聊付费照片').getByRole('button', { name: '已购买 · 点击查看', exact: true }).isVisible(), '群成员分别购买、各自计时');
+  check(await card(op, '群聊付费照片').getByRole('button', { name: '打开图片', exact: true }).isVisible(), '群成员分别购买、各自计时');
   await publish(cp, '公开可重复查看作品', false, false);
   await fp.locator('[data-tab="fan"]').click(); await fp.locator('[data-feed="latest"]').click();
   check(await fp.locator('#grid').getByText('公开可重复查看作品', { exact: true }).isVisible(), '公开作品进入最新内容列表');
-  await cp.locator('[data-tab="creator"]').click(); await cp.locator('#my-contents .content-card').filter({ hasText: '公开可重复查看作品' }).getByRole('button', { name: '发送到聊天', exact: true }).click();
-  await cp.locator('#share-list').getByRole('button', { name: '💬 演示粉丝', exact: true }).click();
+  await cp.locator('[data-tab="creator"]').click(); await cp.locator('#creator-library>summary').click();await cp.locator('#my-contents .content-card').filter({ hasText: '公开可重复查看作品' }).getByRole('button', { name: '发送到聊天', exact: true }).click();
+  await cp.locator('#share-list').getByRole('button', { name: /演示粉丝/ }).click();
   await chat(fp); await openConv(fp, '小鹿'); await buy(fp, '公开可重复查看作品');
   await card(fp, '公开可重复查看作品').locator('[data-content-action="view"]').click(); await wait(fp, '#viewer:not(.hidden)'); await fp.locator('#close-viewer').click();
-  await card(fp, '公开可重复查看作品').getByRole('button', { name: '已购买 · 点击查看', exact: true }).waitFor();
+  await card(fp, '公开可重复查看作品').getByRole('button', { name: '打开图片', exact: true }).waitFor();
   await card(fp, '公开可重复查看作品').locator('[data-content-action="view"]').click(); await wait(fp, '#viewer:not(.hidden)'); await fp.locator('#vimg').evaluate(img => img.decode());
   check(await fp.locator('#vimg').evaluate(img => img.naturalWidth > 0), '关闭限时的付费图片可在购买期限内重复查看'); await fp.locator('#close-viewer').click();
   await cp.locator('[data-tab="fan"]').click(); await cp.locator('[data-feed="creators"]').click();
   await mkdir(new URL('../screenshots/', import.meta.url), { recursive: true });
-  await cp.screenshot({ path: new URL('../screenshots/mvp-creator-square.png', import.meta.url).pathname, fullPage: true });
-  await fp.screenshot({ path: new URL('../screenshots/mvp-chat-paid-images.png', import.meta.url).pathname, fullPage: true });
+  await cp.screenshot({ path: fileURLToPath(new URL('../screenshots/mvp-creator-square.png', import.meta.url)), fullPage: true });
+  await fp.screenshot({ path: fileURLToPath(new URL('../screenshots/mvp-chat-paid-images.png', import.meta.url)), fullPage: true });
   await fp.setViewportSize({ width: 390, height: 844 });
   check(await fp.evaluate(() => document.documentElement.scrollWidth <= innerWidth), '移动端无横向溢出');
-  await fp.screenshot({ path: new URL('../screenshots/mvp-mobile-chat.png', import.meta.url).pathname, fullPage: true });
+  await fp.screenshot({ path: fileURLToPath(new URL('../screenshots/mvp-mobile-chat.png', import.meta.url)), fullPage: true });
   assert.deepEqual(errors, []); console.log(JSON.stringify({ status: 'PASS', checks, browserErrors: errors }, null, 2));
 } finally { await browser.close(); }

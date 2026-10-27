@@ -47,3 +47,7 @@ npm run build:app -- --api https://API_ORIGIN --allow-mainnet
 `test:all` 只创建自己的本地服务（5210–5213，Hub 浏览器测试 5182/5197），结束会清理；不连接用户钱包或发主网交易。验收记录 `deployment/hardening-all-tests.json` 必须区分本地、公共测试网和主网。
 
 发布顺序、钱包部署页、备份恢复和主网门禁见 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)。参赛规则核验见 [docs/CONTEST-CHECKLIST.md](docs/CONTEST-CHECKLIST.md)；测试通过不等于主办方资格审批。
+
+## 前端改版候选（2026-10-27，尚未上传）
+
+统一社交界面、手机 UID 名片与网络入口、消息设置和图片发布。生产构建连接原服务并清除演示入口；DeWEB 上传仍待本次费用确认和钱包签名。范围、检查和更新方式见 [发布说明](docs/SOCIAL-UI-RELEASE-2026-10-27.md)。GitHub 同步不等于网站已更新。

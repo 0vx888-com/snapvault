@@ -1,0 +1,185 @@
+{
+  "checkedAt": "2026-10-27T10:28:21.916Z",
+  "readOnly": true,
+  "chainId": 196,
+  "site": "https://10-2-6.tapekit.org/",
+  "container": "0x618cbE9DC6ab45F7Cfa0c404F3e8C9AFCfeDf06E",
+  "owner": "0xEb55B0f0a274A72b940C10078fb46B998b53B100",
+  "manifestHash": "0xcdd17b97082b32769fdf9a4bb0db54d2bfdfd3674838074606cc432239b8727b",
+  "files": 24,
+  "bundleBytes": 1589633,
+  "changedFiles": [
+    "style.css",
+    "ui-icons.js",
+    "publish-ui.js",
+    "chat-ui.js",
+    "wallet-chat.js",
+    "app.js",
+    "index.html"
+  ],
+  "reused": [
+    {
+      "path": "chat.js",
+      "bytes": 718
+    },
+    {
+      "path": "store.js",
+      "bytes": 5353
+    },
+    {
+      "path": "local-delivery.js",
+      "bytes": 983
+    },
+    {
+      "path": "wallet.js",
+      "bytes": 10823
+    },
+    {
+      "path": "wallet-connect.js",
+      "bytes": 6062
+    },
+    {
+      "path": "transaction-guard.js",
+      "bytes": 1162
+    },
+    {
+      "path": "vendor/okx-connect.min.js",
+      "bytes": 613497
+    },
+    {
+      "path": "vendor/okx-connect-LICENSE.md",
+      "bytes": 2855
+    },
+    {
+      "path": "assets/wallet-icon.png",
+      "bytes": 4717
+    },
+    {
+      "path": "refunds.js",
+      "bytes": 2331
+    },
+    {
+      "path": "vendor/ethers.min.js",
+      "bytes": 254372
+    },
+    {
+      "path": "vendor/ethers-LICENSE.md",
+      "bytes": 1075
+    },
+    {
+      "path": "assets/mark-tape.svg",
+      "bytes": 635
+    },
+    {
+      "path": "assets/social-photos.jpg",
+      "bytes": 512682
+    },
+    {
+      "path": "assets/studio.svg",
+      "bytes": 864
+    },
+    {
+      "path": "assets/sketch.svg",
+      "bytes": 807
+    },
+    {
+      "path": "app-config.json",
+      "bytes": 157
+    }
+  ],
+  "operations": 11,
+  "gasPriceWei": "21000000",
+  "modeledGas": "41571084",
+  "modeledUploadOKB": "0.000872992764",
+  "modelWith30PercentReserveOKB": "0.0011348905932",
+  "containerActive": true,
+  "monthlyFeeOKB": "0.0",
+  "needsActivation": false,
+  "independentRPCSnapshots": [
+    {
+      "block": 74327780,
+      "gasPriceWei": "0x1312d01",
+      "balanceWei": "6724867502193408"
+    },
+    {
+      "block": 74327782,
+      "gasPriceWei": "0x1406f40",
+      "balanceWei": "6724867502193408"
+    }
+  ],
+  "estimates": [
+    {
+      "path": "style.css",
+      "chunk": 0,
+      "model": "fresh-storage chunk model",
+      "gas": "5650377"
+    },
+    {
+      "path": "style.css",
+      "chunk": 1,
+      "model": "fresh-storage chunk model",
+      "gas": "5650377"
+    },
+    {
+      "path": "style.css",
+      "chunk": 2,
+      "model": "fresh-storage chunk model",
+      "gas": "5650377"
+    },
+    {
+      "path": "style.css",
+      "chunk": 3,
+      "model": "fresh-storage chunk model",
+      "gas": "1392174"
+    },
+    {
+      "path": "ui-icons.js",
+      "chunk": 0,
+      "model": "fresh-storage chunk model",
+      "gas": "531483"
+    },
+    {
+      "path": "publish-ui.js",
+      "chunk": 0,
+      "model": "fresh-storage chunk model",
+      "gas": "1098511"
+    },
+    {
+      "path": "chat-ui.js",
+      "chunk": 0,
+      "model": "fresh-storage chunk model",
+      "gas": "3356245"
+    },
+    {
+      "path": "wallet-chat.js",
+      "chunk": 0,
+      "model": "fresh-storage chunk model",
+      "gas": "3328487"
+    },
+    {
+      "path": "app.js",
+      "chunk": 0,
+      "model": "fresh-storage chunk model",
+      "gas": "5650462"
+    },
+    {
+      "path": "app.js",
+      "chunk": 1,
+      "model": "fresh-storage chunk model",
+      "gas": "4917569"
+    },
+    {
+      "path": "index.html",
+      "chunk": 0,
+      "model": "fresh-storage chunk model",
+      "gas": "4345022"
+    }
+  ],
+  "uploadAuthorized": false,
+  "transactionsSent": 0,
+  "limitations": [
+    "Read-only fresh-storage model, not a guaranteed invoice or upper bound. Re-estimate every transaction immediately before human signing.",
+    "No new contract or container creation included. Activation must be quoted separately if inactive.",
+    "Backend hosting/storage and user purchase/withdrawal transactions are excluded."
+  ]
+}
