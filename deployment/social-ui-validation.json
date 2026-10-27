@@ -1,0 +1,76 @@
+{
+  "status": "PASS",
+  "checkedAt": "2026-10-27T10:28:21.916Z",
+  "frozenManifest": "0xcdd17b97082b32769fdf9a4bb0db54d2bfdfd3674838074606cc432239b8727b",
+  "fullSuiteResults": [
+    {
+      "name": "all contracts/services + both official Hub browser flows",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile adapter and transaction safety",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile dialog and real SDK module load",
+      "status": "PASS"
+    },
+    {
+      "name": "neutral loading, offline notice, remote confirmation UI",
+      "status": "PASS"
+    },
+    {
+      "name": "browser order model",
+      "status": "PASS"
+    },
+    {
+      "name": "existing demo social UI",
+      "status": "PASS"
+    },
+    {
+      "name": "wallet social UI + paid image + withdrawal",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy delivery marketplace repeat 1",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy delivery marketplace repeat 2",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy wallet readiness and isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "payment probe no-wallet safety (isolated RPC fixture)",
+      "status": "PASS"
+    }
+  ],
+  "walletSocialPaidImageWithdrawalChecks": 23,
+  "productionBuildChecks": {
+    "status": "PASS",
+    "checks": [
+      "production pages contain no visible demo/sample copy across five screen widths",
+      "demo identity and sample unlock entry stay hidden",
+      "wallet entry remains reachable on mobile; no signing or transactions during checks"
+    ],
+    "pageErrors": [],
+    "scope": "production static build with intercepted API; real backend checked separately read-only",
+    "realTransactions": 0
+  },
+  "protectedModulesUnchanged": [
+    "web/wallet.js",
+    "web/store.js",
+    "web/refunds.js",
+    "web/transaction-guard.js",
+    "web/wallet-connect.js",
+    "web/local-delivery.js"
+  ],
+  "sourceCredentialLiteralScan": "PASS; no ignored runtime files included",
+  "newProductionSignatures": 0,
+  "newProductionTransactions": 0,
+  "published": false,
+  "spendingApproval": null
+}

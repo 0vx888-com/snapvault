@@ -66,7 +66,7 @@ try{
  await refresh(b.page);await chat(b.page);await b.page.locator('.xc-item').filter({hasText:'真实多人群聊'}).click();await refresh(c.page);await chat(c.page);await c.page.locator('.xc-item').filter({hasText:'真实多人群聊'}).click();
  await b.page.locator('[data-message-open]').click();await b.page.getByText('群聊独立计时图片',{exact:true}).waitFor();await delay(5500);
  check(await c.page.locator('[data-message-open]').isVisible(),'真实群聊中其他成员未打开时不消耗自己的阅后即焚时间');await c.page.locator('[data-message-open]').click();await c.page.getByText('群聊独立计时图片',{exact:true}).waitFor();check(await c.page.locator('.chat-photo').count()>0,'群聊免费图文与私聊共用真实服务');
- check(await b.page.locator('#chat-list').getByText('🔥 已焚毁',{exact:true}).isVisible(),'群聊已查看成员到期关闭，其他成员独立查看');
+ check(await b.page.locator('#chat-list').getByText('已结束查看',{exact:true}).isVisible(),'群聊已查看成员到期关闭，其他成员独立查看');
  const leak=await b.page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith('key:')||k.startsWith('blob:')||k.startsWith('chat:id:')));check(leak.length===0,'真实模式没有将内容密钥、密文和私聊身份密钥写进 localStorage');
  await a.page.locator('nav [data-tab=fan]').click();await a.page.screenshot({path:tempPath('snapvault-wallet-square.png'),fullPage:true});await b.page.screenshot({path:tempPath('snapvault-wallet-chat.png'),fullPage:true});await b.page.setViewportSize({width:390,height:844});check(await b.page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'手机布局无横向溢出');await b.page.screenshot({path:tempPath('snapvault-wallet-mobile.png'),fullPage:true});
  assert.deepEqual(errors,[]);await a.page.locator('nav [data-tab="creator"]').click();await a.page.locator('#creator-library>summary').click();

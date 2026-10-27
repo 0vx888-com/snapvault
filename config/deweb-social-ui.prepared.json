@@ -17,7 +17,7 @@
   "preparation": {
     "uploadAuthorized": false,
     "transactionsSent": 0,
-    "status": "AWAITING_VALIDATION_AND_NEW_BUDGET_APPROVAL",
+    "status": "READY_FOR_NEW_BUDGET_APPROVAL",
     "legacyPublisherRetired": true
   }
 }

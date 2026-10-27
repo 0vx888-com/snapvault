@@ -23,3 +23,5 @@ Do not remove the spending pause, reuse an old approval or restart the retired p
 ## Update workflow
 
 Group related edits into a checked commit, review a preview, then release that commit. Tiny local edits do not each require a GitHub push or on-chain upload. Keep the previous frozen bundle for recovery. A GitHub rollback by itself does not roll back the on-chain site; restoring changed DeWEB files is a separate wallet-signed upload that also needs gas.
+
+Final validation: the full `test-all.mjs` suite and `social-release.spec.mjs` passed. Wallet UI integration includes 23 checks against the isolated local chain, including signed login, cross-browser images, payment/decryption, group timers and withdrawal. See `deployment/social-ui-validation.json`. Mainnet signatures and uploads remain zero.
