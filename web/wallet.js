@@ -1,3 +1,11 @@
+export const VAULT_ADDRESS = "0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f";
+export const CHAIN_ID = 196;
+export function assertTrustedVault(config){
+ if(config?.chainId!==CHAIN_ID||String(config?.vault||'').toLowerCase()!==VAULT_ADDRESS.toLowerCase()){
+  const message='安全警告：服务器返回的合约地址或网络与固定的 X Layer 主网合约不一致，已禁止交易';
+  wallet.securityError=message;throw Error(message);
+ }
+}
 import {guardedTransaction} from './transaction-guard.js';
 import {selectProvider} from './wallet-connect.js';
 // Wallet mode is opt-in in development, the default for the deployable app build.
@@ -41,9 +49,9 @@ export async function connect(){
 export function disconnect(revoke=true){if(revoke&&wallet.token)call('logout').catch(()=>{});revision++;wallet.token=null;wallet.account=null;wallet.device=null;sessionStorage.removeItem('sv:wallet-session');sessionStorage.removeItem('sv:wallet-account');wallet.data={contents:[],orders:[],profiles:{},convs:[],messages:[],friends:[]};window.dispatchEvent(new Event('snapvault:identity'));}
 export async function refresh(){const rev=++revision;const d=await call('state');if(rev!==revision)return;wallet.data=d;if(wallet.token)wallet.account=sessionStorage.getItem('sv:wallet-account');window.dispatchEvent(new Event('snapvault:change'));}
 export async function initWallet(){
- wallet.ready=false;wallet.config=null;
+ wallet.ready=false;wallet.config=null;wallet.securityError=null;
  const r=await fetch(apiURL('/api/wallet/config'),{signal:AbortSignal.timeout(10000)});if(!r.ok)throw Error(SERVER_UNAVAILABLE);
- const config=await r.json(),allowed=settings.allowedChainIds||[31337,1952];if(!allowed.includes(config.chainId))throw Error('后端链号不在本前端允许配置中');if(config.chainId===196&&(!settings.allowMainnet||!config.mainnet))throw Error('主网需前后端明确授权配置');
+ const config=await r.json();assertTrustedVault(config);const allowed=settings.allowedChainIds||[31337,1952];if(!allowed.includes(config.chainId))throw Error('后端链号不在本前端允许配置中');if(config.chainId===196&&(!settings.allowMainnet||!config.mainnet))throw Error('主网需前后端明确授权配置');
  wallet.config=config;await device();try{await refresh();}catch(e){
   // Expired login is cleared by call(); keep the page usable as a signed-out visitor.
   // Only retry public state after a 401. Network/server failures still stay visible.
@@ -52,23 +60,24 @@ export async function initWallet(){
 }
 async function transaction(method,args,value=0n){
  if(!wallet.ready||!wallet.config)throw Error(SERVER_UNAVAILABLE);
+ assertTrustedVault(wallet.config);
  if(!wallet.account)throw Error('请先签名登录');const p=injected||await selectProvider(wallet.config);injected=p;
- const chain=Number(BigInt(await p.request({method:'eth_chainId'})));if(chain!==wallet.config.chainId)throw Error('钱包网络不符，请切换到 '+wallet.config.networkName+'；未发送交易');
+ const chain=Number(BigInt(await p.request({method:'eth_chainId'})));if(chain!==CHAIN_ID)throw Error('请切换到 X Layer 主网（196）；未发送交易');
  if(chain===196&&(!settings.allowMainnet||!wallet.config.mainnet))throw Error('主网配置尚未明确启用');
  const accounts=await p.request({method:'eth_accounts'});if(accounts[0]?.toLowerCase()!==wallet.account)throw Error('钱包账户已变化');
  const {Interface,JsonRpcProvider}=await ethersModule(),iface=new Interface(wallet.config.abi),data=iface.encodeFunctionData(method,args),rpc=new JsonRpcProvider(chain===31337?apiURL('/rpc'):chain===1952?'https://testrpc.xlayer.tech/terigon':'https://rpc.xlayer.tech',chain,{staticNetwork:true});
- const key=['sv:pending',chain,wallet.config.vault.toLowerCase(),wallet.account,method,method.startsWith('purchase')?String(args[0]):''].join(':');
- try{const result=await guardedTransaction({key,send:()=>p.request({method:'eth_sendTransaction',params:[{from:accounts[0],to:wallet.config.vault,data,value:'0x'+BigInt(value).toString(16)}]}),wait:hash=>rpc.waitForTransaction(hash,wallet.config.confirmations||1,180000)});return {...result,iface};}finally{rpc.destroy();}
+ const key=['sv:pending',chain,VAULT_ADDRESS.toLowerCase(),wallet.account,method,method.startsWith('purchase')?String(args[0]):''].join(':');
+ try{const result=await guardedTransaction({key,send:async()=>{assertTrustedVault(wallet.config);if(Number(BigInt(await p.request({method:'eth_chainId'})))!==CHAIN_ID)throw Error('请切换到 X Layer 主网（196）；未发送交易');return p.request({method:'eth_sendTransaction',params:[{from:accounts[0],to:VAULT_ADDRESS,chainId:'0x'+CHAIN_ID.toString(16),data,value:'0x'+BigInt(value).toString(16)}]});},wait:hash=>rpc.waitForTransaction(hash,wallet.config.confirmations||1,180000)});return {...result,iface};}finally{rpc.destroy();}
 }
 export async function publishWallet({image,meta}){const upload=await call('upload',{image,mime:meta.mime,meta}),{hash,receipt,iface}=await transaction('listWithOptions',['0x0000000000000000000000000000000000000000',upload.price,upload.secs,upload.max,upload.hash,upload.uri,upload.burn]);const event=receipt.logs.map(l=>{try{return iface.parseLog(l)}catch{return null}}).find(e=>e?.name==='Listed');if(!event)throw Error('没有找到上架事件');const result=await call('register',{id:event.args.id.toString(),transactionHash:hash});await refresh();return result;}
 export async function purchaseWallet(id){const q=await call('quote',{id});window.dispatchEvent(new CustomEvent('snapvault:delivery-route',{detail:q.notice||'本单将通过官方 TapeSend 自动交付'}));const {hash}=q.method==='purchaseDelivered'?await transaction('purchaseDelivered',[id,q.circuits,q.tokenId,q.key,q.deadline,q.signature],q.price):await transaction('purchaseDirect',[id,q.keyHash,q.deadline,q.signature],q.price);await refresh();return {purchaseTx:hash,route:q.route};}
-export async function withdrawWallet(){const e=await call('earnings');if(/^0(?:\.0*)?$/.test(e.amount)&&!localStorage.getItem(['sv:pending',wallet.config.chainId,wallet.config.vault.toLowerCase(),wallet.account,'withdraw',''].join(':')))throw Error('当前可提现余额为 0，未发起钱包交易');const {hash}=await transaction('withdraw',['0x0000000000000000000000000000000000000000']);await refresh();return hash;}
+export async function withdrawWallet(){assertTrustedVault(wallet.config);const e=await call('earnings');if(/^0(?:\.0*)?$/.test(e.amount)&&!localStorage.getItem(['sv:pending',wallet.config.chainId,VAULT_ADDRESS.toLowerCase(),wallet.account,'withdraw',''].join(':')))throw Error('当前可提现余额为 0，未发起钱包交易');const {hash}=await transaction('withdraw',['0x0000000000000000000000000000000000000000']);await refresh();return hash;}
 export async function openWallet(id){const d=await call('open',{id});if(!d.preview){const receipt=wallet.data.orders.find(o=>String(o.contentId)===String(id)&&o.buyer===wallet.account);if(receipt){receipt.accessUntil=d.accessUntil;receipt.viewUntil=d.viewUntil;}}const privateKey=(await device()).privateKey;const raw=new Uint8Array(await crypto.subtle.decrypt({name:'RSA-OAEP'},privateKey,Uint8Array.from(atob(d.encryptedKey),c=>c.charCodeAt(0))));return {...d,key:'0x'+[...raw].map(x=>x.toString(16).padStart(2,'0')).join(''),uri:apiURL(d.uri)};}
 export async function walletAction(action,b){const d=await call(action,b);await refresh();return d;}
 
 export async function setupNetwork(){
  if(!wallet.config||![31337,1952,196].includes(wallet.config.chainId)||(wallet.config.chainId===196&&(!settings.allowMainnet||!wallet.config.mainnet)))throw Error('网络授权配置未就绪');
- const p=injected||provider(),chainId='0x'+wallet.config.chainId.toString(16);
+ assertTrustedVault(wallet.config);const p=injected||provider(),chainId='0x'+CHAIN_ID.toString(16);
  try{await p.request({method:'wallet_switchEthereumChain',params:[{chainId}]});}
  catch(e){if(e.code!==4902)throw e;await p.request({method:'wallet_addEthereumChain',params:[{chainId,chainName:wallet.config.networkName||(wallet.config.chainId===31337?'SnapVault Local':'X Layer Testnet'),nativeCurrency:{name:wallet.config.chainId===196?'OKB':'Test OKB',symbol:'OKB',decimals:18},rpcUrls:[wallet.config.chainId===31337?apiURL('/rpc'):wallet.config.chainId===196?'https://rpc.xlayer.tech':'https://testrpc.xlayer.tech/terigon']}]});}
 }
