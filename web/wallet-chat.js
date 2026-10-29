@@ -1,3 +1,4 @@
+import {messagePayload,hydrateSafeImages} from './safe-dom.js';
 import {wallet,call,walletAction} from './wallet.js';
 import {identity,profile,uidOf,escapeHtml as esc} from './store.js';
 export async function initWalletChat(root,hooks){
@@ -12,16 +13,15 @@ export async function initWalletChat(root,hooks){
  function renderFriends(){
   const box=root.querySelector('#xc-frbox');box.classList.toggle('hidden',!friendOpen);if(!friendOpen)return;
   const who=identity(),friends=wallet.data.friends||[];
-  box.innerHTML=`<div class="muted">我的地址：<span class="wallet-address">${esc(who||'请先登录')}</span><br>UID：${who?uidOf(who):'—'}</div><input id="xc-fq" placeholder="输入对方已登录的钱包地址"><button id="xc-fadd" class="primary">发送好友申请</button><div id="xc-fmsg" role="status" class="muted"></div>${friends.map(f=>`<div class="muted">${esc(profile(f.from===who?f.to:f.from).name)} · ${f.status==='accepted'?'已是好友':f.to===who?`<button class="secondary" data-accept="${f.from}">接受</button>`:'等待接受'}</div>`).join('')}`;
+  box.innerHTML=`<div class="muted">我的地址：<span class="wallet-address">${esc(who||'请先登录')}</span><br>UID：${who?uidOf(who):'—'}</div><input id="xc-fq" placeholder="输入对方已登录的钱包地址"><button id="xc-fadd" class="primary">发送好友申请</button><div id="xc-fmsg" role="status" class="muted"></div>${friends.map(f=>`<div class="muted">${esc(profile(f.from===who?f.to:f.from).name)} · ${f.status==='accepted'?'已是好友':f.to===who?`<button class="secondary" data-accept="${esc(f.from)}">接受</button>`:'等待接受'}</div>`).join('')}`;
   box.querySelector('#xc-fadd').onclick=async()=>{try{await walletAction('friend',{to:box.querySelector('#xc-fq').value.trim()});renderFriends();}catch(e){box.querySelector('#xc-fmsg').textContent=e.message;}};
   box.querySelectorAll('[data-accept]').forEach(b=>b.onclick=async()=>{try{await walletAction('friend',{to:b.dataset.accept,accept:true});renderFriends();}catch(e){tell(e);}});
  }
  function renderNew(){
   const box=root.querySelector('#xc-newbox');box.classList.toggle('hidden',!newOpen);if(!newOpen)return;const who=identity(),others=(wallet.data.friends||[]).filter(f=>f.status==='accepted').map(f=>f.from===who?f.to:f.from);
-  box.innerHTML=`<div class="muted">选一位好友开始私聊，选多位创建群聊。</div>${others.map(a=>`<label class="xc-chk"><input type="checkbox" value="${a}">${esc(profile(a).name)}</label>`).join('')||'<p class="muted">先添加好友，等待对方接受。</p>'}<input id="xc-gname" placeholder="群聊名称" maxlength="30"><button id="xc-create" class="primary">创建会话</button><div id="xc-err" role="status" class="muted"></div>`;
+  box.innerHTML=`<div class="muted">选一位好友开始私聊，选多位创建群聊。</div>${others.map(a=>`<label class="xc-chk"><input type="checkbox" value="${esc(a)}">${esc(profile(a).name)}</label>`).join('')||'<p class="muted">先添加好友，等待对方接受。</p>'}<input id="xc-gname" placeholder="群聊名称" maxlength="30"><button id="xc-create" class="primary">创建会话</button><div id="xc-err" role="status" class="muted"></div>`;
   box.querySelector('#xc-create').onclick=async()=>{try{const members=[...box.querySelectorAll('input[type=checkbox]:checked')].map(e=>e.value),c=await walletAction('conversation',{members,name:box.querySelector('#xc-gname').value});cur=c.id;sessionStorage.setItem('sv:wallet-conv',cur);newOpen=false;renderNew();await render();}catch(e){box.querySelector('#xc-err').textContent=e.message;}};
  }
- function payloadHTML(p){return `${p.text?`<div>${esc(p.text)}</div>`:''}${p.image?`<img class="chat-photo" src="data:${p.image.mime};base64,${p.image.data}" alt="聊天图片">`:''}`;}
  async function openMessage(id){
   const who=identity(),data=await call('message-open',{id});if(identity()!==who)return;
   opened.set(id,data);if(data.viewUntil)deadlines.set(id,data.viewUntil);await render();
@@ -29,21 +29,30 @@ export async function initWalletChat(root,hooks){
  async function render(){
   const rev=++revision,who=identity();if(me!==who){me=who;cur=null;opened.clear();deadlines.clear();drafts.clear();root.querySelector('#xc-frbox').classList.add('hidden');root.querySelector('#xc-newbox').classList.add('hidden');friendOpen=newOpen=false;}
   root.querySelector('#wallet-chat-me').textContent=who?`${profile(who).name} · ${who.slice(0,6)}…${who.slice(-4)}`:'连接钱包后开始聊天';
-  root.querySelector('#xc-list').innerHTML=convs().map(c=>{const m=messages().filter(m=>m.conv===c.id).at(-1);return `<div class="xc-item ${c.id===cur?'on':''}" data-conv="${c.id}"><div class="xc-av">${c.type==='dm'?'💬':'👥'}</div><div class="xc-mid"><div class="xc-row"><b>${esc(label(c))}</b></div><div class="xc-prev">${m?(m.kind==='paid-image'?'付费图片':m.burn?'阅后即焚消息':'新消息 / 图片'):'打个招呼吧'}</div></div></div>`;}).join('');
+  root.querySelector('#xc-list').innerHTML=convs().map(c=>{const m=messages().filter(m=>m.conv===c.id).at(-1);return `<div class="xc-item ${c.id===cur?'on':''}" data-conv="${esc(c.id)}"><div class="xc-av">${c.type==='dm'?'💬':'👥'}</div><div class="xc-mid"><div class="xc-row"><b>${esc(label(c))}</b></div><div class="xc-prev">${m?(m.kind==='paid-image'?'付费图片':m.burn?'阅后即焚消息':'新消息 / 图片'):'打个招呼吧'}</div></div></div>`;}).join('');
   const pane=root.querySelector('#xc-pane'),c=convs().find(c=>c.id===cur);
   if(!c){pane.innerHTML=`<div class="xc-empty"><p style="font-size:42px">💬</p><b>${who?'从一句你好开始':'连接钱包，认识彼此'}</b><p class="muted">免费私聊、群聊，支持文字、图片和自设阅后即焚。<br>${who?'先点好友按钮添加另一个已登录的钱包。':'点击右上角连接钱包。登录签名不会支付费用。'}</p></div>`;return;}
   const old=pane.querySelector('#chat-text'),draft=drafts.get(c.id)||{text:'',burn:false,secs:'10',shot:'allow',file:null};
   const active=old&&document.activeElement===old,selection=active?old.selectionStart:null;
   const rows=[];
   for(const m of messages().filter(m=>m.conv===c.id)){
-   const mine=m.from===who;if(m.kind==='paid-image'){rows.push(`<div class="msg ${mine?'me':''} paid-message">${hooks.renderPaidCard(m.contentId,who,'chat')}</div>`);continue;}
-   let p=opened.get(m.id),body='';if(p?.viewUntil&&p.viewUntil<=Date.now()){opened.delete(m.id);p=null;}
-   if(m.burn){if(mine)body=`<i class="muted">阅后即焚 · ${m.secs} 秒</i>`;else if(m.expired||(deadlines.has(m.id)&&deadlines.get(m.id)<=Date.now())||(m.viewUntil&&m.viewUntil<=Date.now()))body='<i class="muted">🔥 已焚毁</i>';else if(p)body=payloadHTML(p)+`<small class="count">${Math.max(0,Math.ceil((p.viewUntil-Date.now())/1000))} 秒后结束展示</small>`;else body=`<button class="tapburn" data-message-open="${m.id}">🔥 ${m.viewUntil?'继续查看':'点击查看'}（${m.secs} 秒）</button>`;}
-   else {if(!p){try{p=await call('message-open',{id:m.id});if(identity()!==who)return;opened.set(m.id,p);}catch{p={text:'消息暂时不可用，稍后重试'};}}body=payloadHTML(p);}
-   rows.push(`<div class="msg ${mine?'me':''}">${c.type==='group'?`<small class="muted">${esc(profile(m.from).name)}</small>`:''}<div class="bubble ${m.shot==='forbid'?'noshot':''}">${body}</div><small class="muted">${new Date(m.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})}</small></div>`);
+   const mine=m.from===who;if(m.kind==='paid-image'){const paid=document.createElement('div');paid.className='msg paid-message'+(mine?' me':'');paid.innerHTML=hooks.renderPaidCard(m.contentId,who,'chat');hydrateSafeImages(paid);rows.push(paid);continue;}
+   let p=opened.get(m.id);if(p?.viewUntil&&p.viewUntil<=Date.now()){opened.delete(m.id);p=null;}
+   const row=document.createElement('div');row.className='msg'+(mine?' me':'');
+   if(c.type==='group'){const name=document.createElement('small');name.className='muted';name.textContent=profile(m.from).name;row.append(name);}
+   const bubble=document.createElement('div');bubble.className='bubble'+(m.shot==='forbid'?' noshot':'');
+   const note=text=>{const el=document.createElement('i');el.className='muted';el.textContent=text;bubble.append(el);};
+   if(m.burn){
+    if(mine)note(`阅后即焚 · ${m.secs} 秒`);
+    else if(m.expired||(deadlines.has(m.id)&&deadlines.get(m.id)<=Date.now())||(m.viewUntil&&m.viewUntil<=Date.now()))note('🔥 已焚毁');
+    else if(p){bubble.append(messagePayload(p));const count=document.createElement('small');count.className='count';count.textContent=`${Math.max(0,Math.ceil((p.viewUntil-Date.now())/1000))} 秒后结束展示`;bubble.append(count);}
+    else {const button=document.createElement('button');button.className='tapburn';button.dataset.messageOpen=m.id;button.textContent=`🔥 ${m.viewUntil?'继续查看':'点击查看'}（${m.secs} 秒）`;bubble.append(button);}
+   }else{if(!p){try{p=await call('message-open',{id:m.id});if(identity()!==who)return;opened.set(m.id,p);}catch{p={text:'消息暂时不可用，稍后重试'};}}bubble.append(messagePayload(p));}
+   const time=document.createElement('small');time.className='muted';time.textContent=new Date(m.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});row.append(bubble,time);rows.push(row);
   }
   if(rev!==revision)return;
-  pane.innerHTML=`<div class="xc-head"><div class="xc-av">${c.type==='dm'?'💬':'👥'}</div><div><b>${esc(label(c))}</b><div class="muted">${c.type==='group'?`${c.members.length} 位成员`:'免费私聊'} · 文字与图片</div></div></div><div id="chat-list" class="chat-list">${rows.join('')||'<p class="muted">还没有消息，打个招呼吧。</p>'}</div><form id="chat-form" class="chat-input"><input id="chat-text" maxlength="500" placeholder="写一句话，也可以附上图片…" autocomplete="off"><label class="secondary free-image-button" for="chat-file">＋ 图片</label><input class="sr-only" type="file" id="chat-file" accept="image/png,image/jpeg,image/webp,image/gif"><label class="burn"><input type="checkbox" id="chat-burn"> 🔥 阅后即焚</label><select id="chat-secs" aria-label="查看秒数"><option value="5">5 秒</option><option value="10">10 秒</option><option value="30">30 秒</option><option value="60">60 秒</option></select><button id="chat-paid" type="button" class="secondary chat-paid">🔒 付费图片</button><button type="submit" class="primary">发送</button><span class="draft-image-name muted">${esc(draft.file?.name||'')}</span><button class="text-button ${draft.file?'':'hidden'}" id="remove-chat-file" type="button">移除图片</button><span id="chat-error" class="error" role="alert"></span></form>`;
+  pane.innerHTML=`<div class="xc-head"><div class="xc-av">${c.type==='dm'?'💬':'👥'}</div><div><b>${esc(label(c))}</b><div class="muted">${c.type==='group'?`${c.members.length} 位成员`:'免费私聊'} · 文字与图片</div></div></div><div id="chat-list" class="chat-list"></div><form id="chat-form" class="chat-input"><input id="chat-text" maxlength="500" placeholder="写一句话，也可以附上图片…" autocomplete="off"><label class="secondary free-image-button" for="chat-file">＋ 图片</label><input class="sr-only" type="file" id="chat-file" accept="image/png,image/jpeg,image/webp,image/gif"><label class="burn"><input type="checkbox" id="chat-burn"> 🔥 阅后即焚</label><select id="chat-secs" aria-label="查看秒数"><option value="5">5 秒</option><option value="10">10 秒</option><option value="30">30 秒</option><option value="60">60 秒</option></select><button id="chat-paid" type="button" class="secondary chat-paid">🔒 付费图片</button><button type="submit" class="primary">发送</button><span class="draft-image-name muted">${esc(draft.file?.name||'')}</span><button class="text-button ${draft.file?'':'hidden'}" id="remove-chat-file" type="button">移除图片</button><span id="chat-error" class="error" role="alert"></span></form>`;
+  pane.querySelector('#chat-list').replaceChildren(...rows);
   const text=pane.querySelector('#chat-text'),burn=pane.querySelector('#chat-burn'),secs=pane.querySelector('#chat-secs');text.value=draft.text;burn.checked=draft.burn;secs.value=draft.secs;
   const save=()=>{draft.text=text.value;draft.burn=burn.checked;draft.secs=secs.value;drafts.set(c.id,draft);};text.oninput=burn.onchange=secs.onchange=save;
   pane.querySelector('#chat-file').onchange=e=>{draft.file=e.target.files[0];save();render();};pane.querySelector('#remove-chat-file').onclick=()=>{draft.file=null;save();render();};

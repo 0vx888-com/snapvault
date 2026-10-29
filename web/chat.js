@@ -1,3 +1,4 @@
+import {hydrateSafeImages} from './safe-dom.js';
 import {wallet,walletAction} from './wallet.js';
 import {initWalletChat} from './wallet-chat.js';
 // SnapVault 私聊（XChat 风格）：私信、群聊、创作者付费粉丝群，支持阅后即焚。目前是离线模拟。
@@ -177,7 +178,7 @@ function toggleNew() {
   const box = R.querySelector("#xc-newbox"); box.classList.toggle("hidden");
   const others = [...new Set([...Object.keys(PEOPLE), ...Friends.all().flatMap((f) => [f.from, f.to])])].filter((a) => a !== me && Friends.isFriend(me, a));
   box.innerHTML = `<div class="muted">从好友里选：选 1 人就是私信，选多人就是群聊${others.length ? "" : "（还没有好友，先点 👥 添加）"}</div>
-    ${others.map((a) => `<label class="xc-chk"><input type="checkbox" value="${esc(a)}"> ${profile(a).av} ${esc(nm(a))}</label>`).join("")}
+    ${others.map((a) => `<label class="xc-chk"><input type="checkbox" value="${esc(a)}"> ${esc(profile(a).av)} ${esc(nm(a))}</label>`).join("")}
     <input id="xc-gname" placeholder="群名（建群时填）" maxlength="30">
     ${me === CREATOR ? `<label class="xc-chk"><input type="checkbox" id="xc-gated"> 🔐 付费粉丝群（只有买过我内容的钱包能加入）</label>` : ""}
     <button class="primary" id="xc-create">创建</button><div id="xc-err" class="muted"></div>`;
@@ -208,7 +209,7 @@ async function render() {
   }).sort((a, b) => b.ts - a.ts);
   R.querySelector("#xc-list").innerHTML = convs.map(({ c, last, unread, ts }) => {
     const prev = !c.members.includes(me) ? "🔒 付费粉丝群 · 购买后可加入" : !last ? "还没有消息" : (c.type === "group" ? nm(last.from) + "：" : "") + (last.kind === 'paid-image' ? '🔒 付费图片' : last.burn ? "🔥 阅后即焚消息" : "💬 新消息");
-    return `<div class="xc-item ${c.id === cur ? "on" : ""}" data-conv="${c.id}"><div class="xc-av">${avatar(c)}</div>
+    return `<div class="xc-item ${c.id === cur ? "on" : ""}" data-conv="${esc(c.id)}"><div class="xc-av">${avatar(c)}</div>
       <div class="xc-mid"><div class="xc-row"><b>${esc(title(c))}</b><small class="muted">${fmt(ts)}</small></div>
       <div class="xc-row"><span class="xc-prev">${esc(prev)}</span>${unread ? `<span class="xc-badge">${unread}</span>` : ""}</div></div></div>`;
   }).join("");
@@ -238,11 +239,11 @@ async function renderPane() {
     const mine = m.from === me, o = opened[m.id], sp = shotOf(c, m); let body;
     if (m.kind === 'paid-image') return `<div class="msg ${mine ? 'me' : ''} paid-message">${c.type === 'group' ? `<small class="muted">${esc(nm(m.from))}</small>` : ''}${hooks.renderPaidCard?.(m.contentId, me, 'chat') || ''}<small class="muted">${fmt(m.ts)}</small></div>`;
     if (o) { const left = Math.max(0, Math.ceil((o.until - Date.now()) / 1000)); body = `${esc(o.text)}<div class="bar"><div class="cprog" style="width:${left / m.secs * 100}%"></div></div><small class="count">${left} 秒后结束展示</small>`; }
-    else if (m.burn && mine) { const n = (m.viewed || []).length, tot = c.members.length - 1; body = `<i class="muted">🔥 阅后即焚 · ${m.secs} 秒（${n}/${tot} 已查看${m.env ? "" : "，密文已删除"}）</i>`; }
+    else if (m.burn && mine) { const n = (m.viewed || []).length, tot = c.members.length - 1; body = `<i class="muted">🔥 阅后即焚 · ${esc(m.secs)} 秒（${n}/${tot} 已查看${m.env ? "" : "，密文已删除"}）</i>`; }
     else if (m.burn && ((m.viewed || []).includes(me) || !m.env)) body = `<i class="muted">🔥 已焚毁</i>`;
-    else if (m.burn) body = `<button class="tapburn" data-open="${m.id}">🔥 点击查看（${m.secs} 秒）</button>`;
+    else if (m.burn) body = `<button class="tapburn" data-open="${esc(m.id)}">🔥 点击查看（${esc(m.secs)} 秒）</button>`;
     else body = esc(dec.decode(await Crypto.unaes(key, m.env).catch(() => enc.encode("（解密失败）"))));
-    return `<div class="msg ${mine ? "me" : ""}">${c.type === "group" && !mine ? `<small class="muted">${PEOPLE[m.from]?.av || ""} ${esc(nm(m.from))}</small>` : ""}<div class="bubble ${sp === "forbid" && !mine ? "noshot" : ""}" data-wm="${esc(nm(me) + " " + uidOf(me))}">${body}</div><small class="muted">${fmt(m.ts)}${m.shot ? " · " + SHOT[m.shot] : ""}</small></div>`;
+    return `<div class="msg ${mine ? "me" : ""}">${c.type === "group" && !mine ? `<small class="muted">${esc(PEOPLE[m.from]?.av || "")} ${esc(nm(m.from))}</small>` : ""}<div class="bubble ${sp === "forbid" && !mine ? "noshot" : ""}" data-wm="${esc(nm(me) + " " + uidOf(me))}">${body}</div><small class="muted">${fmt(m.ts)}${m.shot ? " · " + SHOT[m.shot] : ""}</small></div>`;
   }));
   if (revision !== paneRevision) return;
   pane.dataset.conv = draftKey;
@@ -252,6 +253,7 @@ async function renderPane() {
       <select id="chat-secs"><option>5</option><option selected>10</option><option>30</option></select><span class="muted">秒</span>
       <details class="chat-settings"><summary aria-label="更多消息设置">⋯</summary><div><label>显示保护<select id="chat-shot" title="这条消息的截图设置"><option value="">跟随会话</option>${Object.entries(SHOT).map(([k, v]) => `<option value="${k}">${v}</option>`).join("")}</select></label><small>浏览器无法阻止或可靠识别系统截图。</small></div></details>
       <button type="button" class="secondary chat-paid" id="chat-paid">🔒 付费图片</button><button class="primary">发送</button></form>`;
+  hydrateSafeImages(pane);
   pane.querySelector('#chat-paid').onclick = () => hooks.compose?.({ ...c, label: title(c) });
   pane.querySelector("#xc-cshot").onchange = (e) => { c.shot = e.target.value; T.saveConv(c); T.send({ conv: c.id, from: me, ts: Date.now(), sys: `${nm(me)} 把会话截图设置改为「${SHOT[c.shot]}」` }); render(); };
   pane.querySelector("#chat-text").value = draft.text;

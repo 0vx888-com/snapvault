@@ -1,3 +1,4 @@
+import {safeImageURL,hydrateSafeImages} from './safe-dom.js';
 import {walletError} from './transaction-guard.js';
 import {initRefunds} from './refunds.js';
 import {wallet,connect,disconnect,initWallet,refresh as walletRefresh,publishWallet,purchaseWallet,openWallet,walletAction,setupNetwork,withdrawWallet,apiURL,SERVER_UNAVAILABLE} from './wallet.js';
@@ -24,11 +25,11 @@ function go(page) {
 function creatorPhoto(address){return !wallet.enabled && address===CREATOR?'photo-travel':!wallet.enabled && address==='0xFaN3000000000000000000000000000000000003'?'photo-maker':'photo-sea';}
 function creatorCard(p) {
   const count = contents().filter(c => c.creator === p.address && c.scope === 'public').length, picture=creatorPhoto(p.address);
-  return `<article class="card creator-card"><div class="creator-cover photo-tile ${picture}" role="img" aria-label="${wallet.enabled?'示例风景封面':'AI 生成的创作者示例封面'}"><span class="creator-tag">${esc(p.tag || '日常分享')}</span><span class="cover-label">${wallet.enabled?'示例封面':'界面示例'}</span></div><div class="creator-info"><div class="creator-identity"><span class="creator-avatar ${wallet.enabled?'':`photo-tile ${picture}`}">${wallet.enabled?p.av:''}</span><div><h3>${esc(p.name)}</h3><span class="creator-uid">${uidOf(p.address)}</span></div><span class="creator-flower" aria-hidden="true">✦</span></div><p>${esc(p.bio || '关于生活，关于我。')}</p><div class="creator-meta"><span>${count} 条公开作品</span><span>${wallet.enabled?'站内资料':'演示创作者'}</span></div><div class="creator-actions"><button class="secondary" data-profile="${p.address}">看看 TA 的日常</button>${identity() === p.address ? '<span class="pill">这是我</span>' : `<button class="${follows().includes(p.address) ? 'secondary' : 'primary'}" data-follow="${p.address}">${follows().includes(p.address) ? '已关注' : '＋ 关注'}</button>`}</div></div></article>`;
+  return `<article class="card creator-card"><div class="creator-cover photo-tile ${picture}" role="img" aria-label="${wallet.enabled?'示例风景封面':'AI 生成的创作者示例封面'}"><span class="creator-tag">${esc(p.tag || '日常分享')}</span><span class="cover-label">${wallet.enabled?'示例封面':'界面示例'}</span></div><div class="creator-info"><div class="creator-identity"><span class="creator-avatar ${wallet.enabled?'':`photo-tile ${picture}`}">${wallet.enabled?esc(p.av):''}</span><div><h3>${esc(p.name)}</h3><span class="creator-uid">${uidOf(p.address)}</span></div><span class="creator-flower" aria-hidden="true">✦</span></div><p>${esc(p.bio || '关于生活，关于我。')}</p><div class="creator-meta"><span>${count} 条公开作品</span><span>${wallet.enabled?'站内资料':'演示创作者'}</span></div><div class="creator-actions"><button class="secondary" data-profile="${esc(p.address)}">看看 TA 的日常</button>${identity() === p.address ? '<span class="pill">这是我</span>' : `<button class="${follows().includes(p.address) ? 'secondary' : 'primary'}" data-follow="${esc(p.address)}">${follows().includes(p.address) ? '已关注' : '＋ 关注'}</button>`}</div></div></article>`;
 }
 function renderStories(){
  const list=profiles().slice(0,8);
- $('#creator-stories').innerHTML=`<button class="story-item story-create" data-go-create><span class="story-avatar">＋</span><b>开始分享</b><small>你的创作空间</small></button>`+list.map(p=>`<button class="story-item" data-profile="${p.address}"><span class="story-avatar ${wallet.enabled?'':`photo-tile ${creatorPhoto(p.address)}`}">${wallet.enabled?esc(p.av):''}</span><b>${esc(p.name)}</b><small>${esc(p.tag||'看看新日常')}</small></button>`).join('')+`<div class="story-greeting"><span>YOUR PEOPLE.<br>YOUR MOMENTS.</span><i>✳</i></div>`;
+ $('#creator-stories').innerHTML=`<button class="story-item story-create" data-go-create><span class="story-avatar">＋</span><b>开始分享</b><small>你的创作空间</small></button>`+list.map(p=>`<button class="story-item" data-profile="${esc(p.address)}"><span class="story-avatar ${wallet.enabled?'':`photo-tile ${creatorPhoto(p.address)}`}">${wallet.enabled?esc(p.av):''}</span><b>${esc(p.name)}</b><small>${esc(p.tag||'看看新日常')}</small></button>`).join('')+`<div class="story-greeting"><span>YOUR PEOPLE.<br>YOUR MOMENTS.</span><i>✳</i></div>`;
 }
 
 function deliveryNote(c,who,state){
@@ -46,20 +47,20 @@ function showReceived(){feed='purchased';profileAddress=null;$('#search').value=
 function paidCard(id, who = identity(), variant = 'grid') {
   const c = content(id); if (!c || !eligible(c, who)) return '<div class="muted">这张图片未向当前身份开放</div>';
   const state = orderState(c, who), p = profile(c.creator), soldout = !!c.max && c.sold >= c.max;
-  const label = state === 'creator' ? '预览我的图片' : state === 'expired' ? '展示已结束' : state === 'delivering' ? '付款已确认 · 密钥交付中' : state === 'ready' ? '已购买 · 点击查看' : state === 'viewing' ? '继续查看' : soldout ? '已售罄' : `🔒 ${money(c)} 解锁`;
+  const label = state === 'creator' ? '预览我的图片' : state === 'expired' ? '展示已结束' : state === 'delivering' ? '付款已确认 · 密钥交付中' : state === 'ready' ? '已购买 · 点击查看' : state === 'viewing' ? '继续查看' : soldout ? '已售罄' : `🔒 ${esc(money(c))} 解锁`;
   const disabled = state === 'delivering' || state === 'expired' || (state === 'locked' && soldout);
-  const image = c.thumb && c.showPreview ? `<img src="${c.thumb}" alt="创作者允许的模糊预览" class="ph">` : '<div class="ph placeholder-art"></div>';
-  return `<article class="${variant === 'chat' ? 'paid-chat-card' : 'card content-card'}" data-product-id="${c.id}"><div class="thumb">${image}<div class="lock"><span class="lock-icon">${state === 'expired' ? '⌛' : '🔒'}</span><span>${c.burn ? `打开后展示 ${c.secs} 秒` : '购买后 24 小时内可看'}</span></div></div><div class="meta"><b>${esc(c.title)}</b><button class="creator-link" data-profile="${c.creator}">${p.av} ${esc(p.name)}</button><div class="muted">${c.scope === 'public' ? '公开作品' : '会话专属'} · 已售 ${c.sold || 0}${c.max ? '/' + c.max : ''}</div><button class="${disabled ? 'primary done' : 'primary'}" data-content-action="${state === 'locked' ? 'buy' : 'view'}" data-content-id="${c.id}" ${disabled ? 'disabled' : ''}>${label}</button>${deliveryNote(c,who,state)}${who === c.creator ? `<button class="secondary" data-content-action="share" data-content-id="${c.id}">发送到聊天</button>` : ''}<small class="card-demo">${wallet.enabled ? (wallet.config?.chainId===31337?'本地链 · 免容器交付':(wallet.config?.mainnet?'X Layer 主网 · 自动交付':'X Layer 测试网 · 免容器交付')) : local.enabled ? '本地链 31337 · 测试付款 / 自动交付' : '本地演示 · 不扣款'}</small></div></article>`;
+  const image = safeImageURL(c.thumb) && c.showPreview ? `<div data-safe-image="${esc(c.thumb)}" class="ph"></div>` : '<div class="ph placeholder-art"></div>';
+  return `<article class="${variant === 'chat' ? 'paid-chat-card' : 'card content-card'}" data-product-id="${esc(c.id)}"><div class="thumb">${image}<div class="lock"><span class="lock-icon">${state === 'expired' ? '⌛' : '🔒'}</span><span>${c.burn ? `打开后展示 ${esc(c.secs)} 秒` : '购买后 24 小时内可看'}</span></div></div><div class="meta"><b>${esc(c.title)}</b><button class="creator-link" data-profile="${esc(c.creator)}">${esc(p.av)} ${esc(p.name)}</button><div class="muted">${c.scope === 'public' ? '公开作品' : '会话专属'} · 已售 ${esc(c.sold || 0)}${c.max ? '/' + esc(c.max) : ''}</div><button class="${disabled ? 'primary done' : 'primary'}" data-content-action="${state === 'locked' ? 'buy' : 'view'}" data-content-id="${esc(c.id)}" ${disabled ? 'disabled' : ''}>${esc(label)}</button>${deliveryNote(c,who,state)}${who === c.creator ? `<button class="secondary" data-content-action="share" data-content-id="${esc(c.id)}">发送到聊天</button>` : ''}<small class="card-demo">${wallet.enabled ? (wallet.config?.chainId===31337?'本地链 · 免容器交付':(wallet.config?.mainnet?'X Layer 主网 · 自动交付':'X Layer 测试网 · 免容器交付')) : local.enabled ? '本地链 31337 · 测试付款 / 自动交付' : '本地演示 · 不扣款'}</small></div></article>`;
 }
 function renderProfile() {
   const panel = $('#creator-profile'); panel.classList.toggle('hidden', !profileAddress);
   if (!profileAddress) return;
   const p = profile(profileAddress), mine = profileAddress === identity();
-  panel.innerHTML = `<button class="secondary" data-close-profile>← 返回广场</button><div class="profile-header"><div class="profile-avatar">${p.av}</div><div><h2>${esc(p.name)}</h2><div class="muted">${uidOf(profileAddress)}</div><p>${esc(p.bio)}</p></div><div class="profile-actions">${mine ? '<button class="secondary" data-go-create>编辑我的资料</button>' : `<button class="primary" data-follow="${profileAddress}">${follows().includes(profileAddress) ? '已关注' : '＋ 关注'}</button><button class="secondary" data-message="${profileAddress}">申请 / 打开私聊</button>`}</div></div><h3>公开作品</h3><div class="grid">${contents().filter(c => c.creator === profileAddress && c.scope === 'public').reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">还没有发布公开作品。</p>'}</div>`;
+  panel.innerHTML = `<button class="secondary" data-close-profile>← 返回广场</button><div class="profile-header"><div class="profile-avatar">${esc(p.av)}</div><div><h2>${esc(p.name)}</h2><div class="muted">${uidOf(profileAddress)}</div><p>${esc(p.bio)}</p></div><div class="profile-actions">${mine ? '<button class="secondary" data-go-create>编辑我的资料</button>' : `<button class="primary" data-follow="${esc(profileAddress)}">${follows().includes(profileAddress) ? '已关注' : '＋ 关注'}</button><button class="secondary" data-message="${esc(profileAddress)}">申请 / 打开私聊</button>`}</div></div><h3>公开作品</h3><div class="grid">${contents().filter(c => c.creator === profileAddress && c.scope === 'public').reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">还没有发布公开作品。</p>'}</div>`;
 }
 function render() {
   renderStories();
-  $('#identity').innerHTML = Object.keys(PEOPLE).map(a => `<option value="${a}">${profile(a).av} ${esc(profile(a).name)}</option>`).join(''); $('#identity').value = identity();
+  $('#identity').innerHTML = Object.keys(PEOPLE).map(a => `<option value="${a}">${esc(profile(a).av)} ${esc(profile(a).name)}</option>`).join(''); $('#identity').value = identity();
   const query = $('#search').value.trim().toLowerCase();
   const creators = profiles().filter(p => `${p.name} ${uidOf(p.address)} ${p.bio} ${p.tag||''}`.toLowerCase().includes(query) && (feed !== 'following' || follows().includes(p.address)));
   const items = contents().filter(c => eligible(c) && (feed === 'purchased' ? !!order(c.id) : c.scope === 'public' && (feed !== 'following' || follows().includes(c.creator))))
@@ -70,11 +71,11 @@ function render() {
   $('#my-contents').innerHTML = contents().filter(c => c.creator === identity()).reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">你还没有发布内容。</p>';
   if (document.activeElement !== $('#profile-name')) $('#profile-name').value = profile(identity()).name;
   if (document.activeElement !== $('#profile-bio')) $('#profile-bio').value = profile(identity()).bio;
-  renderProfile();renderReceived(items);
+  renderProfile();renderReceived(items);hydrateSafeImages(document);
 }
 function renderTargets(selected) {
   const old = selected ?? $('#publish-target').value, convs = chat?.conversations() || [];
-  $('#publish-target').innerHTML = '<option value="public">公开到创作者广场</option>' + convs.map(c => `<option value="${c.id}">仅当前${c.type === 'dm' ? '私聊' : '群聊'}：${esc(c.label)}</option>`).join('');
+  $('#publish-target').innerHTML = '<option value="public">公开到创作者广场</option>' + convs.map(c => `<option value="${esc(c.id)}">仅当前${c.type === 'dm' ? '私聊' : '群聊'}：${esc(c.label)}</option>`).join('');
   if ([...$('#publish-target').options].some(o => o.value === old)) $('#publish-target').value = old;
   const conv = convs.find(c => c.id === $('#publish-target').value);
   $('#compose-context').classList.toggle('hidden', !conv);
@@ -126,7 +127,7 @@ async function openPurchase(id) {
   if (c.creator === identity() || order(id)) return view(id).catch(e => toast(e.message));
   if(wallet.enabled){try{const route=await walletAction('delivery-route');$('#purchase-route').textContent=route.available?'本单付款后由平台 C 自动通过官方 TapeSend 发送查看链接。':route.reason;}catch(e){return toast(e.message);}}else $('#purchase-route').textContent='本地演示交付。';
   pendingPurchase = { id: c.id, buyer: identity() }; $('#purchase-error').textContent = '';
-  $('#purchase-detail').innerHTML = `<h3>${esc(c.title)}</h3><p>创作者：${esc(profile(c.creator).name)}</p><strong class="purchase-price">${money(c)}</strong><p>${c.burn ? `首次打开后展示 ${c.secs} 秒` : '购买后 24 小时内重复查看'}，请在付款后 24 小时内打开。</p><p class="muted">平台费 ${wallet.enabled?((wallet.config?.feeBps??1000)/100)+'%':'10%（演示）'}。买家：${esc(profile(identity()).name)}</p>`;
+  $('#purchase-detail').innerHTML = `<h3>${esc(c.title)}</h3><p>创作者：${esc(profile(c.creator).name)}</p><strong class="purchase-price">${esc(money(c))}</strong><p>${c.burn ? `首次打开后展示 ${esc(c.secs)} 秒` : '购买后 24 小时内重复查看'}，请在付款后 24 小时内打开。</p><p class="muted">平台费 ${wallet.enabled?((wallet.config?.feeBps??1000)/100)+'%':'10%（演示）'}。买家：${esc(profile(identity()).name)}</p>`;
   $('#confirm-purchase').disabled = false; $('#confirm-purchase').textContent = wallet.enabled?(wallet.config?.mainnet?'钱包确认付款（真实 OKB）':'钱包确认测试付款'):local.enabled?'确认本地测试付款':'模拟付款并解锁'; $('#purchase-dialog').showModal();
 }
 async function confirmPurchase() {
@@ -178,7 +179,7 @@ async function view(id) {
 function openShare(id) {
   const c = content(id); if (!c || c.creator !== identity()) return toast('只能发送自己的作品');
   const convs = chat.conversations().filter(conv => c.scope === 'public' || conv.id === c.convId); $('#share-error').textContent = '';
-  $('#share-list').innerHTML = convs.map(conv => `<button class="secondary" data-share-content="${c.id}" data-share-conv="${conv.id}">${conv.type === 'group' ? '👥' : '💬'} ${esc(conv.label)}</button>`).join('') || '<p>还没有可发送的会话，先去消息中添加好友或创建群聊。</p>'; $('#share-dialog').showModal();
+  $('#share-list').innerHTML = convs.map(conv => `<button class="secondary" data-share-content="${esc(c.id)}" data-share-conv="${esc(conv.id)}">${conv.type === 'group' ? '👥' : '💬'} ${esc(conv.label)}</button>`).join('') || '<p>还没有可发送的会话，先去消息中添加好友或创建群聊。</p>'; $('#share-dialog').showModal();
 }
 document.addEventListener('click', async e => {
   const b = e.target.closest('button'); if (!b) return;
