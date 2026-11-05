@@ -1,3 +1,4 @@
+import {publicState,privateProfiles,lookupProfile} from './public-profiles.mjs';
 import {installViewAccess} from './view-access.mjs';
 import {refundAction} from './wallet-refunds.mjs';
 // Authenticated wallet/chat/direct-delivery core. No user private keys, NFT or
@@ -64,13 +65,14 @@ export class WalletService {
  visible(p,who){return p.scope==='public'||p.creator===who||p.audience.includes(who);}
  async product(id,who){const p=this.state.products[id];if(!p||!this.visible(p,who))fail('无权访问此作品',403);const c=await this.vault.contents(id);if(c.creator.toLowerCase()!==p.creator||c.blobHash!==p.hash||c.blobURI!==p.uri)fail('作品链上记录不一致',409);return {p,c};}
  async stateFor(who){
-  await this.syncOrders();
+  if(who)await this.syncOrders();
   const products=[],orders=[];for(const[id,p]of Object.entries(this.state.products)){
    if(!this.visible(p,who))continue;const {c}=await this.product(id,who);products.push({...p,id,sold:Number(c.sold)});
    if(!who)continue;const access=Number(await this.vault.accessUntil(id,who))*1000;if(access)orders.push({contentId:id,buyer:who,creator:p.creator,accessUntil:access,viewUntil:this.state.opens[`${id}:${who}`]||null,delivery:await this.confirmed(id,who)&&((this.state.orderIndex.orders[id+':'+who]?.route!=='tapesend')||this.state.tapeJobs[this.jobRef(id,who)]?.status==='sent')?'ready':'pending',route:this.state.orderIndex.orders[id+':'+who]?.route||'ordinary',deliveryTx:this.state.tapeJobs[this.jobRef(id,who)]?.tx||null});
   }
+  if(!who)return publicState(this,products);
   const convs=this.state.convs.filter(c=>c.members.includes(who));
-  return {contents:products,orders,profiles:this.state.profiles,friends:this.state.friends.filter(f=>[f.from,f.to].includes(who)),convs,messages:this.state.messages.filter(m=>convs.some(c=>c.id===m.conv)).map(({payload,...m})=>({...m,viewUntil:m.opens?.[who]||null,expired:!!(m.burn&&m.opens?.[who]&&m.opens[who]<=Date.now())})),chainId:(await this.config()).chainId};
+  return {contents:products,orders,profiles:privateProfiles(this,who,products,convs),friends:this.state.friends.filter(f=>[f.from,f.to].includes(who)),convs,messages:this.state.messages.filter(m=>convs.some(c=>c.id===m.conv)).map(({payload,burnFile,opens,...m})=>({...m,viewUntil:opens?.[who]||null,expired:!!(m.burn&&opens?.[who]&&opens[who]<=Date.now())})),chainId:(await this.config()).chainId};
  }
  jobRef(id,buyer){return keccak256(Buffer.from(`${this.chainId}:${this.vault.target.toLowerCase()}:${id}:${buyer.toLowerCase()}`));}
  async syncOrders(force=false){if(this.scanTask)return this.scanTask;if(!force&&Date.now()-this.scanAt<5000)return;this.scanTask=this._syncOrders().then(()=>{this.scanAt=Date.now()}).finally(()=>{this.scanTask=null});return this.scanTask;}
@@ -92,7 +94,7 @@ export class WalletService {
  }
  async confirmed(id,who){await this.syncOrders(this.policy.local&&!this.state.orderIndex.orders[id+':'+who.toLowerCase()]);const order=this.state.orderIndex.orders[id+':'+who.toLowerCase()];return !!order&&!order.refunded;}
  async scanDeliveries(){await this.syncOrders(true);if(!this.transport)return;return this.serial(async()=>{for(const job of Object.values(this.state.tapeJobs)){if(['sent','refunded','failed'].includes(job.status))continue;try{await this.transport.deliver(job);if(job.error){job.error=null;this.save();}}catch{job.error='交付暂不可用，请联系平台核对或退款';this.save();}}});}
- async claimOpen(b,who){if(!/^0x[0-9a-fA-F]{64}$/.test(b.claim||''))fail('查看凭证无效',403);const hash=sha256(Buffer.from(b.claim.slice(2),'hex')),job=Object.values(this.state.tapeJobs).find(j=>j.id===String(b.id)&&j.claimHash===hash);if(!job||job.status!=='sent'||job.buyer!==who)fail('查看凭证无效或交付未确认',403);if(!await this.confirmed(job.id,job.buyer))fail('订单未确认或已退款',403);const {p}=await this.product(job.id,job.buyer);const accessUntil=Number(await this.vault.accessUntil(job.id,job.buyer))*1000;if(accessUntil<=Date.now())fail('购买资格已过期',410);const ref=job.id+':'+job.buyer;let viewUntil=null;if(p.burn){viewUntil=this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();await this.flushBackup();}}return {...this.grantView({who,ref,secs:p.secs,asset:p.hash,accessUntil}),hash:p.hash,mime:p.mime,title:p.title,accessUntil};}
+ async claimOpen(b,who){if(!/^0x[0-9a-fA-F]{64}$/.test(b.claim||''))fail('查看凭证无效',403);const hash=sha256(Buffer.from(b.claim.slice(2),'hex')),job=Object.values(this.state.tapeJobs).find(j=>j.id===String(b.id)&&j.claimHash===hash);if(!job||job.status!=='sent'||job.buyer!==who)fail('查看凭证无效或交付未确认',403);if(!await this.confirmed(job.id,job.buyer))fail('订单未确认或已退款',403);const {p}=await this.product(job.id,job.buyer);const accessUntil=Number(await this.vault.accessUntil(job.id,job.buyer))*1000;if(accessUntil<=Date.now())fail('购买资格已过期',410);const ref=job.id+':'+job.buyer;let viewUntil=null;if(p.burn){viewUntil=this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();await this.flushBackup();}}return {...this.grantView({who,ref,secs:p.secs,asset:p.hash,accessUntil,existingDeadline:viewUntil||Infinity}),hash:p.hash,mime:p.mime,title:p.title,accessUntil};}
  async deliveryRoute(who){if(this.chainId===1952)return {available:false,reason:'测试网尚无官方 TapeSend Hub，本单使用普通交付'};if(!this.transport)return {available:false,reason:'当前本地环境未配置 TapeSend，本单使用普通交付'};return this.transport.recipient(who,this.state.profiles[who]?.delivery);}
  async handle(action,b,token,origin){
   await this.config();if(action==='challenge')return this.challenge(b,origin);if(action==='login')return this.login(b,origin);
@@ -102,13 +104,14 @@ export class WalletService {
   if(action==='claim-open')return this.serial(()=>this.claimOpen(b,who));
   if(action==='view-finish')return this.serial(()=>this.finishView(b.ref,who));
   if(action==='logout'){this.sessions.delete(token);return {ok:true};}
+  if(action==='profile-lookup')return lookupProfile(this,who,b.query);
   if(action==='state')return this.stateFor(who);
   if(action.startsWith('refund-'))return refundAction(this,action,b,who);
   if(action==='delivery-settings'){let binding=null;if(b.circuits){const circuits=address(b.circuits),tokenId=String(b.tokenId);if(!/^[1-9][0-9]{0,76}$/.test(tokenId))fail('容器电路编号无效');binding={circuits,tokenId};}this.state.profiles[who]={...this.state.profiles[who],delivery:binding};this.save();return {ok:true};}
   if(action==='delivery-route'){const route=await this.deliveryRoute(who);return {available:route.available,reason:route.reason||null};}
   if(action==='earnings')return {amount:formatEther(await this.vault.balances(who,ZeroAddress)),token:ZeroAddress};
   if(action==='profile'){const name=String(b.name||'').trim(),bio=String(b.bio||'').trim();if(!name||name.length>20||bio.length>100)fail('昵称或简介长度无效');this.state.profiles[who]={...this.state.profiles[who],name,bio,creator:true};this.save();return {ok:true};}
-  if(action==='friend'){
+  if(action==='friend'){this.limit('lookup:'+who,20);
    const to=address(b.to);if(to===who||!this.state.profiles[to])fail('对方需要先登录 SnapVault');
    let f=this.state.friends.find(f=>[f.from,f.to].includes(who)&&[f.from,f.to].includes(to));
    if(b.accept){if(!f||f.to!==who||f.status!=='pending')fail('好友申请不存在');f.status='accepted';}
@@ -132,7 +135,7 @@ export class WalletService {
   if(action==='message-open'){
    const m=this.state.messages.find(m=>m.id===b.id);if(!m||(!m.payload&&!m.burnFile))fail('消息不存在',410);this.member(m.conv,who);
    let until=null;if(m.burn){if(who===m.from)fail('发送者不能打开限时消息');until=m.opens[who];if(until&&until<=Date.now())fail('此消息已结束展示',410);if(!until){until=Date.now()+m.secs*1000;m.opens[who]=until;this.save();}}
-   if(m.burn)return this.serial(()=>this.grantView({who,ref:'message:'+m.id+':'+who,secs:m.secs,message:m.id}));
+   if(m.burn)return this.serial(()=>this.grantView({who,ref:'message:'+m.id+':'+who,secs:m.secs,message:m.id,existingDeadline:until||Infinity}));
    return {...JSON.parse(this.unseal(m.payload)),viewUntil:until};
   }
   if(action==='upload'){
@@ -159,7 +162,7 @@ export class WalletService {
    if(!preview&&this.state.orderIndex.orders[String(b.id)+':'+who]?.route==='tapesend'&&this.state.tapeJobs[this.jobRef(b.id,who)]?.status!=='sent')fail('TapeSend 正在自动交付，请稍后在本站刷新查看，无需重新付款',409);
    const ref=`${b.id}:${who}`;let viewUntil=null;if(p.burn){viewUntil=preview?Date.now()+p.secs*1000:this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();}}
    await this.flushBackup();const a=this.state.assets[c.blobHash],encryptedKey=publicEncrypt({key:createPublicKey({key:s.publicKey,format:'jwk'}),padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(a.key,'hex')).toString('base64');
-   return {encryptedKey,hash:p.hash,mime:a.mime,...this.grantView({who,ref:preview?ref+':preview:'+randomBytes(8).toString('hex'):ref,secs:p.secs,asset:p.hash,accessUntil,preview}),accessUntil,preview};
+   return {encryptedKey,hash:p.hash,mime:a.mime,...this.grantView({who,ref:preview?ref+':preview:'+randomBytes(8).toString('hex'):ref,secs:p.secs,asset:p.hash,accessUntil,preview,existingDeadline:viewUntil||Infinity}),accessUntil,preview};
   });
   fail('接口不存在',404);
  }

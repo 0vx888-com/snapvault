@@ -24,6 +24,7 @@ export function setIdentity(address) {
   window.dispatchEvent(new Event('snapvault:identity'));
 }
 export const uidOf = (address) => {
+  if(address.startsWith('public_'))return '登录后可见';
   let h = 2166136261;
   for (const c of address.toLowerCase()) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
   return 'SV' + (h >>> 0).toString(36).toUpperCase().padStart(7, '0');
@@ -60,7 +61,7 @@ export function orderState(c, who = identity()) {
   if (c.creator === who) return 'creator';
   const o = order(c.id, who);
   if (!o) return 'locked';
-  if (Date.now() >= o.accessUntil || (c.burn && o.viewUntil && Date.now() >= o.viewUntil)) return 'expired';
+  if (Date.now() >= o.accessUntil || ((wallet.enabled||c.burn) && o.viewUntil && Date.now() >= o.viewUntil)) return 'expired';
   if((local.enabled||wallet.enabled)&&o.delivery!=='ready')return 'delivering';
   return o.viewUntil ? 'viewing' : 'ready';
 }
