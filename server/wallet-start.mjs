@@ -10,7 +10,7 @@ import {networkPolicy} from './network-policy.mjs';
 import {startWorkers} from './workers.mjs';
 import {s3BackupFromEnv} from './s3-backup.mjs';
 import {mainnetAppOrigins} from './wallet-origins.mjs';
-if(process.env.SNAPVAULT_MAINTENANCE==='true'){const maintenance=maintenanceServer({port:Number(process.env.PORT||5185),host:process.env.BIND||'127.0.0.1'});process.once('SIGTERM',()=>maintenance.close());process.once('SIGINT',()=>maintenance.close());}else{
+if(process.env.SNAPVAULT_MAINTENANCE==='true'){const maintenance=maintenanceServer({port:Number(process.env.PORT||5185),host:process.env.BIND||'127.0.0.1',controlSocket:process.env.SNAPVAULT_MAINTENANCE_SOCKET});process.once('SIGTERM',()=>maintenance.close());process.once('SIGINT',()=>maintenance.close());}else{
 const root=fileURLToPath(new URL('../',import.meta.url));
 const config=process.env.SNAPVAULT_WALLET_CONFIG_JSON?JSON.parse(process.env.SNAPVAULT_WALLET_CONFIG_JSON):JSON.parse(readFileSync(process.env.SNAPVAULT_WALLET_CONFIG||resolve(root,'config/wallet.json'),'utf8'));
 const policy=networkPolicy(config);
