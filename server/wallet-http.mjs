@@ -1,21 +1,22 @@
+import {requireVersion,API_VERSION} from './release-policy.mjs';
 import {createServer} from 'node:http';
 import {readFileSync,existsSync} from 'node:fs';
 import {resolve,extname,sep} from 'node:path';
 import {isIP} from 'node:net';
 import {APP_FILES} from '../scripts/app-files.mjs';
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml'};
-export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedProxy=false,staticDir=null}){
+export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedProxy=false,staticDir=null,requireClientVersion=service.policy?.mainnet===true}){
  const origin=`http://127.0.0.1:${port}`;
  const tapeRoot=resolve(root,'public/tapesend'),tapeManifestPath=resolve(tapeRoot,'manifest.json'),tapeFiles=existsSync(tapeManifestPath)?JSON.parse(readFileSync(tapeManifestPath,'utf8')):{};
  const server=createServer(async(req,res)=>{
   const suppliedOrigin=req.headers.origin;
-  const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'};
+  const headers={'X-SnapVault-API':API_VERSION,'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Vary':'Origin'};
   const send=(code,d)=>{const body=JSON.stringify(d,(_key,value)=>typeof value==='bigint'?value.toString():value);res.writeHead(code,{...headers,'Content-Type':'application/json'});res.end(body);};
   try{
    if(req.method==='GET'&&req.url==='/healthz'&&(req.headers.host==='healthcheck.railway.app'||req.headers.host===`127.0.0.1:${port}`||allowedHosts.includes(req.headers.host))){const config=await service.config();return send(200,{status:'ok',chainId:config.chainId,testnetOnly:config.chainId!==196});}
    if(req.headers.host!==`127.0.0.1:${port}`&&!allowedHosts.includes(req.headers.host))throw Object.assign(Error('Host 不允许'),{status:403});
    if(suppliedOrigin&&!service.origins.includes(suppliedOrigin))throw Object.assign(Error('网站来源不允许'),{status:403});
-   if(suppliedOrigin){headers['Access-Control-Allow-Origin']=suppliedOrigin;headers['Access-Control-Allow-Headers']='Content-Type, Authorization, X-SnapVault-Origin';headers['Access-Control-Allow-Methods']='GET, POST, OPTIONS';}
+   if(suppliedOrigin){headers['Access-Control-Allow-Origin']=suppliedOrigin;headers['Access-Control-Allow-Headers']='Content-Type, Authorization, X-SnapVault-Origin, X-SnapVault-Client';headers['Access-Control-Allow-Methods']='GET, POST, OPTIONS';headers['Access-Control-Expose-Headers']='X-SnapVault-API';}
    if(req.method==='OPTIONS'){res.writeHead(204,headers);return res.end();}
    const url=new URL(req.url,origin);
    if(url.pathname==='/tapesend'||url.pathname.startsWith('/tapesend/')){
@@ -28,7 +29,8 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedPr
    }
    if(url.pathname==='/app-config.json'&&req.method==='GET'){const c=await service.config();return send(200,{mode:'wallet',apiBase:'',allowedChainIds:[c.chainId],allowMainnet:c.chainId===196&&c.mainnet===true});}
    if(url.pathname==='/api/wallet/config'&&req.method==='GET')return send(200,await service.config());
-   if(url.pathname.startsWith('/api/wallet/access/')&&req.method==='GET'){const who=service.auth(req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin||req.headers['x-snapvault-origin']).account;const result=await service.serial(()=>service.consumeView(url.pathname.split('/').at(-1),who));res.writeHead(200,{...headers,'Content-Type':result.mime});return res.end(result.bytes);}
+   if(requireClientVersion&&url.pathname.startsWith('/api/wallet/')&&!url.pathname.startsWith('/api/wallet/blob/'))requireVersion(req.headers);
+   if(url.pathname.startsWith('/api/wallet/access/')&&req.method==='GET'){const who=service.auth(req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin||req.headers['x-snapvault-origin']).account;const result=await service.serial(async()=>{await service.flushViewLedger?.();const result=service.consumeView(url.pathname.split('/').at(-1),who);await service.flushViewLedger?.();return result;});res.writeHead(200,{...headers,'Content-Type':result.mime});return res.end(result.bytes);}
    if(url.pathname.startsWith('/api/wallet/blob/')&&req.method==='GET'){
     const hash=url.pathname.split('/').at(-1);if(!/^[a-f0-9]{64}$/.test(hash))throw Error('密文路径无效');const blob=service.blob(hash);res.writeHead(200,{...headers,'Content-Type':'application/octet-stream'});return res.end(blob);
    }
@@ -50,7 +52,7 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedPr
     if(['/api/wallet/profile-lookup','/api/wallet/friend'].includes(url.pathname))service.limit('lookup-ip:'+client,30);
     if(!req.headers.authorization&&['/api/wallet/state','/api/wallet/challenge','/api/wallet/login','/api/wallet/claim-open'].includes(url.pathname))service.limit('public:'+client,120);
     const action=url.pathname.slice('/api/wallet/'.length);if(!url.pathname.startsWith('/api/wallet/'))return send(404,{error:'接口不存在'});
-    return send(200,await service.handle(action,b,req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin));
+    await service.flushViewLedger?.();const result=await service.handle(action,b,req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin);await service.flushViewLedger?.();return send(200,result);
    }
    if(req.method!=='GET')return send(405,{error:'仅支持 GET'});
    const requested=decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname);if(!APP_FILES.includes(requested.slice(1))&&!['/app-config.json','/deweb-manifest.json'].includes(requested))return send(404,{error:'页面不存在'});

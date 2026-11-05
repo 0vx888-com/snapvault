@@ -1,3 +1,4 @@
+import {maintenanceServer,lockWriter} from './release-policy.mjs';
 // Public runtime. Explicit 196 enablement, independent keys and verified deployment.
 import {readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
@@ -9,6 +10,7 @@ import {networkPolicy} from './network-policy.mjs';
 import {startWorkers} from './workers.mjs';
 import {s3BackupFromEnv} from './s3-backup.mjs';
 import {mainnetAppOrigins} from './wallet-origins.mjs';
+if(process.env.SNAPVAULT_MAINTENANCE==='true'){const maintenance=maintenanceServer({port:Number(process.env.PORT||5185),host:process.env.BIND||'127.0.0.1'});process.once('SIGTERM',()=>maintenance.close());process.once('SIGINT',()=>maintenance.close());}else{
 const root=fileURLToPath(new URL('../',import.meta.url));
 const config=process.env.SNAPVAULT_WALLET_CONFIG_JSON?JSON.parse(process.env.SNAPVAULT_WALLET_CONFIG_JSON):JSON.parse(readFileSync(process.env.SNAPVAULT_WALLET_CONFIG||resolve(root,'config/wallet.json'),'utf8'));
 const policy=networkPolicy(config);
@@ -25,9 +27,11 @@ const artifact=JSON.parse(readFileSync(resolve(root,'artifacts/contracts/SnapVau
 if((await vault.deliveryOperator()).toLowerCase()!==operator.address.toLowerCase()||Number(await vault.MAX_FEE_BPS())!==1500||await vault.DIRECT_TYPEHASH()===null)throw Error('Expected hardened SnapVaultDirect/operator');
 if(policy.mainnet){if(!config.vaultBytecodeHash||keccak256(await provider.getCode(config.vault))!==config.vaultBytecodeHash)throw Error('Mainnet bytecode hash mismatch');if((await vault.owner()).toLowerCase()!==config.owner.toLowerCase()||(await vault.treasury()).toLowerCase()!==config.treasury.toLowerCase())throw Error('Owner/treasury mismatch');if(!config.dewebURL||!config.origins.includes(new URL(config.dewebURL).origin)||config.tapeSend.publicBaseURL!==new URL(config.dewebURL).origin||!config.testnetEvidenceSHA256)throw Error('Verified DeWEB origin and new testnet acceptance evidence required before mainnet runtime');}
 const sender=config.tapeSend?.enabled?(await signingWallet('TAPESEND')).connect(provider):undefined;
-const port=Number(process.env.PORT||5185),service=new WalletService({...config,provider,vault,operator,sender,dir:config.dataDir,masterKey:process.env.SNAPVAULT_MASTER_KEY,backupKey:process.env.SNAPVAULT_BACKUP_KEY,backupDir:config.backupDir,backupPutURL:process.env.SNAPVAULT_BACKUP_PUT_URL,backupStore:s3BackupFromEnv()});
+const releaseLock=lockWriter(process.env.SNAPVAULT_VIEW_LEDGER_DIR||resolve(config.dataDir,'view-ledger'));const port=Number(process.env.PORT||5185),service=new WalletService({...config,provider,vault,operator,sender,dir:config.dataDir,deliveryWorkerEnabled:process.env.SNAPVAULT_DELIVERY_WORKER_ENABLED==='true',ledgerDir:process.env.SNAPVAULT_VIEW_LEDGER_DIR,ledgerKey:process.env.SNAPVAULT_VIEW_LEDGER_KEY,allowViewMigration:process.env.SNAPVAULT_ALLOW_VIEW_MIGRATION==='true',allowLedgerInitialize:process.env.SNAPVAULT_ALLOW_LEDGER_INITIALIZE==='true',backupPruningPaused:process.env.SNAPVAULT_BACKUP_PRUNING_PAUSED!=='false',masterKey:process.env.SNAPVAULT_MASTER_KEY,backupKey:process.env.SNAPVAULT_BACKUP_KEY,backupDir:config.backupDir,backupPutURL:process.env.SNAPVAULT_BACKUP_PUT_URL,backupStore:s3BackupFromEnv()});
 await service.flushBackup();await service.syncOrders(true);
 const server=walletHttp({service,root,port,allowedHosts:config.hosts||[],trustedProxy:!!process.env.RAILWAY_ENVIRONMENT_ID});
-const stopWorkers=startWorkers(service,{onError:kind=>console.error(kind+' worker unavailable; new checkout fails closed when readiness is missing')});
+const stopWorkers=startWorkers(service,{deliveryEnabled:process.env.SNAPVAULT_DELIVERY_WORKER_ENABLED==='true',onError:kind=>console.error(kind+' worker unavailable; new checkout fails closed when readiness is missing')});
 server.listen(port,process.env.BIND||'127.0.0.1',()=>console.log('SnapVault ready on X Layer '+config.chainId+'; '+(policy.mainnet?'explicit mainnet mode':'testnet only')));
-const stop=()=>{stopWorkers();server.close(()=>{provider.destroy();process.exit(0);});setTimeout(()=>process.exit(1),10000).unref();};process.once('SIGTERM',stop);process.once('SIGINT',stop);
+const stop=()=>{stopWorkers();server.close(()=>{provider.destroy();releaseLock();process.exit(0);});setTimeout(()=>process.exit(1),10000).unref();};process.once('SIGTERM',stop);process.once('SIGINT',stop);
+
+}

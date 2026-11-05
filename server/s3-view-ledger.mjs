@@ -1,0 +1,13 @@
+// Separate immutable event namespace. Never lists or deletes backup objects.
+import {GetObjectCommand,PutObjectCommand,ListObjectsV2Command} from '@aws-sdk/client-s3';
+import {createCipheriv,createDecipheriv,createHmac,randomBytes} from 'node:crypto';
+export class S3ViewLedgerStore {
+ constructor({client,bucket,key,identity}){this.client=client;this.bucket=bucket;this.key=createHmac('sha256',key).update('snapvault-ledger-encryption-v1').digest();this.prefix='snapvault/'+identity+'/view-ledger-v1/';}
+ seal(row){const iv=randomBytes(12),c=createCipheriv('aes-256-gcm',this.key,iv),ct=Buffer.concat([c.update(JSON.stringify(row)),c.final()]);return JSON.stringify({iv:iv.toString('hex'),ct:ct.toString('base64'),tag:c.getAuthTag().toString('hex')});}
+ unseal(bytes){const e=JSON.parse(bytes),d=createDecipheriv('aes-256-gcm',this.key,Buffer.from(e.iv,'hex'));d.setAuthTag(Buffer.from(e.tag,'hex'));return JSON.parse(Buffer.concat([d.update(Buffer.from(e.ct,'base64')),d.final()]));}
+ async head(){try{const r=await this.client.send(new GetObjectCommand({Bucket:this.bucket,Key:this.prefix+'head.json'}));return {head:JSON.parse(await r.Body.transformToString()),etag:r.ETag};}catch(e){if(e.name==='NoSuchKey'||e.$metadata?.httpStatusCode===404)return null;throw Error('Current remote ledger head unavailable');}}
+ async assertEmpty(){const r=await this.client.send(new ListObjectsV2Command({Bucket:this.bucket,Prefix:this.prefix,MaxKeys:1}));if(r.IsTruncated||(r.Contents||[]).length)throw Error('Remote head missing but ledger history exists; keep maintenance');}
+ async get(seq,mac){if(!Number.isSafeInteger(seq)||seq<0||! /^[a-f0-9]{64}$/.test(mac))throw Error('Invalid ledger record address');const r=await this.client.send(new GetObjectCommand({Bucket:this.bucket,Key:this.prefix+'events/'+seq+'-'+mac+'.enc'}));return this.unseal(await r.Body.transformToString());}
+ async put(row){const Key=this.prefix+'events/'+row.seq+'-'+row.mac+'.enc';try{await this.client.send(new PutObjectCommand({Bucket:this.bucket,Key,Body:this.seal(row),IfNoneMatch:'*',ContentType:'application/octet-stream'}));}catch(e){if(e.$metadata?.httpStatusCode!==412)throw Error('Immutable ledger append failed');const old=await this.client.send(new GetObjectCommand({Bucket:this.bucket,Key}));if(JSON.stringify(this.unseal(await old.Body.transformToString()))!==JSON.stringify(row))throw Error('Remote ledger event conflict');}}
+ async advance(head,previous){if(previous&&!previous.etag)throw Error('Conditional remote head update requires ETag');await this.client.send(new PutObjectCommand({Bucket:this.bucket,Key:this.prefix+'head.json',Body:JSON.stringify(head),ContentType:'application/json',...(previous?{IfMatch:previous.etag}:{IfNoneMatch:'*'})}));}
+}

@@ -18,7 +18,7 @@ ENV NODE_ENV=production BIND=0.0.0.0
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
 COPY --from=build /app/artifacts/contracts/SnapVaultDirect.sol/SnapVaultDirect.json ./artifacts/contracts/SnapVaultDirect.sol/SnapVaultDirect.json
-COPY scripts/app-files.mjs ./scripts/app-files.mjs
+COPY scripts/app-files.mjs scripts/backup-state.mjs scripts/recover-view-ledger.mjs scripts/check-safe-rollback.mjs ./scripts/
 COPY vendor/tapekit-send ./vendor/tapekit-send
 COPY server ./server
 COPY public/tapesend ./public/tapesend
