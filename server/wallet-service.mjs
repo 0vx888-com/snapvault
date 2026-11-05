@@ -1,3 +1,4 @@
+import {installViewAccess} from './view-access.mjs';
 import {refundAction} from './wallet-refunds.mjs';
 // Authenticated wallet/chat/direct-delivery core. No user private keys, NFT or
 // container. Single-process persistent store; do not run multiple replicas.
@@ -34,7 +35,7 @@ export class WalletService {
   if(policy.mainnet&&(!this.backup||(!backupPutURL&&!backupStore)))throw Error('Mainnet requires encrypted OFF-SITE backups');
   if(tapeSend?.enabled&&sender)this.transport=new WalletTapeSend({service:this,config:tapeSend,sender});
   if(policy.mainnet&&!this.transport)throw Error('Mainnet TapeSend sender C must be configured separately');
-  this.save();
+  this.initViews();this.save();
  }
  async flushBackup(){if(this.backup)return this.backup.write({file:this.file,master:this.master,identity:this.identity});if(this.policy.mainnet)throw Error('Mainnet backup unavailable');}
  seal(data,key=this.master){const iv=randomBytes(12),c=createCipheriv('aes-256-gcm',key,iv),ct=Buffer.concat([c.update(data),c.final()]);return {iv:iv.toString('base64'),ct:ct.toString('base64'),tag:c.getAuthTag().toString('base64')};}
@@ -91,13 +92,15 @@ export class WalletService {
  }
  async confirmed(id,who){await this.syncOrders(this.policy.local&&!this.state.orderIndex.orders[id+':'+who.toLowerCase()]);const order=this.state.orderIndex.orders[id+':'+who.toLowerCase()];return !!order&&!order.refunded;}
  async scanDeliveries(){await this.syncOrders(true);if(!this.transport)return;return this.serial(async()=>{for(const job of Object.values(this.state.tapeJobs)){if(['sent','refunded','failed'].includes(job.status))continue;try{await this.transport.deliver(job);if(job.error){job.error=null;this.save();}}catch{job.error='交付暂不可用，请联系平台核对或退款';this.save();}}});}
- async claimOpen(b){if(!/^0x[0-9a-fA-F]{64}$/.test(b.claim||''))fail('查看凭证无效',403);const hash=sha256(Buffer.from(b.claim.slice(2),'hex')),job=Object.values(this.state.tapeJobs).find(j=>j.id===String(b.id)&&j.claimHash===hash);if(!job||job.status!=='sent')fail('查看凭证无效或交付未确认',403);if(!await this.confirmed(job.id,job.buyer))fail('订单未确认或已退款',403);const {p}=await this.product(job.id,job.buyer);const accessUntil=Number(await this.vault.accessUntil(job.id,job.buyer))*1000;if(accessUntil<=Date.now())fail('购买资格已过期',410);const ref=job.id+':'+job.buyer;let viewUntil=null;if(p.burn){viewUntil=this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();await this.flushBackup();}}return {uri:'/api/wallet/blob/'+p.hash.slice(2),hash:p.hash,mime:p.mime,title:p.title,accessUntil,viewUntil};}
+ async claimOpen(b,who){if(!/^0x[0-9a-fA-F]{64}$/.test(b.claim||''))fail('查看凭证无效',403);const hash=sha256(Buffer.from(b.claim.slice(2),'hex')),job=Object.values(this.state.tapeJobs).find(j=>j.id===String(b.id)&&j.claimHash===hash);if(!job||job.status!=='sent'||job.buyer!==who)fail('查看凭证无效或交付未确认',403);if(!await this.confirmed(job.id,job.buyer))fail('订单未确认或已退款',403);const {p}=await this.product(job.id,job.buyer);const accessUntil=Number(await this.vault.accessUntil(job.id,job.buyer))*1000;if(accessUntil<=Date.now())fail('购买资格已过期',410);const ref=job.id+':'+job.buyer;let viewUntil=null;if(p.burn){viewUntil=this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();await this.flushBackup();}}return {...this.grantView({who,ref,secs:p.secs,asset:p.hash,accessUntil}),hash:p.hash,mime:p.mime,title:p.title,accessUntil};}
  async deliveryRoute(who){if(this.chainId===1952)return {available:false,reason:'测试网尚无官方 TapeSend Hub，本单使用普通交付'};if(!this.transport)return {available:false,reason:'当前本地环境未配置 TapeSend，本单使用普通交付'};return this.transport.recipient(who,this.state.profiles[who]?.delivery);}
  async handle(action,b,token,origin){
   await this.config();if(action==='challenge')return this.challenge(b,origin);if(action==='login')return this.login(b,origin);
   if(action==='state'&&!token){this.limit('anonymous:global',600);return this.stateFor(null);}
-  if(action==='claim-open')return this.serial(()=>this.claimOpen(b));
+
   const s=this.auth(token,origin),who=s.account;this.limit(who);
+  if(action==='claim-open')return this.serial(()=>this.claimOpen(b,who));
+  if(action==='view-finish')return this.serial(()=>this.finishView(b.ref,who));
   if(action==='logout'){this.sessions.delete(token);return {ok:true};}
   if(action==='state')return this.stateFor(who);
   if(action.startsWith('refund-'))return refundAction(this,action,b,who);
@@ -124,11 +127,12 @@ export class WalletService {
    if(kind==='paid-image'){const {p}=await this.product(String(b.contentId),who);if(p.creator!==who||(p.scope!=='public'&&p.convId!==c.id))fail('不能向此会话发送该作品',403);}
    else {const text=String(b.text||'').trim();if(text.length>500)fail('文字超过 500 字');let image=null;if(b.image){checkedImage(b.image,b.mime);image={data:b.image,mime:b.mime};}if(!text&&!image)fail('请选择图片或输入文字');payload=this.seal(Buffer.from(JSON.stringify({text,image})));}
    const burn=kind==='message'&&!!b.burn,secs=Number(b.secs||10);if(burn&&(!Number.isInteger(secs)||secs<3||secs>3600))fail('展示时长应在 3–3600 秒');
-   const m={id:randomBytes(16).toString('hex'),conv:c.id,from:who,ts:Date.now(),kind,burn,secs,shot:['allow','forbid','notify'].includes(b.shot)?b.shot:'allow',opens:{},...(kind==='paid-image'?{contentId:String(b.contentId)}:{payload})};this.state.messages.push(m);this.save();return {id:m.id};
+   const m={id:randomBytes(16).toString('hex'),conv:c.id,from:who,ts:Date.now(),kind,burn,secs,shot:['allow','forbid','notify'].includes(b.shot)?b.shot:'allow',opens:{},...(kind==='paid-image'?{contentId:String(b.contentId)}:{payload})};this.state.messages.push(m);if(m.burn)this.initViews();this.save();return {id:m.id};
   }
   if(action==='message-open'){
-   const m=this.state.messages.find(m=>m.id===b.id);if(!m||!m.payload)fail('消息不存在');this.member(m.conv,who);
+   const m=this.state.messages.find(m=>m.id===b.id);if(!m||(!m.payload&&!m.burnFile))fail('消息不存在',410);this.member(m.conv,who);
    let until=null;if(m.burn){if(who===m.from)fail('发送者不能打开限时消息');until=m.opens[who];if(until&&until<=Date.now())fail('此消息已结束展示',410);if(!until){until=Date.now()+m.secs*1000;m.opens[who]=until;this.save();}}
+   if(m.burn)return this.serial(()=>this.grantView({who,ref:'message:'+m.id+':'+who,secs:m.secs,message:m.id}));
    return {...JSON.parse(this.unseal(m.payload)),viewUntil:until};
   }
   if(action==='upload'){
@@ -155,9 +159,11 @@ export class WalletService {
    if(!preview&&this.state.orderIndex.orders[String(b.id)+':'+who]?.route==='tapesend'&&this.state.tapeJobs[this.jobRef(b.id,who)]?.status!=='sent')fail('TapeSend 正在自动交付，请稍后在本站刷新查看，无需重新付款',409);
    const ref=`${b.id}:${who}`;let viewUntil=null;if(p.burn){viewUntil=preview?Date.now()+p.secs*1000:this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();}}
    await this.flushBackup();const a=this.state.assets[c.blobHash],encryptedKey=publicEncrypt({key:createPublicKey({key:s.publicKey,format:'jwk'}),padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(a.key,'hex')).toString('base64');
-   return {encryptedKey,hash:p.hash,mime:a.mime,uri:'/api/wallet/blob/'+p.hash.slice(2),accessUntil,viewUntil,preview};
+   return {encryptedKey,hash:p.hash,mime:a.mime,...this.grantView({who,ref:preview?ref+':preview:'+randomBytes(8).toString('hex'):ref,secs:p.secs,asset:p.hash,accessUntil,preview}),accessUntil,preview};
   });
   fail('接口不存在',404);
  }
- blob(hash){const a=this.state.assets['0x'+hash];if(!a)fail('密文不存在',404);return Buffer.from(a.blob,'base64');}
+ blob(){fail('固定密文地址已停用，请使用一次性凭证',410);}
 }
+
+installViewAccess(WalletService);

@@ -28,6 +28,7 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedPr
    }
    if(url.pathname==='/app-config.json'&&req.method==='GET'){const c=await service.config();return send(200,{mode:'wallet',apiBase:'',allowedChainIds:[c.chainId],allowMainnet:c.chainId===196&&c.mainnet===true});}
    if(url.pathname==='/api/wallet/config'&&req.method==='GET')return send(200,await service.config());
+   if(url.pathname.startsWith('/api/wallet/access/')&&req.method==='GET'){const who=service.auth(req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin).account;const result=await service.serial(()=>service.consumeView(url.pathname.split('/').at(-1),who));res.writeHead(200,{...headers,'Content-Type':result.mime});return res.end(result.bytes);}
    if(url.pathname.startsWith('/api/wallet/blob/')&&req.method==='GET'){
     const hash=url.pathname.split('/').at(-1);if(!/^[a-f0-9]{64}$/.test(hash))throw Error('密文路径无效');const blob=service.blob(hash);res.writeHead(200,{...headers,'Content-Type':'application/octet-stream'});return res.end(blob);
    }

@@ -43,7 +43,7 @@ describe('免容器普通钱包交付',function(){
   await expect(service.handle('open',{id:1},c.token,origin)).to.be.rejectedWith('尚未确认');
   const result=await service.handle('open',{id:1},b.token,origin),key=crypto.privateDecrypt({key:b.pair.privateKey,padding:crypto.constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(result.encryptedKey,'base64'));
   expect(key.toString('hex')).to.equal(service.state.assets[asset.hash].key);expect(result).not.to.have.property('key');
-  const replacement=new WalletService({allowLocalKeyFile:true,provider:ethers.provider,vault,operator,dir,origins:[origin],confirmations:1});service=replacement;const newDevice=await login(buyer);const reopened=await service.handle('open',{id:1},newDevice.token,origin);expect(reopened.viewUntil).to.equal(result.viewUntil);
+  const replacement=new WalletService({allowLocalKeyFile:true,provider:ethers.provider,vault,operator,dir,origins:[origin],confirmations:1});service=replacement;const newDevice=await login(buyer);await expect(service.handle('open',{id:1},newDevice.token,origin)).rejectedWith('查看已结束');
   service.state.opens['1:'+buyer.address.toLowerCase()]=Date.now()-1;service.save();await expect(service.handle('open',{id:1},newDevice.token,origin)).to.be.rejectedWith('结束展示');
   const disk=fs.readFileSync(path.join(dir,'state.enc'),'utf8');expect(disk).not.to.include(key.toString('hex'));expect(disk).not.to.include('免容器图片');
  });
@@ -56,7 +56,7 @@ describe('免容器普通钱包交付',function(){
   const sent=await service.handle('send',{conv:conv.id,text:'阅后即焚',burn:true,secs:5},a.token,origin);
   const first=await service.handle('message-open',{id:sent.id},b.token,origin);expect(service.state.messages[0].opens[other.address.toLowerCase()]).to.equal(undefined);
   service.state.messages[0].opens[buyer.address.toLowerCase()]=Date.now()-1;await expect(service.handle('message-open',{id:sent.id},b.token,origin)).to.be.rejectedWith('结束展示');
-  const second=await service.handle('message-open',{id:sent.id},c.token,origin);expect(second.text).to.equal('阅后即焚');expect(second.viewUntil).to.be.greaterThan(first.viewUntil-100);
+  const second=await service.handle('message-open',{id:sent.id},c.token,origin);expect(JSON.parse(service.consumeView(second.uri.split('/').at(-1),other.address.toLowerCase()).bytes).text).to.equal('阅后即焚');expect(second.viewUntil).to.be.greaterThan(first.viewUntil-100);
   const outsider=await ethers.Wallet.createRandom().connect(ethers.provider),d=await login(outsider);await expect(service.handle('message-open',{id:sent.id},d.token,origin)).to.be.rejectedWith('无权');
  });
 });

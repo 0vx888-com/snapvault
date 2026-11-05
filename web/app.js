@@ -3,7 +3,7 @@ import {initPublishComposer,syncPublishComposer} from './publish-ui.js';
 import {safeImageURL,hydrateSafeImages} from './safe-dom.js';
 import {walletError} from './transaction-guard.js';
 import {initRefunds} from './refunds.js';
-import {wallet,connect,disconnect,initWallet,refresh as walletRefresh,publishWallet,purchaseWallet,openWallet,walletAction,setupNetwork,withdrawWallet,apiURL,SERVER_UNAVAILABLE} from './wallet.js';
+import {wallet,connect,disconnect,initWallet,refresh as walletRefresh,publishWallet,purchaseWallet,openWallet,walletAction,setupNetwork,withdrawWallet,apiURL,SERVER_UNAVAILABLE,fetchContent,finishContent} from './wallet.js';
 import {local,localCall,localRefresh} from './local-delivery.js';
 import { initChat, Friends } from './chat.js';
 import { PEOPLE, identity, setIdentity, profile, profiles, uidOf, saveProfile, follows, toggleFollow,
@@ -164,7 +164,7 @@ async function confirmPurchase() {
   finally { purchasing = false; $('#confirm-purchase').disabled = false; $('#confirm-purchase').textContent = wallet.enabled?(wallet.config?.mainnet?'钱包确认付款（真实 OKB）':'钱包确认测试付款'):local.enabled?'确认本地测试付款':'模拟付款并解锁'; }
 }
 function closeViewer() {
-  viewTask++; if (viewing) { clearInterval(viewing.timer); URL.revokeObjectURL(viewing.url); viewing = null; }
+  viewTask++; if (viewing) { clearInterval(viewing.timer); finishContent(viewing.ref);URL.revokeObjectURL(viewing.url); viewing = null; }
   $('#vimg').removeAttribute('src'); $('#wm').textContent = ''; $('#viewer').classList.add('hidden'); window.dispatchEvent(new Event('snapvault:change')); render();
 }
 async function view(id) {
@@ -175,7 +175,7 @@ async function view(id) {
   let blob,keyBytes,opened;
   if(wallet.enabled||local.enabled){
     opened=wallet.enabled?await openWallet(id):await localCall('open',{who,id});
-    const response=await fetch(opened.uri);if(!response.ok)throw Error('密文网关读取失败');
+    const response=await (wallet.enabled?fetchContent(opened.uri):fetch(opened.uri));if(!response.ok)throw Error('密文网关读取失败');
     blob=new Uint8Array(await response.arrayBuffer());
     keyBytes=Uint8Array.from(opened.key.slice(2).match(/../g),h=>parseInt(h,16));
   }else{
@@ -187,9 +187,9 @@ async function view(id) {
   const key=await crypto.subtle.importKey('raw',keyBytes,'AES-GCM',false,['decrypt']);
   const plaintext=await crypto.subtle.decrypt({name:'AES-GCM',iv:blob.slice(0,12)},key,blob.slice(12));
   if (task !== viewTask || identity() !== who) return;
-  if (viewing) { clearInterval(viewing.timer); URL.revokeObjectURL(viewing.url); }
+  if (viewing) { clearInterval(viewing.timer); finishContent(viewing.ref);URL.revokeObjectURL(viewing.url); }
   const o = (wallet.enabled||local.enabled)?opened:beginView(c, who), url = URL.createObjectURL(new Blob([plaintext], { type: c.mime || 'image/png' }));
-  viewing = { url, who, id }; $('#vimg').src = url; $('#view-title').textContent = c.title + (o.preview ? ' · 作者预览' : '');
+  viewing = { url, who, id,ref:opened?.viewRef }; $('#vimg').src = url; $('#view-title').textContent = c.title + (o.preview ? ' · 作者预览' : '');
   $('#wm').innerHTML = Array.from({ length: 20 }, () => `<span>${esc(profile(who).name)} · ${uidOf(who)}</span>`).join(''); $('#viewer').classList.remove('hidden');
   const tick = () => {
     const left = o.viewUntil ? Math.max(0, Math.ceil((o.viewUntil - Date.now()) / 1000)) : null;
@@ -350,6 +350,8 @@ if(wallet.enabled){
 }
 
 // TAP-10 link contains key ONLY in its fragment; never send it over HTTP/storage.
-if(tapeLink&&wallet.enabled){const section=document.createElement('section');section.className='card profile-editor';const title=document.createElement('h3');title.textContent='TapeSend 已购内容';const note=document.createElement('p');note.className='field-note';note.textContent='查看链接请勿转发。点击打开后开始计时，无法阻止截图或保存。';const button=document.createElement('button');button.className='primary';button.textContent='打开已购图片';const status=document.createElement('p');status.className='error';section.append(title,note,button,status);document.querySelector('main').prepend(section);button.onclick=async()=>{button.disabled=true;try{const opened=await (await import('./wallet.js')).call('claim-open',{id:tapeLink.id,claim:tapeLink.claim});const res=await fetch(new URL((wallet.base||'')+opened.uri,location.href));if(!res.ok)throw Error('密文读取失败');const bytes=new Uint8Array(await res.arrayBuffer());if('0x'+hex(await crypto.subtle.digest('SHA-256',bytes))!==opened.hash)throw Error('图片完整性核验失败');const key=await crypto.subtle.importKey('raw',Uint8Array.from(tapeLink.key.slice(2).match(/../g),x=>parseInt(x,16)),'AES-GCM',false,['decrypt']);const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},key,bytes.slice(12));closeViewer();const until=opened.viewUntil||opened.accessUntil,url=URL.createObjectURL(new Blob([plain],{type:opened.mime}));viewing={url,timer:null};$('#view-title').textContent=opened.title;$('#vimg').src=url;$('#wm').textContent='SnapVault · 已购内容';$('#viewer').classList.remove('hidden');const duration=Math.max(1,until-Date.now());viewing.timer=setInterval(()=>{const left=until-Date.now();$('#count').textContent=Math.max(0,Math.ceil(left/1000))+' 秒';$('#prog').style.width=Math.max(0,left/duration*100)+'%';if(left<=0)closeViewer();},200);status.textContent='图片解密成功。';}catch(e){status.textContent=e.message;}finally{button.disabled=false;}};}
+if(tapeLink&&wallet.enabled){const section=document.createElement('section');section.className='card profile-editor';const title=document.createElement('h3');title.textContent='TapeSend 已购内容';const note=document.createElement('p');note.className='field-note';note.textContent='查看链接请勿转发。点击打开后开始计时，无法阻止截图或保存。';const button=document.createElement('button');button.className='primary';button.textContent='打开已购图片';const status=document.createElement('p');status.className='error';section.append(title,note,button,status);document.querySelector('main').prepend(section);button.onclick=async()=>{button.disabled=true;try{const opened=await (await import('./wallet.js')).call('claim-open',{id:tapeLink.id,claim:tapeLink.claim});const res=await fetchContent(opened.uri);if(!res.ok)throw Error('密文读取失败');const bytes=new Uint8Array(await res.arrayBuffer());if('0x'+hex(await crypto.subtle.digest('SHA-256',bytes))!==opened.hash)throw Error('图片完整性核验失败');const key=await crypto.subtle.importKey('raw',Uint8Array.from(tapeLink.key.slice(2).match(/../g),x=>parseInt(x,16)),'AES-GCM',false,['decrypt']);const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},key,bytes.slice(12));closeViewer();const until=opened.viewUntil||opened.accessUntil,url=URL.createObjectURL(new Blob([plain],{type:opened.mime}));viewing={url,timer:null,ref:opened.viewRef};$('#view-title').textContent=opened.title;$('#vimg').src=url;$('#wm').textContent='SnapVault · 已购内容';$('#viewer').classList.remove('hidden');const duration=Math.max(1,until-Date.now());viewing.timer=setInterval(()=>{const left=until-Date.now();$('#count').textContent=Math.max(0,Math.ceil(left/1000))+' 秒';$('#prog').style.width=Math.max(0,left/duration*100)+'%';if(left<=0)closeViewer();},200);status.textContent='图片解密成功。';}catch(e){status.textContent=e.message;}finally{button.disabled=false;}};}
 
 if(wallet.enabled)initRefunds();
+
+window.addEventListener('pagehide',()=>{if(viewing)finishContent(viewing.ref);});

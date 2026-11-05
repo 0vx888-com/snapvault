@@ -83,3 +83,6 @@ export async function setupNetwork(){
 }
 
 export async function refundWallet(id,buyer){const q=await call('refund-quote',{id,buyer});const {hash}=await transaction('refundDelivery',[q.id,q.buyer],q.valueWei);await call('refund-confirm',{id:q.id,buyer:q.buyer,hash});await refresh();return hash;}
+
+export function fetchContent(uri){return fetch(uri.startsWith('http')?uri:apiURL(uri),{headers:{Authorization:'Bearer '+wallet.token},cache:'no-store'});}
+export function finishContent(ref){if(!ref||!wallet.token)return;return fetch(apiURL('/api/wallet/view-finish'),{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+wallet.token},body:JSON.stringify({ref}),keepalive:true}).catch(()=>{});}

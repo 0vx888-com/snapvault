@@ -1,7 +1,7 @@
 import {messagePayload,hydrateSafeImages} from './safe-dom.js';
 import {icon} from './ui-icons.js';
 import {setupChatUI,openChatPane,filterConversations,chatHeader,expiryControl} from './chat-ui.js';
-import {wallet,call,walletAction} from './wallet.js';
+import {wallet,call,walletAction,fetchContent,finishContent} from './wallet.js';
 import {identity,profile,uidOf,escapeHtml as esc} from './store.js';
 export async function initWalletChat(root,hooks){
  let cur=sessionStorage.getItem('sv:wallet-conv'),me=identity(),revision=0,friendOpen=false,newOpen=false;
@@ -29,7 +29,7 @@ export async function initWalletChat(root,hooks){
   box.querySelector('#xc-create').onclick=async()=>{const button=box.querySelector('#xc-create');if(button.disabled)return;button.disabled=true;button.textContent='正在创建…';try{const members=[...box.querySelectorAll('input[type=checkbox]:checked')].map(e=>e.value);if(!members.length)throw Error('请至少选择 1 位好友');const c=await walletAction('conversation',{members,name:box.querySelector('#xc-gname').value});openChatPane(root);cur=c.id;sessionStorage.setItem('sv:wallet-conv',cur);newOpen=false;renderNew();await render();}catch(e){box.querySelector('#xc-err').textContent=e.message;}finally{if(button.isConnected){button.disabled=false;button.textContent='创建会话';}}};
  }
  async function openMessage(id){
-  const who=identity(),data=await call('message-open',{id});if(identity()!==who)return;
+  const who=identity(),data=await call('message-open',{id});if(data.uri){const response=await fetchContent(data.uri);if(!response.ok)throw Error('图片已过期');Object.assign(data,await response.json());}if(identity()!==who)return;
   opened.set(id,data);if(data.viewUntil)deadlines.set(id,data.viewUntil);await render();
  }
  async function render(){
@@ -44,7 +44,7 @@ export async function initWalletChat(root,hooks){
   const rows=[];
   for(const m of messages().filter(m=>m.conv===c.id)){
    const mine=m.from===who;if(m.kind==='paid-image'){const paid=document.createElement('div');paid.className='msg paid-message'+(mine?' me':'');paid.innerHTML=hooks.renderPaidCard(m.contentId,who,'chat');hydrateSafeImages(paid);rows.push(paid);continue;}
-   let p=opened.get(m.id);if(p?.viewUntil&&p.viewUntil<=Date.now()){opened.delete(m.id);p=null;}
+   let p=opened.get(m.id);if(p?.viewUntil&&p.viewUntil<=Date.now()){finishContent(p.viewRef);opened.delete(m.id);p=null;}
    const row=document.createElement('div');row.className='msg'+(mine?' me':'');
    if(c.type==='group'){const name=document.createElement('small');name.className='muted';name.textContent=profile(m.from).name;row.append(name);}
    const bubble=document.createElement('div');bubble.className='bubble'+(m.shot==='forbid'?' noshot':'');
@@ -74,6 +74,6 @@ export async function initWalletChat(root,hooks){
   if(active){text.focus();text.setSelectionRange(selection,selection);}const list=pane.querySelector('#chat-list');list.scrollTop=list.scrollHeight;
  }
  window.addEventListener('snapvault:change',()=>{render().catch(tell);if(friendOpen&&!root.querySelector('#xc-frbox').contains(document.activeElement))renderFriends();});window.addEventListener('snapvault:identity',()=>render().catch(tell));
- const expiry=setInterval(()=>{if([...opened.values()].some(p=>p.viewUntil))render().catch(tell);},500);window.addEventListener('pagehide',()=>clearInterval(expiry),{once:true});
+ const expiry=setInterval(()=>{if([...opened.values()].some(p=>p.viewUntil))render().catch(tell);},500);window.addEventListener('pagehide',()=>{for(const p of opened.values())finishContent(p.viewRef);clearInterval(expiry);},{once:true});
  await render();return {conversations:()=>convs().map(c=>({...c,label:label(c)})),openWith:async address=>{let c=convs().find(c=>c.type==='dm'&&c.members.includes(address));if(!c)c=await walletAction('conversation',{members:[address]});openChatPane(root);cur=c.id;sessionStorage.setItem('sv:wallet-conv',cur);await render();},sendPaidCard:async(id,conv)=>{await walletAction('send',{conv,kind:'paid-image',contentId:String(id)});cur=conv;sessionStorage.setItem('sv:wallet-conv',cur);await render();}};
 }
