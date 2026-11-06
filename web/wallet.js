@@ -62,6 +62,7 @@ export async function initWallet(){
  }wallet.ready=true;
 }
 async function transaction(method,args,value=0n){
+ if(wallet.config?.testMode)throw Error("本地真机测试不支持钱包付款或链上操作");
  if(!wallet.ready||!wallet.config)throw Error(SERVER_UNAVAILABLE);
  assertTrustedVault(wallet.config);
  if(!wallet.account)throw Error('请先签名登录');const p=injected||await selectProvider(wallet.config);injected=p;

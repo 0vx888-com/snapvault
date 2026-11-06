@@ -33,7 +33,14 @@
     "prepare:service-wallets": "node scripts/prepare-service-wallets.mjs",
     "backup:wallet": "node scripts/backup-state.mjs",
     "build:wallet-sdk": "node scripts/build-wallet-sdk.mjs",
-    "test:mobile": "node --test scripts/mobile-wallet.test.mjs scripts/transaction-guard.test.mjs && node scripts/mobile-dialog.spec.mjs"
+    "test:mobile": "node --test scripts/mobile-wallet.test.mjs scripts/transaction-guard.test.mjs && node scripts/mobile-dialog.spec.mjs",
+    "dev:share": "node scripts/share-preview.mjs",
+    "test:product-ui": "node scripts/product-ui.spec.mjs",
+    "test:social-media": "node --test test/social-media.test.mjs",
+    "test:social-ui": "node scripts/social-ui.spec.mjs",
+    "test:screen-privacy": "node --test test/screen-privacy.test.mjs",
+    "test:screen-privacy-ui": "node scripts/screen-privacy.spec.mjs",
+    "test:mobile-web-screen-privacy": "node scripts/mobile-web-screen-privacy.spec.mjs"
   },
   "keywords": [],
   "author": "",

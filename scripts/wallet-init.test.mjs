@@ -10,8 +10,8 @@ async function fixture({expired=false,stateStatus=200,configFails=false}={}){
  globalThis.fetch=async(url,options={})=>{
   const path=new URL(url).pathname;
   if(path.endsWith('/app-config.json'))return Response.json({mode:'wallet',apiBase:'https://backend.example',allowedChainIds:[196],allowMainnet:true});
-  if(path==='/api/wallet/config'){if(configFails)throw new TypeError('isolated offline fixture');return Response.json({chainId:196,mainnet:true});}
-  if(path==='/api/wallet/state'){stateCalls++;if(options.headers?.Authorization){authenticatedCalls++;return Response.json({error:'请重新登录'},{status:401});}return Response.json(stateStatus===200?{contents:[],orders:[],profiles:{},convs:[],messages:[],friends:[],chainId:196}:{error:'fixture unavailable'},{status:stateStatus});}
+  if(path==='/api/wallet/config'){if(configFails)throw new TypeError('isolated offline fixture');return Response.json({apiVersion:"view-ledger-v2",vault:"0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f",chainId:196,mainnet:true});}
+  if(path==='/api/wallet/state'){stateCalls++;if(options.headers?.Authorization){authenticatedCalls++;return Response.json({error:'请重新登录'},{status:401,headers:{"X-SnapVault-API":"view-ledger-v2"}});}return Response.json(stateStatus===200?{contents:[],orders:[],profiles:{},convs:[],messages:[],friends:[],chainId:196}:{error:'fixture unavailable'},{status:stateStatus,headers:{"X-SnapVault-API":"view-ledger-v2"}});}
   throw Error('Unexpected request; no signing or transaction API permitted: '+path);
  };
  try{const m=await import('../web/wallet.js?isolated-init='+serial++);m.wallet.device={existingDeviceKey:true};return {m,store,counts:()=>({stateCalls,authenticatedCalls}),restore(){for(const[k,d]of originals){if(d)Object.defineProperty(globalThis,k,d);else delete globalThis[k];}}};}

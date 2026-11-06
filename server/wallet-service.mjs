@@ -1,3 +1,6 @@
+import {installScreenPrivacy} from './screen-privacy.mjs';
+import {installSocialMedia} from './social-media.mjs';
+import {backupGeneration as checkedGeneration,snapshotState} from './backup-policy.mjs';
 import {S3ViewLedgerStore} from './s3-view-ledger.mjs';
 import {API_VERSION} from './release-policy.mjs';
 import {ViewLedger,businessDigest} from './view-ledger.mjs';
@@ -25,7 +28,7 @@ function checkedImage(image,mime){
  if(real!==mime)fail('图片文件内容与格式不符');return bytes;
 }
 export class WalletService {
- constructor({provider,vault,operator,dir,origins,confirmations=1,deploymentBlock=0,chainId=31337,mainnetEnabled=false,mainnetAcknowledgement,owner,treasury,allowLocalKeyFile=false,masterKey=process.env.SNAPVAULT_MASTER_KEY,backupKey=process.env.SNAPVAULT_BACKUP_KEY,backupDir,backupPutURL,backupStore,tapeSend,sender,allowStateMigration=false,ledgerDir,ledgerKey=process.env.SNAPVAULT_VIEW_LEDGER_KEY,allowViewMigration=false,backupPruningPaused=false,deliveryWorkerEnabled=true,allowLedgerInitialize=false}){
+ constructor({provider,vault,operator,dir,origins,confirmations=1,deploymentBlock=0,chainId=31337,mainnetEnabled=false,mainnetAcknowledgement,owner,treasury,allowLocalKeyFile=false,masterKey=process.env.SNAPVAULT_MASTER_KEY,backupKey=process.env.SNAPVAULT_BACKUP_KEY,backupDir,backupPutURL,backupStore,tapeSend,sender,allowStateMigration=false,ledgerDir,ledgerKey=process.env.SNAPVAULT_VIEW_LEDGER_KEY,allowViewMigration=false,backupPruningPaused=false,backupGeneration,deliveryWorkerEnabled=true,allowLedgerInitialize=false}){
   const policy=networkPolicy({chainId,mainnetEnabled,mainnetAcknowledgement,owner,treasury,operator:operator.address,confirmations,tapeSend},{local:allowLocalKeyFile});
   Object.assign(this,{provider,vault,operator,dir,origins,confirmations,deploymentBlock,chainId,policy,tapeSend,owner,treasury,deliveryWorkerEnabled});mkdirSync(dir,{recursive:true,mode:0o700});
   if(masterKey)this.master=secretKey(masterKey,'SNAPVAULT_MASTER_KEY');
@@ -35,21 +38,24 @@ export class WalletService {
   this.identity=chainId+':'+vault.target.toLowerCase();if(this.state.identity&&this.state.identity!==this.identity)throw Error('Data directory belongs to another chain/contract');if(!this.state.identity&&this.state.version===1&&!allowStateMigration)throw Error('Legacy data requires explicit backup and migration');this.state.identity=this.identity;this.state.version=2;
   this.state.orderIndex ||= {cursor:deploymentBlock-1,anchor:null,orders:{}};this.state.tapeJobs ||= {};
   this.nonces=new Map();this.sessions=new Map();this.pending=Promise.resolve();this.limits=new Map();this.scanTask=null;this.scanAt=0;
+  backupGeneration=checkedGeneration(backupGeneration);if(backupStore&&backupGeneration!==(backupStore.generation||null))throw Error('Local/remote backup generation mismatch');
+  if(policy.mainnet&&!backupPruningPaused&&!backupGeneration)throw Error('Mainnet pruning requires an isolated backup generation');
+  if(policy.mainnet&&deliveryWorkerEnabled&&(!backupGeneration||backupPruningPaused))throw Error('Payments require scoped bounded backups');
   if(backupPruningPaused&&backupStore)backupStore.prune=false;
-  if(backupKey){const key=secretKey(backupKey,'SNAPVAULT_BACKUP_KEY');if(key.equals(this.master))throw Error('Backup key must differ from master key');this.backup=new BackupManager({dir:backupDir||resolve(dir,'backups'),key,putURL:backupPutURL,store:backupStore,prune:!backupPruningPaused});}
+  if(backupKey){const key=secretKey(backupKey,'SNAPVAULT_BACKUP_KEY');if(key.equals(this.master))throw Error('Backup key must differ from master key');this.backup=new BackupManager({dir:backupDir||resolve(dir,'backups'),key,putURL:backupPutURL,store:backupStore,prune:!backupPruningPaused,generation:backupGeneration});}
   if(policy.mainnet&&(!this.backup||(!backupPutURL&&!backupStore)))throw Error('Mainnet requires encrypted OFF-SITE backups');
   if(tapeSend?.enabled&&sender)this.transport=new WalletTapeSend({service:this,config:tapeSend,sender});
   if(policy.mainnet&&!this.transport)throw Error('Mainnet TapeSend sender C must be configured separately');
-  const journalDir=ledgerDir||resolve(dir,'view-ledger');if(policy.mainnet&&(!ledgerDir||!ledgerKey))throw Error('Independent persistent view ledger directory/key required');if(policy.mainnet&&(secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY').equals(this.master)||secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY').equals(secretKey(backupKey,'SNAPVAULT_BACKUP_KEY'))))throw Error('View ledger key must differ from master and backup keys');if(policy.mainnet&&!this.state.viewLedgerRequired&&!allowViewMigration)throw Error('Explicit reviewed legacy view migration required');this.viewLedger=new ViewLedger({dir:journalDir,key:ledgerKey?secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY'):this.master,identity:this.identity,create:!this.state.viewLedgerRequired,allowRemoteInitialize:allowLedgerInitialize||allowViewMigration&&!this.state.viewLedgerRequired,remote:policy.mainnet?new S3ViewLedgerStore({client:backupStore?.client,bucket:backupStore?.bucket,key:secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY'),identity:this.identity}):undefined});if(policy.mainnet&&(!backupStore?.client||!backupStore?.bucket))throw Error('Remote view ledger requires S3 backup store');this.initViews();this.save();
+  const journalDir=ledgerDir||resolve(dir,'view-ledger');if(policy.mainnet&&(!ledgerDir||!ledgerKey))throw Error('Independent persistent view ledger directory/key required');if(policy.mainnet&&(secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY').equals(this.master)||secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY').equals(secretKey(backupKey,'SNAPVAULT_BACKUP_KEY'))))throw Error('View ledger key must differ from master and backup keys');if(policy.mainnet&&!this.state.viewLedgerRequired&&!allowViewMigration)throw Error('Explicit reviewed legacy view migration required');this.viewLedger=new ViewLedger({dir:journalDir,key:ledgerKey?secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY'):this.master,identity:this.identity,create:!this.state.viewLedgerRequired,allowRemoteInitialize:allowLedgerInitialize||allowViewMigration&&!this.state.viewLedgerRequired,remote:policy.mainnet?new S3ViewLedgerStore({client:backupStore?.client,bucket:backupStore?.bucket,key:secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY'),identity:this.identity}):undefined});if(policy.mainnet&&(!backupStore?.client||!backupStore?.bucket))throw Error('Remote view ledger requires S3 backup store');this.initViews();this.initSocial();if(backupGeneration)this.state.backupPolicyVersion=1;this.save();
  }
  async flushViewLedger(){try{await this.viewLedger?.syncRemote();}catch{fail('查看记录暂不可用，请稍后再试',503);}}
- async flushBackup(){if(this.backup)return (async()=>{await this.flushViewLedger();this.sweepViews();this.save();await this.flushViewLedger();const burnFiles={};for(const m of this.state.messages)if(m.burnFile&&!m.destroyedAt)burnFiles[m.id]=JSON.parse(readFileSync(resolve(this.dir,'burn',m.id+'.enc'),'utf8'));return this.backup.write({file:this.file,master:this.master,identity:this.identity,stateBytes:readFileSync(this.file),viewRecovery:{head:this.viewLedger.head(),burnFiles}});})();if(this.policy.mainnet)throw Error('Mainnet backup unavailable');}
+ async flushBackup(){if(this.backup)return (async()=>{await this.flushViewLedger();this.sweepViews();this.save();await this.flushViewLedger();const burnFiles={};for(const m of this.state.messages)if(m.burnFile&&!m.destroyedAt)burnFiles[m.id]=JSON.parse(readFileSync(resolve(this.dir,'burn',m.id+'.enc'),'utf8'));return this.backup.write({file:this.file,master:this.master,identity:this.identity,stateBytes:readFileSync(this.file),viewRecovery:{head:this.viewLedger.head(),burnFiles},fingerprint:Buffer.from(JSON.stringify(snapshotState(this.state)))});})();if(this.policy.mainnet)throw Error('Mainnet backup unavailable');}
  seal(data,key=this.master){const iv=randomBytes(12),c=createCipheriv('aes-256-gcm',key,iv),ct=Buffer.concat([c.update(data),c.final()]);return {iv:iv.toString('base64'),ct:ct.toString('base64'),tag:c.getAuthTag().toString('base64')};}
  unseal(e,key=this.master){const d=createDecipheriv('aes-256-gcm',key,Buffer.from(e.iv,'base64'));d.setAuthTag(Buffer.from(e.tag,'base64'));return Buffer.concat([d.update(Buffer.from(e.ct,'base64')),d.final()]);}
  save(){if(this.viewLedger){const digest=businessDigest(this.state),last=this.viewLedger.rows.findLast(r=>r.event.type==='business');if(!last||last.event.digest!==digest)this.viewLedger.append({type:'business',digest});this.state.viewLedgerHead=this.viewLedger.head();}writeFileSync(this.file+'.tmp',JSON.stringify(this.seal(Buffer.from(JSON.stringify(this.state)))),{mode:0o600});renameSync(this.file+'.tmp',this.file);}
  serial(fn){const task=this.pending.catch(()=>{}).then(fn);this.pending=task;return task;}
  limit(key,max=90){const now=Date.now(),old=this.limits.get(key),v=old&&old.until>now?old:{n:0,until:now+60000};if(++v.n>max)fail('操作太频繁，请稍后再试',429);this.limits.set(key,v);if(this.limits.size>10000)for(const[k,r]of this.limits)if(r.until<now)this.limits.delete(k);}
- async config(){if(Number((await this.provider.getNetwork()).chainId)!==this.chainId)fail('RPC/config chain mismatch',503);if(!this.feeInfo||Date.now()-this.feeInfo.at>30000)this.feeInfo={at:Date.now(),bps:Number(await this.vault.feeBps())};return {apiVersion:API_VERSION,feeBps:this.feeInfo.bps,chainId:this.chainId,vault:this.vault.target,abi:this.vault.interface.fragments.map(f=>f.format('full')),containerRequired:false,freeChat:true,storage:'encrypted-server-files',confirmations:this.confirmations,...this.policy,paymentsEnabled:!this.policy.mainnet||this.deliveryWorkerEnabled,tapeSendEnabled:!!this.transport,tapeSendReason:this.chainId===1952?'测试网尚无官方 Hub，使用普通交付':!this.transport?'本地未配置 TapeSend':'有可用容器时优先 TapeSend，无容器时普通交付',refundPolicy:'owner-funded-full-refund'};}
+ async config(){if(Number((await this.provider.getNetwork()).chainId)!==this.chainId)fail('RPC/config chain mismatch',503);if(!this.feeInfo||Date.now()-this.feeInfo.at>30000)this.feeInfo={at:Date.now(),bps:Number(await this.vault.feeBps())};return {apiVersion:API_VERSION,feeBps:this.feeInfo.bps,chainId:this.chainId,vault:this.vault.target,abi:this.vault.interface.fragments.map(f=>f.format('full')),containerRequired:false,freeChat:true,screenPrivacy:{version:1,nativeCaptureReports:true,webCaptureDetection:false},socialMedia:{version:1,freeImages:true,stories:true,storyHours:24,video:false},storage:'encrypted-server-files',confirmations:this.confirmations,...this.policy,paymentsEnabled:!this.policy.mainnet||this.deliveryWorkerEnabled,tapeSendEnabled:!!this.transport,tapeSendReason:this.chainId===1952?'测试网尚无官方 Hub，使用普通交付':!this.transport?'本地未配置 TapeSend':'有可用容器时优先 TapeSend，无容器时普通交付',refundPolicy:'owner-funded-full-refund'};}
  auth(token,origin){const s=this.sessions.get(token);if(!s||s.until<Date.now()||s.origin!==origin)fail('请连接钱包并签名登录',401);return s;}
  async challenge(b,origin){
   if(!this.origins.includes(origin))fail('网站来源不允许',403);this.limit('login:'+b.address,12);const account=address(b.address),{chainId,vault}=await this.config();
@@ -77,7 +83,7 @@ export class WalletService {
   }
   if(!who)return publicState(this,products);
   const convs=this.state.convs.filter(c=>c.members.includes(who));
-  return {contents:products,orders,profiles:privateProfiles(this,who,products,convs),friends:this.state.friends.filter(f=>[f.from,f.to].includes(who)),convs,messages:this.state.messages.filter(m=>convs.some(c=>c.id===m.conv)).map(({payload,burnFile,opens,...m})=>({...m,viewUntil:opens?.[who]||null,expired:!!(m.burn&&opens?.[who]&&opens[who]<=Date.now())})),chainId:(await this.config()).chainId};
+  return {captureNotices:this.captureNoticesFor(who),contents:products,orders,profiles:privateProfiles(this,who,products,convs),friends:this.state.friends.filter(f=>[f.from,f.to].includes(who)),convs,messages:this.state.messages.filter(m=>convs.some(c=>c.id===m.conv)).map(({payload,burnFile,opens,...m})=>({...m,viewUntil:opens?.[who]||null,expired:!!(m.burn&&opens?.[who]&&opens[who]<=Date.now())})),chainId:(await this.config()).chainId};
  }
  jobRef(id,buyer){return keccak256(Buffer.from(`${this.chainId}:${this.vault.target.toLowerCase()}:${id}:${buyer.toLowerCase()}`));}
  async syncOrders(force=false){if(this.scanTask)return this.scanTask;if(!force&&Date.now()-this.scanAt<5000)return;this.scanTask=this._syncOrders().then(()=>{this.scanAt=Date.now()}).finally(()=>{this.scanTask=null});return this.scanTask;}
@@ -103,9 +109,16 @@ export class WalletService {
  async deliveryRoute(who){if(this.chainId===1952)return {available:false,reason:'测试网尚无官方 TapeSend Hub，本单使用普通交付'};if(!this.transport)return {available:false,reason:'当前本地环境未配置 TapeSend，本单使用普通交付'};return this.transport.recipient(who,this.state.profiles[who]?.delivery);}
  async handle(action,b,token,origin){
   await this.config();if(action==='challenge')return this.challenge(b,origin);if(action==='login')return this.login(b,origin);
+  if(action==='social-state'&&!token){this.limit('anonymous-social:global',600);return this.serial(()=>this.socialState(null));}
   if(action==='state'&&!token){this.limit('anonymous:global',600);return this.stateFor(null);}
 
   const s=this.auth(token,origin),who=s.account;this.limit(who);
+  if(action==='privacy-setting')return this.serial(()=>this.privacySetting(b,who));
+  if(action==='capture-report')return this.serial(()=>this.reportCapture(b,who));
+  if(action==='social-state')return this.serial(()=>this.socialState(who));
+  if(action==='social-publish')return this.serial(()=>this.publishSocial(b,who));
+  if(action==='social-open')return this.serial(()=>this.openSocial(b,who));
+  if(action==='social-delete')return this.serial(()=>this.deleteSocial(b,who));
   if(action==='claim-open')return this.serial(()=>this.claimOpen(b,who));
   if(action==='view-finish')return this.serial(()=>this.finishView(b.ref,who));
   if(action==='logout'){this.sessions.delete(token);return {ok:true};}
@@ -175,3 +188,7 @@ export class WalletService {
 }
 
 installViewAccess(WalletService);
+
+installSocialMedia(WalletService);
+
+installScreenPrivacy(WalletService);

@@ -7,6 +7,10 @@
       "status": "PASS"
     },
     {
+      "name": "production vault pin safety",
+      "status": "PASS"
+    },
+    {
       "name": "mobile adapter and transaction safety",
       "status": "PASS"
     },

@@ -1,3 +1,4 @@
+import {privacyControls} from './screen-privacy.js';
 import {hydrateSafeImages} from './safe-dom.js';
 import {icon} from './ui-icons.js';
 import {setupChatUI,openChatPane,filterConversations,chatHeader,expiryControl} from './chat-ui.js';
@@ -42,11 +43,11 @@ export const Friends = {
   isFriend(x, y) { return this.all().some((f) => f.status === "accepted" && [f.from, f.to].includes(x) && [f.from, f.to].includes(y)); },
 };
 // ---------- 截图策略 ----------
-// allow=允许；forbid=禁止（尽力而为：模糊、水印，窗口失焦或切走时遮住内容）；notify=截图时通知发送者（类似 Snapchat）。
-// 浏览器拿不到真正的截图事件，只能靠 PrintScreen 或 Cmd+Shift+3/4/5 这类按键、visibilitychange、窗口 blur 来猜。
+// allow=普通显示；forbid=模糊显示。真实系统截图通知仅在原生客户端中接入。
+// 网页不把快捷键、失焦或切屏当作截图证据。
 // 手机系统截图、外接相机拍屏、开发者工具都拦不住，也检测不到。
-const SHOT = { allow: "Standard · 默认显示", forbid: "Privacy blur · 模糊显示", notify: "Screenshot hints · 截图提示" };
-const shotOf = (c, m) => (m && m.shot) || c.shot || "allow";
+const SHOT = { allow: "Standard · 默认显示", forbid: "Privacy blur · 模糊显示" };
+const shotOf = (c, m) => ((m && m.shot) || c.shot)==="forbid"?"forbid":"allow";
 
 // ---------- 模拟 E2E ----------
 const Crypto = {
@@ -111,7 +112,7 @@ async function seed() {
   LS.set("chat:friends", [{ from: cr, to: f1, status: "accepted" }, { from: f3, to: cr, status: "accepted" }, { from: f1, to: f2, status: "accepted" }, { from: f3, to: f1, status: "pending" }]);
   const dm = await createConv({ type: "dm", members: [cr, f1], admin: cr });
   const g = await createConv({ type: "group", name: "小鹿的付费粉丝团 💛", members: [cr, f2], admin: cr, gated: true });
-  g.shot = "notify"; T.saveConv(g);
+  g.shot = "allow"; T.saveConv(g);
   const g2 = await createConv({ type: "group", name: "粉丝闲聊", members: [f1, f2, f3], admin: f1 });
   const dm2 = await createConv({ type: "dm", members: [cr, f3], admin: cr });
   await sendText(dm, cr, "谢谢支持！今晚给你发一张独家花絮 ✨", false);
@@ -153,12 +154,12 @@ export async function initChat(root, options = {}) {
   window.addEventListener('snapvault:change', () => render());
   root.querySelector("#xc-new").onclick = toggleNew;
   root.querySelector("#xc-fr").onclick = () => { R.querySelector("#xc-frbox").classList.toggle("hidden"); renderFriends(); };
-  setupShotDetect();
+
   root.querySelector("#xc-list").onclick = (e) => { const id = e.target.closest("[data-conv]")?.dataset.conv; if (id) { cur = id; sessionStorage.setItem('sv:conversation', id); render(); } };
   root.querySelector("#xc-pane").onclick = onPane;
   window.addEventListener("storage", (e) => { if (e.key?.startsWith("chat:") || e.key === "purchases") render(); });
   document.querySelector('[data-tab="chat"]')?.addEventListener("click", () => render());
-  window.addEventListener('snapvault:chat-view',()=>render());
+  window.addEventListener('snapvault:chat-view',()=>render());window.addEventListener('snapvault:privacy-ready',()=>render());
   await seed(); render();
   const conversations = () => T.convs().filter(c => c.members.includes(me)).map(c => ({ ...c, label: title(c) }));
   return {
@@ -237,8 +238,8 @@ async function renderPane() {
   if (pane.dataset.conv === draftKey && pane.querySelector('#chat-text')) drafts.set(draftKey, { text: pane.querySelector('#chat-text').value, burn: pane.querySelector('#chat-burn').checked, secs: pane.querySelector('#chat-secs').value, shot: pane.querySelector('#chat-shot').value });
   const draft = drafts.get(draftKey) || { text: '', burn: false, secs: '10', shot: '' };
   const peer=c.type==='dm'?(c.members.find(x=>x!==me)||me):null;
-  const settings=c.members.includes(me)?`<label class="display-mode-label">Display mode <span>显示模式</span><select id="xc-cshot" aria-label="Display mode · 会话显示模式">${Object.entries(SHOT).map(([key,value])=>`<option value="${key}" ${shotOf(c)===key?'selected':''}>${value}</option>`).join('')}</select></label><p class="display-mode-note">仅影响网页显示。模糊显示不等于防截图；截图提示仅基于可识别的按键和切屏行为。</p>`:'';
-  const head=chatHeader({name:title(c),uid:peer?uidOf(peer):'',group:c.type==='group',members:c.members.length,local:true,photo:peer===CREATOR?'photo-travel':peer==='0xFaN3000000000000000000000000000000000003'?'photo-maker':'',settings});
+  const settings='';
+  const head=chatHeader({name:title(c),uid:peer?uidOf(peer):'',group:c.type==='group',members:c.members.length,local:true,photo:peer===CREATOR?'photo-travel':peer==='0xFaN3000000000000000000000000000000000003'?'photo-maker':'',settings:settings+privacyControls(c)});
 
   if (!c.members.includes(me)) {
     const ok = hasPurchased(me, c.admin);
@@ -256,7 +257,7 @@ async function renderPane() {
     else if (m.burn && ((m.viewed || []).includes(me) || !m.env)) body = `<i class="muted">已结束查看</i>`;
     else if (m.burn) body = `<button class="tapburn" data-open="${esc(m.id)}">${icon('clock')} 查看限时消息 · ${esc(m.secs)}s</button>`;
     else body = esc(dec.decode(await Crypto.unaes(key, m.env).catch(() => enc.encode("（解密失败）"))));
-    return `<div class="msg ${mine ? "me" : ""}">${c.type === "group" && !mine ? `<small class="muted">${esc(PEOPLE[m.from]?.av || "")} ${esc(nm(m.from))}</small>` : ""}<div class="bubble ${sp === "forbid" && !mine ? "noshot" : ""}" data-wm="${esc(nm(me) + " " + uidOf(me))}">${body}</div><small class="muted">${fmt(m.ts)}${m.shot ? " · " + SHOT[m.shot] : ""}</small></div>`;
+    return `<div class="msg ${mine ? "me" : ""}">${c.type === "group" && !mine ? `<small class="muted">${esc(PEOPLE[m.from]?.av || "")} ${esc(nm(m.from))}</small>` : ""}<div class="bubble ${sp === "forbid" && !mine ? "noshot" : ""}" data-wm="${esc(nm(me) + " " + uidOf(me))}">${body}</div><small class="muted">${fmt(m.ts)}${m.shot&&SHOT[m.shot] ? " · " + SHOT[m.shot] : ""}</small></div>`;
   }));
   if (revision !== paneRevision) return;
   pane.dataset.conv = draftKey;
@@ -267,7 +268,7 @@ async function renderPane() {
       <button type="button" class="secondary chat-paid" id="chat-paid">${icon('lock')}<span>付费图片</span></button><button class="primary">发送</button></form>`;
   hydrateSafeImages(pane);
   pane.querySelector('#chat-paid').onclick = () => hooks.compose?.({ ...c, label: title(c) });
-  pane.querySelector("#xc-cshot").onchange = (e) => { c.shot = e.target.value; T.saveConv(c); T.send({ conv: c.id, from: me, ts: Date.now(), sys: `${nm(me)} 将显示模式设为「${SHOT[c.shot]}」` }); render(); };
+  const legacyDisplay=pane.querySelector("#xc-cshot");if(legacyDisplay)legacyDisplay.onchange = (e) => { c.shot = e.target.value; T.saveConv(c); T.send({ conv: c.id, from: me, ts: Date.now(), sys: `${nm(me)} 将显示模式设为「${SHOT[c.shot]}」` }); render(); };
   pane.querySelector("#chat-text").value = draft.text;
   pane.querySelector('.expiry-control').open=!!expiryOpen;
   pane.querySelector('#chat-burn').checked = draft.burn; pane.querySelector('#chat-secs').value = draft.secs; pane.querySelector('#chat-shot').value = draft.shot;
@@ -300,21 +301,4 @@ function renderFriends() {
  box.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>{Friends.accept(b.dataset.acc,me);renderFriends();});
 }
 
-// 截图检测（尽力而为）
-function setupShotDetect() {
-  const hit = (why) => {
-    const c = T.convs().find((x) => x.id === cur); if (!c || !c.members.includes(me) || !document.querySelector("#xc-pane")?.offsetParent) return;
-    const ms = T.list(c.id).filter((m) => !m.sys && m.from !== me);
-    const notify = shotOf(c) === "notify" || ms.some((m) => m.shot === "notify" && opened[m.id]);
-    if (notify) { T.send({ conv: c.id, from: me, ts: Date.now(), sys: `📸 ${nm(me)} 可能截了屏（${why}）` }); render(); }
-  };
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "PrintScreen" || (e.metaKey && e.shiftKey && ["3", "4", "5", "#", "$", "%"].includes(e.key)) || (e.key.toLowerCase() === "s" && e.metaKey && e.shiftKey)) hit("检测到截图快捷键");
-  });
-  const hide = (on) => document.body.classList.toggle("xc-hide", on);
-  document.addEventListener("visibilitychange", () => { hide(document.hidden); if (document.hidden && Object.keys(opened).length) hit("查看阅后即焚时切走了页面"); });
-  window.addEventListener("blur", () => hide(true)); window.addEventListener("focus", () => hide(false));
-  document.addEventListener("contextmenu", (e) => { if (e.target.closest(".noshot")) e.preventDefault(); });
-  window.__simulateScreenshot = () => hit("模拟");
-}
 window.__snapchat = { Friends, uidOf, MockTapeSendTransport, Crypto, hasPurchased };

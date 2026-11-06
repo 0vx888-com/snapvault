@@ -1,12 +1,18 @@
+import {wallet} from './wallet.js';
+import {socialEnabled} from './social.js';
 const $=s=>document.querySelector(s);
 export function syncPublishComposer(){
  const form=$('#form');if(!form)return;
+ const story=$('#post-kind')?.value==='story',free=story||$('#post-access')?.value==='free';
+ if(story)$('#post-access').value='free';$('#post-access').disabled=story;
  const file=$('#file').files[0],title=$('#title').value,price=$('#price'),token=$('#token'),burn=$('#content-burn').checked,secs=$('#secs'),target=$('#publish-target'),preview=$('#show-preview');
  $('#publish-title-count').textContent=title.length+' / 40';
  $('#publish-file-name').textContent=file?file.name:'尚未选择图片';
  $('#publish-file-meta').textContent=file?`${(file.size/1024).toFixed(file.size<1024?1:0)} KB · ${file.type.replace('image/','').toUpperCase()}`:'PNG、JPEG、WebP、GIF · 最大 2 MB';
  $('#clear-upload').textContent=file?'更换图片':'选择图片';
- $('#publish-duration-row').classList.toggle('hidden',!burn);secs.disabled=!burn;
+ $('#publish-duration-row').classList.toggle('hidden',!burn);secs.disabled=free||!burn;price.disabled=token.disabled=free;$('#max').disabled=free;$('#content-burn').disabled=free;preview.disabled=free||wallet.enabled;$('#title').required=!story;
+ $('.paid-settings').classList.toggle('hidden',free);$('.publish-advanced').classList.toggle('hidden',free);
+ $('#social-composer-note').textContent=story?'Story 免费查看，发布 24 小时后过期。可选择好友可见或公开。':free?'不需要付款，发布图片不会发起链上交易。':'付费图片由钱包确认上架和付款。';
  if(!burn&&(!Number.isInteger(Number(secs.value))||Number(secs.value)<3||Number(secs.value)>3600))secs.value='10';
  const label=target.selectedOptions[0]?.textContent||'创作者广场';
  $('#publish-review-target').textContent=target.value==='public'?'创作者广场':label.replace(/^仅当前(私聊|群聊)：/,'');
@@ -15,10 +21,11 @@ export function syncPublishComposer(){
  $('#publish-access-help').textContent=burn?'付款后 24 小时内可打开；限时从首次打开开始，无法阻止截图。':'付款后 24 小时内可重复打开。已保存的图片无法收回。';
  $('#publish-preview-note').textContent=preview.checked?'允许公开低清模糊预览，原图仍需付费解锁。':'默认不公开图片预览，付款解锁后才能查看。';
  $('#publish-preview-help').textContent=preview.disabled?'当前模式暂不支持公开模糊预览。':'默认关闭，未解锁前不展示图片。';
- const valid=!!file&&!!title.trim()&&price.validity.valid&&Number(price.value)>0&&(!burn||secs.validity.valid)&&$('#max').validity.valid;
+ const valid=!!file&&(story||!!title.trim())&&(free?socialEnabled():price.validity.valid&&Number(price.value)>0&&(!burn||secs.validity.valid)&&$('#max').validity.valid);
+ if(free){$('#publish-review-access').textContent=story?'免费 · 24 小时后过期':'免费查看';$('#publish-audience-help').textContent=target.value==='public'?'公开可见，无需付款。':target.value==='friends'?'仅已互相接受的好友可见。':'仅当前会话成员可见。';$('#publish-preview-note').textContent=story?'Story 从发布时间开始计时，24 小时后不可再查看。':'图片按所选范围分享，不需要购买。';}
  $('#publish-submit-label').textContent=form.dataset.sending==='true'?'正在发布…':'发布图片';
  form.querySelector('[type=submit]').disabled=!valid||form.dataset.sending==='true';
- $('#publish-readiness').textContent=!file?'先选择一张图片。':!title.trim()?'写一句配文后即可发布。':!valid?'请检查价格、时长或可售份数。':'请确认发布对象和解锁规则。';
+ $('#publish-readiness').textContent=!file?'先选择一张图片。':!story&&!title.trim()?'写一句配文后即可发布。':!valid?'请检查价格、时长或可售份数。':'请确认发布对象和解锁规则。';
 }
 export function initPublishComposer(){
  const form=$('#form');form.addEventListener('input',syncPublishComposer);form.addEventListener('change',syncPublishComposer);

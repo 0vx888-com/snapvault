@@ -50,7 +50,7 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedPr
     }
     const forwarded=trustedProxy?String(req.headers['x-forwarded-for']||'').split(',').at(-1)?.trim():null;const client=isIP(forwarded||'')?forwarded:req.socket.remoteAddress;
     if(['/api/wallet/profile-lookup','/api/wallet/friend'].includes(url.pathname))service.limit('lookup-ip:'+client,30);
-    if(!req.headers.authorization&&['/api/wallet/state','/api/wallet/challenge','/api/wallet/login','/api/wallet/claim-open'].includes(url.pathname))service.limit('public:'+client,120);
+    if(!req.headers.authorization&&['/api/wallet/social-state','/api/wallet/state','/api/wallet/challenge','/api/wallet/login','/api/wallet/claim-open'].includes(url.pathname))service.limit('public:'+client,120);
     const action=url.pathname.slice('/api/wallet/'.length);if(!url.pathname.startsWith('/api/wallet/'))return send(404,{error:'接口不存在'});
     await service.flushViewLedger?.();const result=await service.handle(action,b,req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin);await service.flushViewLedger?.();return send(200,result);
    }

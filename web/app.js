@@ -1,3 +1,6 @@
+import {initScreenPrivacy,setPrivacyContext} from './screen-privacy.js';
+import {initSocial,publishSocial,socialMode,renderSocial} from './social.js';
+import {initProductUI} from './product-ui.js';
 import {icon} from './ui-icons.js';
 import {initPublishComposer,syncPublishComposer} from './publish-ui.js';
 import {safeImageURL,hydrateSafeImages} from './safe-dom.js';
@@ -18,6 +21,7 @@ const money = c => `${c.price} ${c.token}`;
 const activeNetworkName=()=>wallet.enabled?(wallet.config?.mainnet?'X Layer 主网':wallet.config?.chainId===31337?'本地链':'X Layer 测试网'):local.enabled?'本地链':'本地演示';
 function toast(text) { $('#toast').textContent = text; $('#toast').classList.remove('hidden'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').classList.add('hidden'), 4000); }
 function go(page) {
+  setPrivacyContext(null);
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === page));
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== page));
   if (page === 'creator') renderTargets();
@@ -26,20 +30,23 @@ function go(page) {
   $('#workspace-title').textContent=({fan:'发现',chat:'消息',creator:'发布'})[page];
   if(page==='chat')window.dispatchEvent(new Event('snapvault:chat-view'));
   document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===page?'page':'false'));
-  window.scrollTo({top:0,behavior:'instant'});
+  window.scrollTo({top:0,behavior:'instant'});document.querySelector('main').scrollTo({top:0,behavior:'instant'});
 }
 function creatorPhoto(address){return !wallet.enabled && address===CREATOR?'photo-travel':!wallet.enabled && address==='0xFaN3000000000000000000000000000000000003'?'photo-maker':'photo-sea';}
 function creatorCard(p,index) {
  const mine=identity()===p.address,count=contents().filter(c=>c.creator===p.address&&c.scope==='public').length,picture=creatorPhoto(p.address),following=follows().includes(p.address),friend=Friends.isFriend(identity(),p.address);
- return `<article class="creator-card"><div class="frame-caption"><span>${esc(p.tag||'日常分享')}</span><small>${wallet.enabled?'创作者':'演示资料'}</small></div><button class="creator-cover ${wallet.enabled?'photo-empty':`photo-tile ${picture}`}" data-profile="${esc(p.address)}" aria-label="打开 ${esc(p.name)} 的主页">${wallet.enabled?`<span class="photo-initial">${esc(p.name.slice(0,1))}</span>`:''}<span class="cover-visit">查看主页 <span aria-hidden="true">↗</span></span></button><div class="creator-info"><div class="creator-identity"><span class="creator-avatar ${wallet.enabled?'':`photo-tile ${picture}`}">${wallet.enabled?esc(p.name.slice(0,1)):''}</span><div><h3>${esc(p.name)}</h3><button class="creator-uid" data-copy-uid="${uidOf(p.address)}" aria-label="复制 ${esc(p.name)} 的 UID">UID ${uidOf(p.address)} <span aria-hidden="true">⧉</span></button></div><div class="creator-actions">${mine?'<span class="pill">我自己</span>':`<button class="${following?'secondary':'primary'}" data-follow="${esc(p.address)}">${following?'已关注':'关注 ＋'}</button>`}</div></div><p>${esc(p.bio||'还没有填写简介。')}</p><div class="creator-bottom"><span>${count} 条公开作品</span>${mine?'<button class="text-button" data-edit-profile>编辑资料 ↗</button>':`<button class="text-button" data-message="${esc(p.address)}">${friend?'发消息':'添加好友'} <span aria-hidden="true">↗</span></button>`}</div></div></article>`;
+ const coverClass=wallet.enabled?'photo-empty':`photo-tile ${picture}`;
+ return `<article class="creator-card ${wallet.enabled?'no-photo':''}"><header class="creator-post-header"><button class="creator-avatar ${wallet.enabled?'':`photo-tile ${picture}`}" data-profile="${esc(p.address)}" aria-label="打开 ${esc(p.name)} 的主页">${wallet.enabled?esc(p.name.slice(0,1)):''}</button><div class="creator-post-name"><h3>${esc(p.name)}</h3><button class="creator-uid" data-copy-uid="${uidOf(p.address)}" aria-label="复制 ${esc(p.name)} 的 UID">${uidOf(p.address)} <span aria-hidden="true">⧉</span></button></div><div class="creator-actions">${mine?'<span class="pill">我自己</span>':`<button class="${following?'secondary':'primary'}" data-follow="${esc(p.address)}">${following?'已关注':'关注 ＋'}</button>`}</div></header><button class="creator-cover ${coverClass}" data-profile="${esc(p.address)}" aria-label="打开 ${esc(p.name)} 的主页">${wallet.enabled?`<span class="photo-initial">${esc(p.name.slice(0,1))}</span>`:''}<span class="cover-visit">查看主页 <span aria-hidden="true">↗</span></span></button><div class="creator-info"><div class="creator-post-tag"><span>${esc(p.tag||'日常分享')}</span><span>${count} 条公开作品</span></div><p>${esc(p.bio||'还没有填写简介。')}</p><div class="creator-bottom"><button class="text-button" data-profile="${esc(p.address)}">查看主页 <span aria-hidden="true">↗</span></button>${mine?'<button class="text-button" data-edit-profile>编辑资料 ↗</button>':`<button class="text-button creator-message" data-message="${esc(p.address)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H5l-3 2v-10A9.5 9.5 0 0 1 21 11.5Z"/></svg>${friend?'发消息':'添加好友'}</button>`}</div></div></article>`;
 }
 function renderAccount(){
  const who=identity(),uid=who?uidOf(who):'未连接钱包',p=who?profile(who):{name:'未登录'};
+ document.body.dataset.identityState=who?'connected':'guest';
  for(const id of ['account-header-uid','mobile-account-uid','account-uid'])$('#'+id).textContent=uid;
  $('#account-wallet').textContent=wallet.enabled?(wallet.token?'退出钱包登录':'连接钱包'):'钱包接入说明';
  $('#demo-identity').classList.toggle('hidden',wallet.enabled);
  $('#account-orders').classList.toggle('hidden',!wallet.enabled);$('#account-network').classList.toggle('hidden',!wallet.enabled);$('#account-network').disabled=!wallet.ready;$('#account-network').textContent=wallet.config?.mainnet?'切换 X Layer 主网':'切换网络';
  $('#rail-account-name').textContent=p.name;$('#account-title').textContent=p.name;
+ $('#account-avatar').textContent=p.name.slice(0,1);
  $('#account-address').textContent=who||'连接钱包后显示地址与 UID';
  document.querySelectorAll('[data-copy-self]').forEach(b=>b.disabled=!who);
 }
@@ -59,9 +66,10 @@ function showReceived(){feed='purchased';profileAddress=null;$('#search').value=
 function paidCard(id, who = identity(), variant = 'grid') {
  const c=content(id);if(!c||!eligible(c,who))return '<div class="muted">这张图片未向当前身份开放</div>';
  const state=orderState(c,who),p=profile(c.creator),soldout=!!c.max&&c.sold>=c.max,ended=state==='expired';
- const disabled=ended||state==='delivering'||(state==='locked'&&soldout);
+ const paymentPaused=wallet.enabled&&wallet.config?.paymentsEnabled===false&&state==='locked';
+ const disabled=ended||state==='delivering'||(state==='locked'&&soldout)||paymentPaused;
  const status=ended?'已结束':state==='creator'?'我的作品':state==='delivering'?'交付中':state==='ready'||state==='viewing'?'已购买':soldout?'已售罄':'待解锁';
- const action=ended?'查看已结束':state==='creator'?'预览图片':state==='delivering'?'等待交付':state==='ready'?'打开图片':state==='viewing'?'继续查看':soldout?'已售罄':'解锁图片';
+ const action=paymentPaused?'暂停购买':ended?'查看已结束':state==='creator'?'预览图片':state==='delivering'?'等待交付':state==='ready'?'打开图片':state==='viewing'?'继续查看':soldout?'已售罄':'解锁图片';
  const icons={lock:'<rect x="6" y="10" width="12" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2"/>',expired:'<circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2M5.8 5.8l12.4 12.4"/>',image:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8" cy="9" r="1.5"/><path d="m4 17 5-5 4 4 3-3 5 5"/>'};
  const icon=ended?icons.expired:state==='locked'?icons.lock:icons.image;
  const english=ended?'View ended':state==='delivering'?'Preparing your photo':state==='creator'?'Private photo':state==='ready'||state==='viewing'?'Ready to view':soldout?'Sold out':'Private photo';
@@ -93,11 +101,12 @@ function render() {
   $('#my-contents').innerHTML = contents().filter(c => c.creator === identity()).reverse().map(c => paidCard(c.id)).join('') || '<p class="empty-state">你还没有发布内容。</p>';
   if (!$('#profile-edit-dialog').open && document.activeElement !== $('#profile-name')) $('#profile-name').value = profile(identity()).name;
   if (!$('#profile-edit-dialog').open && document.activeElement !== $('#profile-bio')) $('#profile-bio').value = profile(identity()).bio;
-  renderProfile();renderReceived(items);hydrateSafeImages(document);syncPublishComposer();
+  renderProfile();renderReceived(items);hydrateSafeImages(document);syncPublishComposer();renderSocial();
 }
 function renderTargets(selected) {
   const old = selected ?? $('#publish-target').value, convs = chat?.conversations() || [];
-  $('#publish-target').innerHTML = '<option value="public">公开到创作者广场</option>' + convs.map(c => `<option value="${esc(c.id)}">仅当前${c.type === 'dm' ? '私聊' : '群聊'}：${esc(c.label)}</option>`).join('');
+  if($('#post-kind').value==='story'){$('#publish-target').innerHTML='<option value="friends">好友可见</option><option value="public">公开</option>';$('#publish-target').value=old==='public'?'public':'friends';$('#compose-context').classList.add('hidden');syncPublishComposer();return;}
+  $('#publish-target').innerHTML = '<option value="public">公开到创作者广场</option>'+($('#post-access').value==='free'?'<option value="friends">好友可见</option>':'') + convs.map(c => `<option value="${esc(c.id)}">仅当前${c.type === 'dm' ? '私聊' : '群聊'}：${esc(c.label)}</option>`).join('');
   if ([...$('#publish-target').options].some(o => o.value === old)) $('#publish-target').value = old;
   const conv = convs.find(c => c.id === $('#publish-target').value);
   $('#compose-context').classList.toggle('hidden', !conv);
@@ -112,6 +121,7 @@ async function publish(e) {
     const file = $('#file').files[0]; if (!file) throw new Error('请选择图片');
     if (!['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type)) throw new Error('请选择 PNG、JPEG、WebP 或 GIF 图片');
     if (file.size > 2 * 1024 * 1024) throw new Error('本地演示请使用 2 MB 以内的图片');
+    if(socialMode()){const result=await publishSocial({file,title:$('#title').value.trim(),target:$('#publish-target').value});$('#file').value='';$('#title').value='';go('fan');if(!result.story){feed='latest';document.querySelectorAll('[data-feed]').forEach(b=>b.classList.toggle('on',b.dataset.feed===feed));}render();toast(result.story?'Story 已发布，24 小时后过期':'免费图片已发布，无需付款');return;}
     const title = $('#title').value.trim(), price = Number($('#price').value), secs = Number($('#secs').value), max = Number($('#max').value);
     if (!title || !Number.isFinite(price) || price <= 0 || !Number.isInteger(secs) || secs < 3 || secs > 3600 || !Number.isInteger(max) || max < 0 || max > 1_000_000) throw new Error('请检查标题、价格、时长和限量');
     const target = $('#publish-target').value, conv = target === 'public' ? null : chat.conversations().find(c => c.id === target);
@@ -148,6 +158,7 @@ async function publish(e) {
 async function openPurchase(id) {
   const c = content(id); if (!eligible(c)) return toast('当前身份没有购买权限');
   if (c.creator === identity() || order(id)) return view(id).catch(e => toast(e.message));
+  if(wallet.enabled&&wallet.config?.paymentsEnabled===false)return toast("付款服务暂未开放，请稍后再试");
   if(wallet.enabled){try{const route=await walletAction('delivery-route');$('#purchase-route').textContent=route.available?'本单付款后由平台 C 自动通过官方 TapeSend 发送查看链接。':route.reason;}catch(e){return toast(e.message);}}else $('#purchase-route').textContent='本地演示交付。';
   pendingPurchase = { id: c.id, buyer: identity() }; $('#purchase-error').textContent = '';
   $('#purchase-detail').innerHTML = `<div class="purchase-heading"><span class="purchase-photo-icon">${icon('photo')}</span><div><h3>${esc(c.title)}</h3><button class="creator-link" data-profile="${esc(c.creator)}">${esc(profile(c.creator).name)}</button></div></div><strong class="purchase-price">${esc(money(c))}</strong><dl class="purchase-facts"><div><dt>查看方式</dt><dd>${c.burn?c.secs+' 秒限时查看':'24 小时内可重复查看'}</dd></div><div><dt>打开期限</dt><dd>付款后 24 小时内</dd></div><div><dt>发布范围</dt><dd>${c.scope==='public'?'广场作品':'会话专属'}</dd></div></dl><p class="purchase-cost-note">平台费 ${wallet.enabled?((wallet.config?.feeBps??1000)/100)+'%':'10%（演示）'} · 买家 ${esc(profile(identity()).name)}</p>`;
@@ -164,6 +175,7 @@ async function confirmPurchase() {
   finally { purchasing = false; $('#confirm-purchase').disabled = false; $('#confirm-purchase').textContent = wallet.enabled?(wallet.config?.mainnet?'钱包确认付款（真实 OKB）':'钱包确认测试付款'):local.enabled?'确认本地测试付款':'模拟付款并解锁'; }
 }
 function closeViewer() {
+ setPrivacyContext(null);
   viewTask++; if (viewing) { clearInterval(viewing.timer); finishContent(viewing.ref);URL.revokeObjectURL(viewing.url); viewing = null; }
   $('#vimg').removeAttribute('src'); $('#wm').textContent = ''; $('#viewer').classList.add('hidden'); window.dispatchEvent(new Event('snapvault:change')); render();
 }
@@ -190,7 +202,7 @@ async function view(id) {
   if (viewing) { clearInterval(viewing.timer); finishContent(viewing.ref);URL.revokeObjectURL(viewing.url); }
   const o = (wallet.enabled||local.enabled)?opened:beginView(c, who), url = URL.createObjectURL(new Blob([plaintext], { type: c.mime || 'image/png' }));
   viewing = { url, who, id,ref:opened?.viewRef }; $('#vimg').src = url; $('#view-title').textContent = c.title + (o.preview ? ' · 作者预览' : '');
-  $('#wm').innerHTML = Array.from({ length: 20 }, () => `<span>${esc(profile(who).name)} · ${uidOf(who)}</span>`).join(''); $('#viewer').classList.remove('hidden');
+  $('#wm').innerHTML = Array.from({ length: 20 }, () => `<span>${esc(profile(who).name)} · ${uidOf(who)}</span>`).join(''); $('#viewer').classList.remove('hidden');setPrivacyContext({kind:'content',id:String(id),enabled:true});
   const tick = () => {
     const left = o.viewUntil ? Math.max(0, Math.ceil((o.viewUntil - Date.now()) / 1000)) : null;
     $('#count').textContent = left === null ? '已解锁 · 关闭即可返回聊天' : `${left} 秒后结束展示`;
@@ -307,7 +319,7 @@ window.addEventListener('snapvault:identity', () => {
 });
 window.addEventListener('storage', e => { if (['contents', 'sv:orders', 'sv:profiles'].includes(e.key) || e.key?.startsWith('sv:follows:')) render(); });
 initPublishComposer();
-chat = await initChat($('#chat'), { renderPaidCard: paidCard, compose: conv => { go('creator'); renderTargets(conv.id); $('#title').focus(); }, notify: toast });
+chat = await initChat($('#chat'), { renderPaidCard: paidCard, compose: conv => { $('#post-kind').value='post';$('#post-access').value='paid';go('creator'); renderTargets(conv.id); $('#title').focus(); }, notify: toast });
 renderTargets(); render();
 const initialView=new URLSearchParams(location.search).get('view');if(initialView==='publish')go('creator');else if(initialView==='messages')go('chat');else go('fan');
 
@@ -350,8 +362,14 @@ if(wallet.enabled){
 }
 
 // TAP-10 link contains key ONLY in its fragment; never send it over HTTP/storage.
-if(tapeLink&&wallet.enabled){const section=document.createElement('section');section.className='card profile-editor';const title=document.createElement('h3');title.textContent='TapeSend 已购内容';const note=document.createElement('p');note.className='field-note';note.textContent='查看链接请勿转发。点击打开后开始计时，无法阻止截图或保存。';const button=document.createElement('button');button.className='primary';button.textContent='打开已购图片';const status=document.createElement('p');status.className='error';section.append(title,note,button,status);document.querySelector('main').prepend(section);button.onclick=async()=>{button.disabled=true;try{const opened=await (await import('./wallet.js')).call('claim-open',{id:tapeLink.id,claim:tapeLink.claim});const res=await fetchContent(opened.uri);if(!res.ok)throw Error('密文读取失败');const bytes=new Uint8Array(await res.arrayBuffer());if('0x'+hex(await crypto.subtle.digest('SHA-256',bytes))!==opened.hash)throw Error('图片完整性核验失败');const key=await crypto.subtle.importKey('raw',Uint8Array.from(tapeLink.key.slice(2).match(/../g),x=>parseInt(x,16)),'AES-GCM',false,['decrypt']);const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},key,bytes.slice(12));closeViewer();const until=opened.viewUntil||opened.accessUntil,url=URL.createObjectURL(new Blob([plain],{type:opened.mime}));viewing={url,timer:null,ref:opened.viewRef};$('#view-title').textContent=opened.title;$('#vimg').src=url;$('#wm').textContent='SnapVault · 已购内容';$('#viewer').classList.remove('hidden');const duration=Math.max(1,until-Date.now());viewing.timer=setInterval(()=>{const left=until-Date.now();$('#count').textContent=Math.max(0,Math.ceil(left/1000))+' 秒';$('#prog').style.width=Math.max(0,left/duration*100)+'%';if(left<=0)closeViewer();},200);status.textContent='图片解密成功。';}catch(e){status.textContent=e.message;}finally{button.disabled=false;}};}
+if(tapeLink&&wallet.enabled){const section=document.createElement('section');section.className='card profile-editor';const title=document.createElement('h3');title.textContent='TapeSend 已购内容';const note=document.createElement('p');note.className='field-note';note.textContent='查看链接请勿转发。点击打开后开始计时，无法阻止截图或保存。';const button=document.createElement('button');button.className='primary';button.textContent='打开已购图片';const status=document.createElement('p');status.className='error';section.append(title,note,button,status);document.querySelector('main').prepend(section);button.onclick=async()=>{button.disabled=true;try{const opened=await (await import('./wallet.js')).call('claim-open',{id:tapeLink.id,claim:tapeLink.claim});const res=await fetchContent(opened.uri);if(!res.ok)throw Error('密文读取失败');const bytes=new Uint8Array(await res.arrayBuffer());if('0x'+hex(await crypto.subtle.digest('SHA-256',bytes))!==opened.hash)throw Error('图片完整性核验失败');const key=await crypto.subtle.importKey('raw',Uint8Array.from(tapeLink.key.slice(2).match(/../g),x=>parseInt(x,16)),'AES-GCM',false,['decrypt']);const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:bytes.slice(0,12)},key,bytes.slice(12));closeViewer();const until=opened.viewUntil||opened.accessUntil,url=URL.createObjectURL(new Blob([plain],{type:opened.mime}));viewing={url,timer:null,ref:opened.viewRef};$('#view-title').textContent=opened.title;$('#vimg').src=url;$('#wm').textContent='SnapVault · 已购内容';$('#viewer').classList.remove('hidden');setPrivacyContext({kind:'content',id:String(tapeLink.id),enabled:true});const duration=Math.max(1,until-Date.now());viewing.timer=setInterval(()=>{const left=until-Date.now();$('#count').textContent=Math.max(0,Math.ceil(left/1000))+' 秒';$('#prog').style.width=Math.max(0,left/duration*100)+'%';if(left<=0)closeViewer();},200);status.textContent='图片解密成功。';}catch(e){status.textContent=e.message;}finally{button.disabled=false;}};}
 
 if(wallet.enabled)initRefunds();
 
+initProductUI();
+initScreenPrivacy({notify:toast});
 window.addEventListener('pagehide',()=>{if(viewing)finishContent(viewing.ref);});
+
+initSocial({friends:()=>Friends.all(),following:follows,conversations:()=>chat?.conversations()||[],targets:renderTargets,composer:syncPublishComposer,notify:toast});
+
+if(wallet.config?.testMode){document.body.classList.add("local-device-test");document.querySelector("#mode").textContent="本地真机测试 · 不付款";document.querySelector("#connect").textContent="切换测试身份";document.querySelector("#connect").onclick=()=>location.assign("/test-login");document.querySelector("#post-access").value="free";document.querySelector("#post-access option[value=paid]").disabled=true;renderTargets();syncPublishComposer();}
