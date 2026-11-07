@@ -40,7 +40,8 @@
     "test:social-ui": "node scripts/social-ui.spec.mjs",
     "test:screen-privacy": "node --test test/screen-privacy.test.mjs",
     "test:screen-privacy-ui": "node scripts/screen-privacy.spec.mjs",
-    "test:mobile-web-screen-privacy": "node scripts/mobile-web-screen-privacy.spec.mjs"
+    "test:mobile-web-screen-privacy": "node scripts/mobile-web-screen-privacy.spec.mjs",
+    "test:story-backup": "node --test test/story-backup.test.mjs"
   },
   "keywords": [],
   "author": "",

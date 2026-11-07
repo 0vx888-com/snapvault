@@ -25,8 +25,9 @@ export function installSocialMedia(Service){
   storyPath(id){if(!/^story_[a-f0-9]{32}$/.test(id))fail('Story 编号无效');return resolve(this.socialDir,id+'.enc');},
   sweepSocial(){
    if(!this.state.socialStories)return;
-   let dirty=false;for(const[id,p]of Object.entries(this.state.socialStories))if(p.expiresAt<=Date.now()||!existsSync(this.storyPath(id))){const file=this.storyPath(id);if(existsSync(file))unlinkSync(file);delete this.state.socialStories[id];dirty=true;}
+   let dirty=false;for(const[id,p]of Object.entries(this.state.socialStories))if(p.expiresAt<=Date.now()){const file=this.storyPath(id);if(existsSync(file))unlinkSync(file);delete this.state.socialStories[id];dirty=true;}
    if(dirty)this.save();
+   for(const id of Object.keys(this.state.socialStories))if(!existsSync(this.storyPath(id)))fail('Story 图片文件缺失，请先恢复备份',503);
   },
   socialState(who){
    if(!this.state.socialPosts)this.initSocial();this.sweepSocial();const profiles={};

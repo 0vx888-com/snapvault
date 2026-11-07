@@ -6,6 +6,7 @@ function child(cmd,args,extra={}){return spawn(cmd,args,{cwd:root,env:{...proces
 async function run(name,args,extra={}){const p=child(node,args,extra);let output='';p.stdout.on('data',b=>{output+=b;process.stdout.write(b)});p.stderr.on('data',b=>{output+=b;process.stderr.write(b)});const code=await new Promise((r,j)=>{p.once('exit',r);p.once('error',j)});results.push({name,status:code===0?'PASS':'FAIL'});if(code!==0)throw Error(name+' failed');}
 async function server(cmd,args,url,extra={}){const p=child(cmd,args,extra);owned.push(p);let errors='';p.stderr.on('data',b=>errors+=b);p.stdout.on('data',()=>{});for(let n=0;n<300;n++){if(p.exitCode!==null)throw Error('Test server exited: '+errors);try{const r=await fetch(url);if(r.ok)return;}catch{}await new Promise(r=>setTimeout(r,100));}throw Error('Local test server not ready: '+errors);}
 let status='PASS';try{
+ await run('Story media backup, restore and expiry',['--test','test/story-backup.test.mjs']);
  await run('all contracts/services + both official Hub browser flows',[hardhat,'test'],{SNAPVAULT_BROWSER_TEST:'1'});
  await run('production vault pin safety',['scripts/vault-pin.spec.mjs']);
  await run('mobile adapter and transaction safety',['--test','scripts/mobile-wallet.test.mjs','scripts/transaction-guard.test.mjs','scripts/wallet-init.test.mjs','scripts/final-wallet-fee.test.mjs','scripts/local-wallet-fixture.test.mjs']);
