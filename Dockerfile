@@ -9,8 +9,9 @@ RUN node node_modules/hardhat/internal/cli/cli.js compile
 COPY scripts/build-app.mjs scripts/public-build.mjs scripts/optimize-public.mjs scripts/app-files.mjs ./scripts/
 COPY web/product-ui.css web/product-ui.js web/i18n.js web/social.js web/screen-privacy.js ./web/
 COPY web/index.html web/style.css web/app.js web/chat.js web/store.js web/local-delivery.js web/wallet.js web/wallet-connect.js web/transaction-guard.js web/wallet-chat.js web/refunds.js web/safe-dom.js web/chat-ui.js web/publish-ui.js web/ui-icons.js ./web/
+COPY web/about.html web/faq.html web/robots.txt web/sitemap.xml web/llms.txt ./web/
 COPY web/vendor/ethers.min.js web/vendor/ethers-LICENSE.md web/vendor/okx-connect.min.js web/vendor/okx-connect-LICENSE.md ./web/vendor/
-COPY web/assets/wallet-icon.png web/assets/mark-tape.svg web/assets/social-photos.jpg web/assets/studio.svg web/assets/sketch.svg ./web/assets/
+COPY web/assets/wallet-icon.png web/assets/mark-tape.svg web/assets/social-photos.jpg web/assets/studio.svg web/assets/sketch.svg web/assets/og-image.png ./web/assets/
 RUN node scripts/build-app.mjs --server --allow-mainnet
 
 FROM node:24-bookworm-slim

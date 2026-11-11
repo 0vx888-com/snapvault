@@ -228,3 +228,44 @@ body.privacy-shield.privacy-covered .chat-screen-cover{position:absolute;inset:v
 .conversation-settings-list .privacy-setting-name{font-size:13px;font-weight:500}
 .head-popover .protection-scope-note{font-size:10px;line-height:1.65;margin:11px 8px 0;color:#95959a}
 @media(max-width:760px){.head-menu .head-popover{width:285px}.conversation-settings-list .privacy-setting-row{min-height:50px}.conversation-settings-list .privacy-setting-name{font-size:13px}}
+
+/* GEO / SEO static pages and a crawler-visible homepage intro. */
+#fan .site-intro {margin:0 0 18px;padding:18px 0 12px;border-bottom:1px solid #ededef;color:#34353c;font-size:14px;line-height:1.7}
+#fan .site-intro p {margin:0 0 8px;max-width:46rem}
+#fan .site-intro-links {font-size:13px;font-weight:600}
+#fan .site-intro-links a {text-decoration:underline;text-underline-offset:3px}
+.app-footer .footer-links {display:flex;gap:14px;align-items:center}
+.app-footer .footer-links a {color:inherit;text-decoration:underline;text-underline-offset:3px}
+
+html.static-doc,html.static-doc body {width:auto;height:auto;min-height:100%;overflow:auto;overflow-x:hidden;background:#fff;padding:0}
+html.static-doc body.static-doc {display:flex;flex-direction:column;font-size:16px;line-height:1.65;color:#161719}
+html.static-doc .static-doc-header {position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:16px 28px;background:#ffffffee;backdrop-filter:blur(16px);border-bottom:1px solid #eaeaec}
+html.static-doc .static-doc-header .logo {margin:0;display:flex;align-items:center;gap:9px;text-decoration:none}
+html.static-doc .static-doc-header .logo img {width:37px;height:37px;border-radius:12px}
+html.static-doc .static-doc-header .logo>span {display:block;font-size:22px;font-weight:750;letter-spacing:-1.1px;color:#161719}
+html.static-doc .static-doc-nav {display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+html.static-doc .static-doc-nav a {text-decoration:none;font-size:14px;font-weight:600;color:#34353c}
+html.static-doc .static-doc-nav a[aria-current=page] {color:#161719;text-decoration:underline;text-underline-offset:4px}
+html.static-doc .static-doc-nav .primary {display:inline-flex;align-items:center;text-decoration:none;color:#fff}
+html.static-doc main.static-doc-main {position:static;inset:auto;margin:0 auto;padding:28px 28px 64px;max-width:820px;overflow:visible;width:100%;background:#fff}
+html.static-doc .static-copy {margin:0 0 56px}
+html.static-doc .static-copy .eyebrow {margin:0 0 8px;color:#62636c;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+html.static-doc .static-copy h1 {margin:0 0 18px;font-size:32px;line-height:1.2;letter-spacing:-.04em}
+html.static-doc .static-copy h2 {margin:28px 0 10px;font-size:20px;line-height:1.3}
+html.static-doc .static-copy p,html.static-doc .static-copy li {color:#34353c}
+html.static-doc .static-copy p {margin:0 0 14px}
+html.static-doc .static-copy ul {margin:0 0 16px;padding:0 0 0 1.2em}
+html.static-doc .static-copy li {margin:0 0 8px}
+html.static-doc .static-copy code {font:13px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
+html.static-doc .static-links {margin-top:24px}
+html.static-doc .static-links a,html.static-doc .static-copy a {color:#161719;text-decoration:underline;text-underline-offset:3px}
+html.static-doc .faq-item {margin:0 0 22px;padding:0 0 18px;border-bottom:1px solid #ededef}
+html.static-doc .faq-item h2 {margin:0 0 8px;font-size:18px}
+html.static-doc .faq-item p {margin:0}
+html.static-doc .static-doc-footer {margin:0;padding:24px 28px 40px;border-top:1px solid #eaeaec;color:#62636c;font-size:13px}
+html.static-doc .static-doc-footer nav {display:flex;flex-wrap:wrap;gap:14px 20px;margin-bottom:8px}
+html.static-doc .static-doc-footer a {color:#34353c;text-decoration:underline;text-underline-offset:3px}
+@media (max-width:760px) {
+  html.static-doc .static-doc-header,html.static-doc main.static-doc-main,html.static-doc .static-doc-footer {padding-left:18px;padding-right:18px}
+  html.static-doc .static-copy h1 {font-size:26px}
+}

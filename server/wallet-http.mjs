@@ -4,7 +4,7 @@ import {readFileSync,existsSync} from 'node:fs';
 import {resolve,extname,sep} from 'node:path';
 import {isIP} from 'node:net';
 import {APP_FILES} from '../scripts/app-files.mjs';
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml'};
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.txt':'text/plain; charset=utf-8','.xml':'application/xml; charset=utf-8'};
 export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedProxy=false,staticDir=null,requireClientVersion=service.policy?.mainnet===true}){
  const origin=`http://127.0.0.1:${port}`;
  const tapeRoot=resolve(root,'public/tapesend'),tapeManifestPath=resolve(tapeRoot,'manifest.json'),tapeFiles=existsSync(tapeManifestPath)?JSON.parse(readFileSync(tapeManifestPath,'utf8')):{};

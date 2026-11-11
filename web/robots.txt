@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Disallow: /deploy-testnet.html
+Disallow: /deploy-wallet.html
+Disallow: /payment-test.html
+Disallow: /publish-deweb.html
+Disallow: /live.html
+Disallow: /deployment/
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.snapvault.cc/sitemap.xml
