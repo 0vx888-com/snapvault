@@ -40,16 +40,16 @@
   <p class="eyebrow">About</p>
   <h1>What is SnapVault?</h1>
   <p>SnapVault is a creator social and paid-content app built on X Layer. It combines Snapchat-style temporary sharing, creator paid content, and on-chain payments.</p>
-  <p>Creators share daily moments, behind-the-scenes work, and previews through free 24-hour photo Stories. Fans get to know a creator first, then unlock the paid content they like with OKB. Payments and revenue splits are handled by smart contracts on X Layer. The platform takes a 10% fee, and creators withdraw their earnings themselves.</p>
+  <p>Creators share daily moments, behind-the-scenes work, and previews through free 24-hour photo Stories. Fans get to know a creator first, then unlock the paid content they like with OKB. Payments and revenue splits are handled by smart contracts on X Layer. The configured platform fee is 10%; check the rate shown in the app before paying. Creators withdraw their earnings themselves.</p>
 
   <h2>Key features</h2>
   <ul>
     <li><strong>Free 24-hour photo Stories:</strong> shown for 24 hours after posting. PNG, JPEG, WebP, and GIF, up to 2 MB each.</li>
     <li><strong>Paid photo unlocks:</strong> creators set a price; fans pay in OKB on X Layer to unlock.</li>
-    <li><strong>Timed viewing for paid content:</strong> once opened, content is shown for a set time, such as 10 or 60 seconds.</li>
-    <li><strong>Friends and chat:</strong> add friends by UID or wallet address, with text and photo messages. Message delivery uses TapeSend.</li>
+    <li><strong>Timed viewing for paid content:</strong> creators can enable a viewing timer, such as 10 or 60 seconds. Timed access starts on first opening; closing or leaving ends that viewing session.</li>
+    <li><strong>Friends and chat:</strong> add friends by UID or wallet address, with text and photo messages. Free text and photo messages in private and group chats are synced by the platform service. Senders can set a viewing timer.</li>
     <li><strong>Creator profiles and discovery:</strong> browse creators, latest posts, following, and purchased content.</li>
-    <li><strong>On-chain payments, splits, and withdrawals:</strong> a 10% platform fee; the rest goes to the creator, who withdraws it directly.</li>
+    <li><strong>On-chain payments, splits, and withdrawals:</strong> the configured platform fee is 10%; the rest is credited to the creator for withdrawal. The current contract rate shown in the app applies.</li>
     <li><strong>English and Chinese interface.</strong></li>
   </ul>
 
@@ -57,14 +57,14 @@
   <ul>
     <li><strong>X Layer mainnet (chain 196)</strong> smart contract <code>0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f</code>, which is verified and non-upgradeable, for OKB payments, splits, and withdrawals.</li>
     <li><strong>TapeOut DeWEB</strong> hosting the SnapVault frontend.</li>
-    <li><strong>TapeSend</strong> for message delivery.</li>
+    <li><strong>TapeSend</strong> delivers paid-photo viewing links to buyers with a supported container and public key. Other buyers use in-app delivery; a personal container is not required.</li>
   </ul>
 
   <h2>Limits to know</h2>
   <p>SnapVault is not fully decentralized yet; parts of the backend and content storage are centralized. Story expiry and timed viewing control access inside the app. They cannot prevent screenshots or screen recording, and they do not mean files are permanently erased.</p>
 
   <h2>Roadmap</h2>
-  <p>Creator group chats, paid fan groups, video Stories, and fuller Snapchat-style disappearing messages are future plans and are not live yet.</p>
+  <p>Private and group chats already support free text/photo messages and sender-set viewing timers. Paid group membership and video uploads are not supported yet.</p>
 
   <p class="static-links"><a href="index.html">Try SnapVault</a> · <a href="faq.html">FAQ</a> · <a href="https://github.com/0vx888-com/snapvault" rel="noopener noreferrer">GitHub</a> · <a href="https://x.com/SnapVault6767" rel="noopener noreferrer">Official X</a> · <a href="https://x.com/0vx888" rel="noopener noreferrer">X @0vx888</a></p>
 </article>
@@ -74,16 +74,16 @@
   <p class="eyebrow">介绍</p>
   <h1>SnapVault 是什么？</h1>
   <p>SnapVault 是一个构建在 X Layer 上的创作者社交与付费内容应用，结合了 Snapchat 式的限时分享、创作者付费内容和链上支付。</p>
-  <p>创作者可以用免费的 24 小时图片 Story 分享日常、创作过程和作品预告；粉丝先认识创作者，再用 OKB 解锁喜欢的付费内容。支付和分账由 X Layer 智能合约处理，平台收取 10% 费用，创作者可以自行提现。</p>
+  <p>创作者可以用免费的 24 小时图片 Story 分享日常、创作过程和作品预告；粉丝先认识创作者，再用 OKB 解锁喜欢的付费内容。支付和分账由 X Layer 智能合约处理，平台配置费率为 10%，付款前请核对页面显示的当前费率；创作者可以自行提现。</p>
 
   <h2>主要功能</h2>
   <ul>
     <li><strong>免费 24 小时图片 Story：</strong>分享日常和作品预告，发布后 24 小时内展示。支持 PNG、JPEG、WebP、GIF，单张最大 2 MB。</li>
     <li><strong>付费图片解锁：</strong>创作者设置价格，粉丝用 OKB 在 X Layer 上付款解锁。</li>
-    <li><strong>付费内容限时查看：</strong>打开后按设定时长展示，例如 10 秒或 60 秒。</li>
-    <li><strong>好友与聊天：</strong>通过 UID 或钱包地址加好友，支持聊天和图片消息，消息交付接入 TapeSend。</li>
+    <li><strong>付费内容限时查看：</strong>创作者可设置限时查看，例如 10 秒或 60 秒；首次打开后开始计时，关闭或离开页面会结束该次查看。</li>
+    <li><strong>好友与聊天：</strong>通过 UID 或钱包地址加好友，私聊和群聊支持免费文字与图片，由平台服务同步。发送者可设置阅后即焚时长。</li>
     <li><strong>创作者主页与内容发现：</strong>浏览创作者、最新内容、关注和已购内容。</li>
-    <li><strong>链上支付、分账与提现：</strong>平台收取 10% 费用，其余计入创作者收益，创作者自行提现。</li>
+    <li><strong>链上支付、分账与提现：</strong>平台配置费率为 10%，以页面显示的当前合约费率为准；其余计入创作者收益，由创作者自行提现。</li>
     <li><strong>中英文界面：</strong>支持中文和英文切换。</li>
   </ul>
 
@@ -91,14 +91,14 @@
   <ul>
     <li><strong>X Layer 主网（chain 196）智能合约</strong> <code>0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f</code>（已开源验证、不可升级）：处理 OKB 付款、分账和提现。</li>
     <li><strong>TapeOut DeWEB：</strong>承载 SnapVault 前端。</li>
-    <li><strong>TapeSend：</strong>消息交付。</li>
+    <li><strong>TapeSend：</strong>向已有可用容器和公钥的买家交付付费图片查看链接；其他买家使用站内交付，不要求个人容器。</li>
   </ul>
 
   <h2>需要知道的边界</h2>
   <p>SnapVault 目前不是完全去中心化的应用，后端和内容存储仍有中心化部分。限时展示和限时查看控制的是产品内的访问权限，不能阻止截图、录屏或拍摄，也不等于文件已被彻底删除。</p>
 
   <h2>后续计划</h2>
-  <p>创作者群聊、付费粉丝群、视频 Story，以及更完整的 Snapchat 式阅后即焚私聊，都属于后续计划，目前尚未上线。</p>
+  <p>私聊和群聊已支持免费图文及自设阅后即焚。付费入群、周期订阅和视频上传尚不支持。</p>
 
   <p class="static-links"><a href="index.html">体验 SnapVault</a> · <a href="faq.html">常见问题</a> · <a href="https://github.com/0vx888-com/snapvault" rel="noopener noreferrer">GitHub</a> · <a href="https://x.com/SnapVault6767" rel="noopener noreferrer">官方 X</a> · <a href="https://x.com/0vx888" rel="noopener noreferrer">X @0vx888</a></p>
 </article>

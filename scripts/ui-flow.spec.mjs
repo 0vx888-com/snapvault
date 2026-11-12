@@ -13,7 +13,8 @@ const creator = '0xCreAt0r00000000000000000000000000000001', fan = '0xDem0FaN000
 const image = { name: 'sample.png', mimeType: 'image/png', buffer: await readFile(new URL('../screenshots/sample.png', import.meta.url)) };
 const checks = [];
 const check = (condition, message) => { assert.ok(condition, message); checks.push(message); console.log('PASS',message); };
-const wait = (p, selector) => p.locator(selector).first().waitFor({ state: 'visible', timeout: 8000 });
+// Wait for actual app initialization before asserting content, not a network race.
+const wait = async (p, selector) => {if(selector==='.creator-card')await p.waitForFunction(()=>document.body.dataset.uiReady==='true');await p.locator(selector).first().waitFor({ state: 'visible', timeout: 8000 });};
 const chat = p => p.locator('[data-tab="chat"]').click();
 const select = async(p, who) => {await p.locator('#my-account').click();if(!await p.locator('#demo-identity').evaluate(e=>e.open))await p.locator('#demo-identity summary').click();await p.locator('#identity').selectOption(who);await p.getByRole('button',{name:'关闭我的名片',exact:true}).click();};
 const openConv = (p, name) => (name === '小鹿' ? p.locator('.xc-item').filter({ hasText: name }).filter({ hasNotText: '付费粉丝团' }) : p.locator('.xc-item').filter({ hasText: name })).click();
@@ -24,7 +25,7 @@ async function publish(p, title, scope, burn = true) {
   await p.locator('#file').setInputFiles(image); await p.locator('#title').fill(title); await p.locator('#secs').fill('5');
   await p.locator('#content-burn').setChecked(burn);
   if (!scope) await p.locator('#publish-target').selectOption('public');
-  await p.locator('#form button[type="submit"]').click();
+  await p.locator('#editor-submit').click();
   await p.waitForFunction(() => document.querySelector('#form').dataset.sending !== 'true');
   if (scope) await card(p, title).waitFor(); else await p.locator('#grid').getByText(title, { exact: true }).waitFor();
 }

@@ -2,25 +2,25 @@
 
 > SnapVault is a creator social and paid-content app on X Layer. It combines Snapchat-style temporary sharing, creator paid content, and on-chain payments. Creators post free 24-hour photo Stories; fans unlock paid photos with OKB. Payments, revenue splits (10% platform fee), and creator withdrawals run on a verified, non-upgradeable X Layer mainnet (chain 196) smart contract: 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f.
 
-## Live features
+## Features in this release
 - Free 24-hour photo Stories (PNG, JPEG, WebP, GIF, up to 2 MB). Photos only for now.
 - Paid photo unlocks paid in OKB on X Layer.
 - Timed viewing of paid content after opening (for example 10 or 60 seconds).
-- Friends by UID or wallet address; text and photo messages; message delivery via TapeSend.
+- Friends by UID or wallet address; text and photo messages; free private and group text/photo chat via the platform service, with sender-set viewing timers.
 - Creator profiles, discovery, following, and purchased content.
 - English and Chinese interface.
 
 ## Built with
 - X Layer mainnet (chain 196) smart contract 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f (verified, non-upgradeable): OKB payments, splits, and withdrawals.
 - TapeOut DeWEB: frontend hosting.
-- TapeSend: message delivery.
+- TapeSend: paid-photo viewing links for buyers with a supported container and public key. Other buyers use in-app delivery; personal containers are not required.
 
 ## Limits
 - Not fully decentralized: parts of the backend and content storage are centralized.
 - Story expiry and timed viewing limit access in the app; they do not prevent screenshots and do not guarantee permanent deletion.
 
 ## Roadmap
-- Creator group chats, paid fan groups, video Stories, fuller disappearing messages.
+- Paid group membership, recurring fan subscriptions, and video uploads. These are not supported yet.
 
 ## Links
 - Website: https://www.snapvault.cc/

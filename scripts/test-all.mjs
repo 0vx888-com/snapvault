@@ -1,13 +1,15 @@
 import {publicTestnetEvidence} from './acceptance-evidence.mjs';
 // Reproducible, isolated, no-money suite. Starts/stops ONLY its own local servers.
-import {spawn} from 'node:child_process';import {mkdir,writeFile} from 'node:fs/promises';import {fileURLToPath} from 'node:url';import {resolve} from 'node:path';
+import {spawn} from 'node:child_process';import {mkdir,writeFile,readdir} from 'node:fs/promises';import {fileURLToPath} from 'node:url';import {resolve} from 'node:path';
 const root=fileURLToPath(new URL('../',import.meta.url)),node=process.execPath,hardhat=resolve(root,'node_modules/hardhat/internal/cli/cli.js'),owned=[],results=[];await mkdir(resolve(root,'deployment'),{recursive:true});
 function child(cmd,args,extra={}){return spawn(cmd,args,{cwd:root,env:{...process.env,...extra},stdio:['ignore','pipe','pipe'],detached:true});}
 async function run(name,args,extra={}){const p=child(node,args,extra);let output='';p.stdout.on('data',b=>{output+=b;process.stdout.write(b)});p.stderr.on('data',b=>{output+=b;process.stderr.write(b)});const code=await new Promise((r,j)=>{p.once('exit',r);p.once('error',j)});results.push({name,status:code===0?'PASS':'FAIL'});if(code!==0)throw Error(name+' failed');}
 async function server(cmd,args,url,extra={}){const p=child(cmd,args,extra);owned.push(p);let errors='';p.stderr.on('data',b=>errors+=b);p.stdout.on('data',()=>{});for(let n=0;n<300;n++){if(p.exitCode!==null)throw Error('Test server exited: '+errors);try{const r=await fetch(url);if(r.ok)return;}catch{}await new Promise(r=>setTimeout(r,100));}throw Error('Local test server not ready: '+errors);}
 let status='PASS';try{
- await run('Story media backup, restore and expiry',['--test','test/story-backup.test.mjs']);
+ const nodeTests=(await readdir(resolve(root,'test'))).filter(f=>f.endsWith('.test.mjs')).sort().map(f=>'test/'+f);
+ await run('isolated Node service tests (Story, social and privacy)',['--test',...nodeTests]);
  await run('all contracts/services + both official Hub browser flows',[hardhat,'test'],{SNAPVAULT_BROWSER_TEST:'1'});
+ await run('chat XSS safety',['scripts/chat-xss.spec.mjs']);
  await run('production vault pin safety',['scripts/vault-pin.spec.mjs']);
  await run('mobile adapter and transaction safety',['--test','scripts/mobile-wallet.test.mjs','scripts/transaction-guard.test.mjs','scripts/wallet-init.test.mjs','scripts/final-wallet-fee.test.mjs','scripts/local-wallet-fixture.test.mjs']);
  await run('mobile dialog and real SDK module load',['scripts/mobile-dialog.spec.mjs']);

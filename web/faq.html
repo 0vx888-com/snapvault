@@ -53,7 +53,7 @@
       "name": "What is the platform fee, and how do creators get paid?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The platform takes 10%. The rest goes to the creator, who can withdraw it directly in the app."
+        "text": "The configured platform fee is 10%; the current contract rate shown in the app applies. The rest is credited to the creator, who can withdraw it directly in the app. Network gas is charged separately."
       }
     },
     {
@@ -85,7 +85,7 @@
       "name": "Can I add friends and chat?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. Add friends by UID or wallet address and send text and photo messages. Message delivery uses TapeSend."
+        "text": "Yes. Add friends by UID or wallet address and send text and photo messages. Free text and photo messages in private and group chats are synced by the platform service. Senders can set a viewing timer."
       }
     },
     {
@@ -93,7 +93,7 @@
       "name": "Are there group chats?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Group chats and paid fan groups are on the roadmap and not live yet."
+        "text": "Group chats support text, photos, and paid-photo cards. Each member buys a paid photo separately; paying to join a group or recurring fan subscriptions is not supported."
       }
     },
     {
@@ -109,7 +109,7 @@
       "name": "Which on-chain and TapeOut capabilities does SnapVault use?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Payments, splits, and withdrawals run on a verified, non-upgradeable smart contract on X Layer mainnet (chain 196): 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f. The frontend is hosted on TapeOut DeWEB. Message delivery is integrated with TapeSend."
+        "text": "Payments, splits, and withdrawals run on a verified, non-upgradeable smart contract on X Layer mainnet (chain 196): 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f. The frontend is hosted on TapeOut DeWEB. For paid photos, TapeSend delivers viewing links to buyers with a supported container and public key; other buyers receive them in the app."
       }
     },
     {
@@ -157,7 +157,7 @@
       "name": "平台抽成多少？创作者怎么拿到钱？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "平台收取 10% 费用，其余计入创作者收益，创作者可以在产品里自行发起提现。"
+        "text": "平台配置费率为 10%，以页面显示的当前合约费率为准；其余计入创作者收益，由创作者在产品里自行提现。网络 gas 另计。"
       }
     },
     {
@@ -189,7 +189,7 @@
       "name": "可以加好友和聊天吗？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "可以。通过 UID 或钱包地址加好友，支持文字和图片消息，消息交付接入 TapeSend。"
+        "text": "可以。通过 UID 或钱包地址加好友，私聊和群聊支持免费文字与图片，由平台服务同步。发送者可设置阅后即焚时长。"
       }
     },
     {
@@ -197,7 +197,7 @@
       "name": "有群聊吗？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "群聊和付费粉丝群在后续计划中，目前还没有上线。"
+        "text": "支持群聊文字、图片和付费图片卡片。群成员分别购买图片；付费入群和周期订阅尚不支持。"
       }
     },
     {
@@ -213,7 +213,7 @@
       "name": "SnapVault 用到了哪些链上和 TapeOut 能力？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "付款、分账和提现由 X Layer 主网（chain 196）上已开源验证、不可升级的智能合约处理，合约地址为 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f。前端部署在 TapeOut 的 DeWEB 上。消息交付已接入 TapeSend。"
+        "text": "付款、分账和提现由 X Layer 主网（chain 196）上已开源验证、不可升级的智能合约处理，合约地址为 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f。前端部署在 TapeOut 的 DeWEB 上。付费图片向已有可用容器和公钥的买家通过 TapeSend 交付查看链接，其他买家使用站内交付。"
       }
     },
     {
@@ -267,7 +267,7 @@
     </section>
     <section class="faq-item" id="q-en-4">
       <h2>What is the platform fee, and how do creators get paid?</h2>
-      <p>The platform takes 10%. The rest goes to the creator, who can withdraw it directly in the app.</p>
+      <p>The configured platform fee is 10%; the current contract rate shown in the app applies. The rest is credited to the creator, who can withdraw it directly in the app. Network gas is charged separately.</p>
     </section>
     <section class="faq-item" id="q-en-5">
       <h2>What are Stories?</h2>
@@ -283,11 +283,11 @@
     </section>
     <section class="faq-item" id="q-en-8">
       <h2>Can I add friends and chat?</h2>
-      <p>Yes. Add friends by UID or wallet address and send text and photo messages. Message delivery uses TapeSend.</p>
+      <p>Yes. Add friends by UID or wallet address and send text and photo messages. Free text and photo messages in private and group chats are synced by the platform service. Senders can set a viewing timer.</p>
     </section>
     <section class="faq-item" id="q-en-9">
       <h2>Are there group chats?</h2>
-      <p>Group chats and paid fan groups are on the roadmap and not live yet.</p>
+      <p>Group chats support text, photos, and paid-photo cards. Each member buys a paid photo separately; paying to join a group or recurring fan subscriptions is not supported.</p>
     </section>
     <section class="faq-item" id="q-en-10">
       <h2>Is SnapVault fully decentralized?</h2>
@@ -295,7 +295,7 @@
     </section>
     <section class="faq-item" id="q-en-11">
       <h2>Which on-chain and TapeOut capabilities does SnapVault use?</h2>
-      <p>Payments, splits, and withdrawals run on a verified, non-upgradeable smart contract on X Layer mainnet (chain 196): 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f. The frontend is hosted on TapeOut DeWEB. Message delivery is integrated with TapeSend.</p>
+      <p>Payments, splits, and withdrawals run on a verified, non-upgradeable smart contract on X Layer mainnet (chain 196): 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f. The frontend is hosted on TapeOut DeWEB. For paid photos, TapeSend delivers viewing links to buyers with a supported container and public key; other buyers receive them in the app.</p>
     </section>
     <section class="faq-item" id="q-en-12">
       <h2>Is there an English version?</h2>
@@ -323,7 +323,7 @@
     </section>
     <section class="faq-item" id="q-zh-4">
       <h2>平台抽成多少？创作者怎么拿到钱？</h2>
-      <p>平台收取 10% 费用，其余计入创作者收益，创作者可以在产品里自行发起提现。</p>
+      <p>平台配置费率为 10%，以页面显示的当前合约费率为准；其余计入创作者收益，由创作者在产品里自行提现。网络 gas 另计。</p>
     </section>
     <section class="faq-item" id="q-zh-5">
       <h2>Story 是什么？</h2>
@@ -339,11 +339,11 @@
     </section>
     <section class="faq-item" id="q-zh-8">
       <h2>可以加好友和聊天吗？</h2>
-      <p>可以。通过 UID 或钱包地址加好友，支持文字和图片消息，消息交付接入 TapeSend。</p>
+      <p>可以。通过 UID 或钱包地址加好友，私聊和群聊支持免费文字与图片，由平台服务同步。发送者可设置阅后即焚时长。</p>
     </section>
     <section class="faq-item" id="q-zh-9">
       <h2>有群聊吗？</h2>
-      <p>群聊和付费粉丝群在后续计划中，目前还没有上线。</p>
+      <p>支持群聊文字、图片和付费图片卡片。群成员分别购买图片；付费入群和周期订阅尚不支持。</p>
     </section>
     <section class="faq-item" id="q-zh-10">
       <h2>SnapVault 是完全去中心化的吗？</h2>
@@ -351,7 +351,7 @@
     </section>
     <section class="faq-item" id="q-zh-11">
       <h2>SnapVault 用到了哪些链上和 TapeOut 能力？</h2>
-      <p>付款、分账和提现由 X Layer 主网（chain 196）上已开源验证、不可升级的智能合约处理，合约地址为 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f。前端部署在 TapeOut 的 DeWEB 上。消息交付已接入 TapeSend。</p>
+      <p>付款、分账和提现由 X Layer 主网（chain 196）上已开源验证、不可升级的智能合约处理，合约地址为 0xFd9b25442955C09007abB2D10dEcD24b4d2CF83f。前端部署在 TapeOut 的 DeWEB 上。付费图片向已有可用容器和公钥的买家通过 TapeSend 交付查看链接，其他买家使用站内交付。</p>
     </section>
     <section class="faq-item" id="q-zh-12">
       <h2>支持英文吗？</h2>

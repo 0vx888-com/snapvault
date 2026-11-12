@@ -6,7 +6,7 @@ try{
  const p=await browser.newPage();await p.addInitScript(()=>{window.__walletRequests=0;window.ethereum={request:async()=>{window.__walletRequests++;throw Error('No wallet requests allowed in readiness test');},on(){}}});let release;
  await p.route('https://api.example.test/**',async r=>{if(r.request().url().endsWith('/config')&&!release)await new Promise(resolve=>release=()=>resolve());await r.fulfill({headers:{"X-SnapVault-API":"view-ledger-v2","Access-Control-Allow-Origin":"*","Access-Control-Expose-Headers":"X-SnapVault-API"},json:r.request().url().endsWith('/config')?config:state});});
  await p.goto(base,{waitUntil:'commit'});await p.locator('#wallet-service-status').filter({hasText:'正在连接 X Layer 主网…'}).waitFor();
- await p.locator('#wallet-network').waitFor();
+ await p.locator('#wallet-network').waitFor({state:'attached'});
  for(const selector of ['#creator > .sub','#token','#purchase-dialog .demo-notice','.preview-note'])assert.ok((await p.locator(selector).textContent()).includes('正在连接 X Layer 主网…'),selector);
  await p.locator('#connect').click();await p.locator('#wallet-service-status').filter({hasText:message}).waitFor();assert.equal(await p.evaluate(()=>window.__walletRequests),0);checks.push('配置未好之前全部中性文案；连接按钮不调用钱包，显示常驻网络提示');
  release();await p.waitForFunction(()=>document.querySelector('#mode').textContent==='X Layer 主网',{},{timeout:10000}).catch(async e=>{console.log('READINESS',await p.locator('#wallet-service-status').innerText());throw e});assert.equal(await p.locator('#token').innerText(),'OKB');assert.equal(await p.locator('#wallet-service-status').isVisible(),false);checks.push('配置成功后才显示主网 OKB，清除错误提示');await p.close();
