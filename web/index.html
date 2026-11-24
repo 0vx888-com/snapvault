@@ -1,16 +1,16 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SnapVault · Pay-to-unlock creator photos on X Layer | 分享瞬间，靠近彼此</title>
-<meta name="description" content="SnapVault is a creator app on X Layer: free 24-hour photo Stories, OKB pay-to-unlock photos, and timed viewing. 10% platform fee.">
+<meta name="description" content="Share free 24-hour photo Stories and unlock creators’ limited-time photos with OKB on X Layer.">
 <link rel="canonical" href="https://www.snapvault.cc/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="SnapVault · Pay-to-unlock creator photos on X Layer | 分享瞬间，靠近彼此">
-<meta property="og:description" content="SnapVault is a creator app on X Layer: free 24-hour photo Stories, OKB pay-to-unlock photos, and timed viewing. 10% platform fee.">
+<meta property="og:description" content="Share free 24-hour photo Stories and unlock creators’ limited-time photos with OKB on X Layer.">
 <meta property="og:image" content="https://www.snapvault.cc/assets/og-image.png">
 <meta property="og:url" content="https://www.snapvault.cc/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="SnapVault · Pay-to-unlock creator photos on X Layer | 分享瞬间，靠近彼此">
-<meta name="twitter:description" content="SnapVault is a creator app on X Layer: free 24-hour photo Stories, OKB pay-to-unlock photos, and timed viewing. 10% platform fee.">
+<meta name="twitter:description" content="Share free 24-hour photo Stories and unlock creators’ limited-time photos with OKB on X Layer.">
 <meta name="twitter:image" content="https://www.snapvault.cc/assets/og-image.png">
 <meta name="theme-color" content="#171a17"><link rel="icon" type="image/svg+xml" href="assets/mark-tape.svg"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="product-ui.css">
 <script type="application/ld+json">
@@ -19,12 +19,12 @@
   "@type": "WebApplication",
   "name": "SnapVault",
   "url": "https://www.snapvault.cc/",
-  "description": "SnapVault is a creator app on X Layer: free 24-hour photo Stories, OKB pay-to-unlock photos, and timed viewing. The platform fee is 10%, and creators withdraw themselves.",
+  "description": "Share free 24-hour photo Stories and unlock creators’ limited-time photos with OKB on X Layer.",
   "applicationCategory": "SocialNetworkingApplication",
   "operatingSystem": "Web",
   "offers": {
     "@type": "Offer",
-    "description": "OKB pay-to-unlock photos with a 10% platform fee",
+    "description": "Pay-to-unlock photos priced in OKB",
     "priceCurrency": "OKB"
   },
   "inLanguage": [
@@ -52,11 +52,6 @@
 <p id="wallet-service-status" class="service-status hidden" role="alert" aria-live="polite">正在连接 X Layer 主网…</p>
 <main id="main-content">
   <section id="fan" class="page">
-    <section class="site-intro" aria-label="About SnapVault">
-      <p>SnapVault is a creator app on X Layer. Share free 24-hour photo Stories, unlock paid photos with OKB, and view them for a set time after opening. The platform fee is 10%, and creators withdraw themselves.</p>
-      <p lang="zh-CN">SnapVault 是构建在 X Layer 上的创作者应用：可用免费 24 小时图片 Story 分享日常，用 OKB 解锁付费图片，打开后按设定时长查看。平台收取 10% 费用，创作者可自行提现。</p>
-      <p class="site-intro-links"><a href="about.html">About</a> · <a href="faq.html">FAQ</a></p>
-    </section>
     <div class="preview-note" role="note"><span class="status-dot"></span><span>本地体验版 · 人物与内容为演示数据，购买不扣款。</span><button id="about-preview" class="text-button">了解进度 ↗</button></div>
     <div class="feed-header"><div><p class="feed-kicker">Discover</p><h1>发现</h1><p class="page-description">看看彼此最近的生活。</p></div><div class="discovery-actions"><button id="received-images" class="secondary hidden" type="button">收到的图片</button><button class="text-button" data-go-friends>用 UID 找朋友 <span aria-hidden="true">↗</span></button><button class="primary" data-go-create>＋ 发布图片</button></div></div>
 
@@ -67,6 +62,16 @@
     <div id="social-posts" class="social-posts hidden"></div><div id="creators-grid" class="creator-grid"></div>
     <section id="received-summary" class="received-summary hidden" aria-label="收到的付费图片"><div><h3>收到的图片</h3><p id="received-summary-copy" aria-live="polite"></p></div><button id="refresh-delivery" class="secondary" type="button">刷新交付状态</button></section><div id="grid" class="grid"></div>
     <section id="creator-profile" class="card profile-panel hidden" aria-label="创作者主页"></section></div><aside class="discovery-aside"><section class="sample-strip"><div class="sample-tape" aria-hidden="true"><span></span><i></i><span></span></div><div><b>一张 10 秒的示例图片</b><p>打开后才计时 · 本地模拟，不扣款</p></div><button id="try-demo" class="secondary">体验解锁 <span aria-hidden="true">↗</span></button></section></aside></div>
+    <footer class="discovery-footer" aria-label="SnapVault">
+      <div class="discovery-footer-copy">
+        <p lang="en">Share free 24-hour photo Stories and unlock creators’ limited-time photos with OKB on X Layer.</p>
+        <p lang="zh-CN">在 X Layer 免费分享 24 小时图片动态，也可以用 OKB 解锁创作者的限时照片。</p>
+      </div>
+      <nav class="discovery-footer-links" aria-label="SnapVault links">
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQ</a>
+      </nav>
+    </footer>
   </section>
   <section id="creator" class="page hidden">
     <div class="publish-page-heading"><div><p>New photo</p><h1>分享一张照片</h1></div><button class="text-button publish-back" type="button" data-back-discover>取消</button></div><p class="sub">发布到广场，或只发给一个人、一群人。当前为本地演示，图片和密钥保存在本浏览器。</p>

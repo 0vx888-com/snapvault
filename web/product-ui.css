@@ -230,10 +230,14 @@ body.privacy-shield.privacy-covered .chat-screen-cover{position:absolute;inset:v
 @media(max-width:760px){.head-menu .head-popover{width:285px}.conversation-settings-list .privacy-setting-row{min-height:50px}.conversation-settings-list .privacy-setting-name{font-size:13px}}
 
 /* GEO / SEO static pages and a crawler-visible homepage intro. */
-#fan .site-intro {margin:0 0 18px;padding:18px 0 12px;border-bottom:1px solid #ededef;color:#34353c;font-size:14px;line-height:1.7}
-#fan .site-intro p {margin:0 0 8px;max-width:46rem}
-#fan .site-intro-links {font-size:13px;font-weight:600}
-#fan .site-intro-links a {text-decoration:underline;text-underline-offset:3px}
+#fan .discovery-footer {display:flex;align-items:baseline;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin:32px 0 0;padding:14px 0 0;border-top:1px solid #ededef;color:#62636c;font-size:13px;line-height:1.6}
+#fan .discovery-footer p {margin:0}
+:root:not([lang="en"]) #fan .discovery-footer p[lang="en"],
+:root[lang="en"] #fan .discovery-footer p[lang="zh-CN"] {display:none}
+#fan .discovery-footer-links {display:flex;gap:18px}
+#fan .discovery-footer-links a {display:inline-flex;align-items:center;min-height:32px;color:inherit;font-weight:600;text-underline-offset:3px}
+#fan .discovery-footer-links a:hover,#fan .discovery-footer-links a:focus-visible {text-decoration:underline}
+@media(max-width:760px){#fan .discovery-footer {margin:24px 17px 0}}
 .app-footer .footer-links {display:flex;gap:14px;align-items:center}
 .app-footer .footer-links a {color:inherit;text-decoration:underline;text-underline-offset:3px}
 
