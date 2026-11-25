@@ -1,5 +1,24 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+(() => {
+  if (location.hostname !== 'www.snapvault.cc' || location.search || location.hash) return;
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  gtag('set', {
+    page_location: location.origin + location.pathname,
+    page_referrer: document.referrer ? new URL(document.referrer).origin : ''
+  });
+  gtag('js', new Date());
+
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.referrerPolicy = 'no-referrer';
+  tag.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MNKKDRXR';
+  document.head.append(tag);
+})();
+</script>
 <title>SnapVault · Pay-to-unlock creator photos on X Layer | 分享瞬间，靠近彼此</title>
 <meta name="description" content="Share free 24-hour photo Stories and unlock creators’ limited-time photos with OKB on X Layer.">
 <link rel="canonical" href="https://www.snapvault.cc/">

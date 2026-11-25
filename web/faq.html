@@ -2,6 +2,25 @@
 <html lang="en" class="static-doc">
 <head>
 <meta charset="utf-8">
+<script>
+(() => {
+  if (location.hostname !== 'www.snapvault.cc' || location.search || location.hash) return;
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  gtag('set', {
+    page_location: location.origin + location.pathname,
+    page_referrer: document.referrer ? new URL(document.referrer).origin : ''
+  });
+  gtag('js', new Date());
+
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.referrerPolicy = 'no-referrer';
+  tag.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MNKKDRXR';
+  document.head.append(tag);
+})();
+</script>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SnapVault FAQ | 常见问题</title>
 <meta name="description" content="Answers about SnapVault: OKB pay-to-unlock photos, 24-hour Stories, timed viewing, the 10% fee, and what is not claimed.">
