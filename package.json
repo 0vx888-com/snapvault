@@ -41,7 +41,10 @@
     "test:screen-privacy": "node --test test/screen-privacy.test.mjs",
     "test:screen-privacy-ui": "node scripts/screen-privacy.spec.mjs",
     "test:mobile-web-screen-privacy": "node scripts/mobile-web-screen-privacy.spec.mjs",
-    "test:story-backup": "node --test test/story-backup.test.mjs"
+    "test:story-backup": "node --test test/story-backup.test.mjs",
+    "test:taperelay-media": "node --test test/taperelay-media.test.mjs test/taperelay-media-security.test.mjs test/taperelay-adapter.contract.test.mjs test/taperelay-media-preview.test.mjs test/taperelay-media-story-auth.test.mjs test/taperelay-large-media.test.mjs test/taperelay-media-persistence.test.mjs test/taperelay-live-config.test.mjs",
+    "build:taperelay-client": "node scripts/build-taperelay-client.mjs",
+    "serve:taperelay-preview": "node scripts/serve-taperelay-media-preview.mjs"
   },
   "keywords": [],
   "author": "",

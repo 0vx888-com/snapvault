@@ -1,0 +1,31 @@
+{
+  "name": "@taperelay/client",
+  "version": "0.1.0-test.132",
+  "description": "TapeRelay client: identity and request signing, session keys, discovery files, the shared file format, uploading/claiming/reading objects, verified in-page playback, share links, signed pointers, inbox and server messages.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/taperelay.mjs",
+    "./src/*": "./src/*",
+    "./vendor/tapekit-kernel/*": "./vendor/tapekit-kernel/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "vendor",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@noble/ciphers": "2.4.0",
+    "@noble/curves": "2.4.0",
+    "@noble/hashes": "2.4.0"
+  },
+  "tapekit": "37c617e"
+}

@@ -47,3 +47,5 @@ npm run build:app -- --api https://API_ORIGIN --allow-mainnet
 `test:all` 只创建自己的本地服务（5210–5213，Hub 浏览器测试 5182/5197），结束会清理；不连接用户钱包或发主网交易。验收记录 `deployment/hardening-all-tests.json` 必须区分本地、公共测试网和主网。
 
 发布顺序、钱包部署页、备份恢复和主网门禁见 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)。参赛规则核验见 [docs/CONTEST-CHECKLIST.md](docs/CONTEST-CHECKLIST.md)；测试通过不等于主办方资格审批。
+
+Large encrypted video and file uploads (TapeRelay, default off) are documented in `docs/TAPERELAY-MEDIA.md`. They are a local implementation with mock tests until a real circuit and developer key are configured; this is not a live rollout.
