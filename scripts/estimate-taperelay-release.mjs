@@ -5,7 +5,7 @@ import {Contract, Interface, JsonRpcProvider, formatEther} from 'ethers';
 import {loadDewebBundle, REGISTRY_ABI} from './deweb-bundle-normalized.mjs';
 import {deltaUploadPlan} from './deweb-delta.mjs';
 import {XLAYER_REGISTRY} from './release-check.mjs';
-const root=process.cwd(), output=resolve(root,'../../../reports/taperelay-intake-2026-11-25');
+const root=process.cwd(), output=resolve(process.env.SNAPVAULT_RELEASE_REPORT_DIR || resolve(root,'dist/release-review'));
 const setup=JSON.parse(readFileSync(resolve(root,'config/deweb-publish-optimized.reviewed.json')));
 if(setup.name!=='10.2.6.tape'||setup.chainId!==196)throw Error('Unexpected DeWEB target');
 const provider=new JsonRpcProvider('https://rpc.xlayer.tech',196,{staticNetwork:true,batchMaxCount:1});

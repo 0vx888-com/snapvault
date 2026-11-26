@@ -7,7 +7,8 @@
   "imports_source_snapshot_then_local_fixes": true,
   "published": false,
   "production_feature_enabled": false,
-  "live_large_test": "pending repeat with persistent resume state",
+  "live_large_test": "Three replicas uploaded after process restart. Full readback incomplete: unreachable during relay1 read.",
   "credentials_in_source": false,
-  "upstream_SHA256SUMS_scope": "Original supplied source snapshot only; local changes have separate LOCAL-SHA256SUMS."
+  "upstream_SHA256SUMS_scope": "Original supplied source snapshot only; local changes have separate LOCAL-SHA256SUMS.",
+  "local_tests_passed": 53
 }

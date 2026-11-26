@@ -7,8 +7,8 @@ const circuit = '1408.2.265.tape';
 const servers = ['relay1.taperelay.com:4246', 'relay4.taperelay.com:4246', 'relay5.taperelay.com:4246'];
 const now = Math.floor(Date.now() / 1000);
 // Synthetic local delegation; never a production credential and never sent to nodes.
-async function envFor({scopes = ['objects'], start = now, days = 90} = {}) {
-  const {key} = await createDeveloperKey({wallet: keyWallet(newPrivateKey()), account: circuit, servers, scopes, now: start, days});
+async function envFor({scopes = ['objects'], start = now, days = 90, fallbacks = []} = {}) {
+  const {key} = await createDeveloperKey({wallet: keyWallet(newPrivateKey()), account: circuit, servers, fallbacks, scopes, now: start, days});
   return {TAPERELAY_MEDIA_ENABLED: '1', TAPERELAY_MEDIA_MODE: 'live', TAPERELAY_DEV_KEY: key,
     TAPERELAY_CIRCUIT: circuit, TAPERELAY_SERVERS: servers.join(','), TAPERELAY_SELF_SECRET: '11'.repeat(32)};
 }
@@ -25,6 +25,19 @@ test('live configuration refuses missing, malformed and noncanonical persistent 
   assert.equal(loadMediaSettings(env).mode, 'live');
   assert.equal(loadMediaSettings({...env, TAPERELAY_SELF_SECRET: Buffer.alloc(32, 17).toString('base64')}).mode, 'live');
   assert.equal(loadMediaSettings({...env, TAPERELAY_MEDIA_ENABLED: '0'}).mode, 'off');
+});
+
+test('standard HTTPS aliases preserve primary nodes and require the holder-signed delegation', async () => {
+  const aliases = servers.map(s => s.replace(':4246', ':443'));
+  const settings = loadMediaSettings(await envFor({fallbacks: aliases}));
+  assert.deepEqual(settings.servers, servers);
+  assert.deepEqual(settings.transportServers, aliases);
+  assert.deepEqual(settings.signerServers, [...servers, ...aliases]);
+  const plain = loadMediaSettings(await envFor());
+  assert.deepEqual(plain.transportServers, servers);
+  const partial = loadMediaSettings(await envFor({fallbacks: [aliases[0], 'unrelated.example:443']}));
+  assert.deepEqual(partial.transportServers, [aliases[0], servers[1], servers[2]]);
+  assert.equal(partial.signerServers.includes('unrelated.example:443'), false);
 });
 
 test('live configuration binds circuit, node set, permissions and delegation lifetime', async () => {

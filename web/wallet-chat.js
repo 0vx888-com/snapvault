@@ -41,14 +41,16 @@ export async function initWalletChat(root,hooks){
   root.querySelector('#xc-list').innerHTML=convs().map(c=>{const m=messages().filter(m=>m.conv===c.id).at(-1);return `<div class="xc-item ${c.id===cur?'on':''}" role="button" tabindex="0" data-conv="${esc(c.id)}" data-search="${esc(label(c)+' '+(c.type==='dm'?uidOf(c.members.find(a=>a!==who)||who):''))}"><div class="xc-av">${c.type==='dm'?esc(label(c).slice(0,1)):'群'}</div><div class="xc-mid"><div class="xc-row"><b>${esc(label(c))}</b></div><div class="xc-prev">${m?(m.kind==='privacy-notice'?'设备截图提醒':m.kind==='paid-image'?'付费图片':m.burn?'阅后即焚消息':'新消息 / 图片'):'打个招呼吧'}</div></div></div>`;}).join('');
   filterConversations(root);
   const pane=root.querySelector('#xc-pane'),c=convs().find(c=>c.id===cur);
+  if(pane.dataset.conv&&pane.dataset.conv!==c?.id){for(const p of opened.values()){p._close?.();p._close=null;p._node=null;}pane.dataset.conv=c?.id||'';}
   if(!c){chatPrivacyContext(null);pane.innerHTML=`<div class="xc-empty"><div class="empty-tape" aria-hidden="true">◉—◉</div><b>${who?'还没打开会话':'连接钱包后开始聊天'}</b><p class="muted">免费私聊、群聊，支持文字、图片和自设阅后即焚。<br>${who?'点击「添加好友」，输入对方的 UID 或钱包地址。':'点击右上角连接钱包。登录签名不会支付费用。'}</p></div>`;return;}
   if(!document.querySelector('#viewer:not(.hidden),#social-viewer[open]'))chatPrivacyContext(document.body.dataset.page==='chat'&&(!matchMedia('(max-width:760px)').matches||root.querySelector('.xchat').classList.contains('conversation-open'))?c:null);
   const old=pane.querySelector('#chat-text'),draft=drafts.get(c.id)||{text:'',burn:false,secs:'10',shot:'allow',file:null};
   const active=old&&document.activeElement===old,selection=active?old.selectionStart:null;
-  const rows=[];
+  const rows=[],mediaMounts=[];
+  const queueMedia=p=>{const placeholder=document.createElement('div');mediaMounts.push([placeholder,p]);return placeholder;};
   for(const m of messages().filter(m=>m.conv===c.id)){
    const mine=m.from===who;if(m.kind==='privacy-notice'){const row=document.createElement('p');row.className='privacy-notice';row.textContent=profile(m.from).name+' 的设备报告了一次截图';rows.push(row);continue;}if(m.kind==='paid-image'){const paid=document.createElement('div');paid.className='msg paid-message'+(mine?' me':'');paid.innerHTML=hooks.renderPaidCard(m.contentId,who,'chat');hydrateSafeImages(paid);rows.push(paid);continue;}
-   let p=opened.get(m.id);if(p?.viewUntil&&p.viewUntil<=Date.now()){finishContent(p.viewRef);opened.delete(m.id);p=null;}
+   let p=opened.get(m.id);if(p?.viewUntil&&p.viewUntil<=Date.now()){finishContent(p.viewRef);p._close?.();opened.delete(m.id);p=null;}
    const row=document.createElement('div');row.className='msg'+(mine?' me':'');
    if(c.type==='group'){const name=document.createElement('small');name.className='muted';name.textContent=profile(m.from).name;row.append(name);}
    const bubble=document.createElement('div');bubble.className='bubble'+(m.shot==='forbid'?' noshot':'');
@@ -56,9 +58,9 @@ export async function initWalletChat(root,hooks){
    if(m.burn){
     if(mine)note(`阅后即焚 · ${m.secs} 秒`);
     else if(m.expired||(deadlines.has(m.id)&&deadlines.get(m.id)<=Date.now())||(m.viewUntil&&m.viewUntil<=Date.now()))note('🔥 已焚毁');
-    else if(p){bubble.append(p.mediaId?mediaNode(p):messagePayload(p));const count=document.createElement('small');count.className='count';count.textContent=`${Math.max(0,Math.ceil((p.viewUntil-Date.now())/1000))} 秒后结束展示`;bubble.append(count);}
+    else if(p){bubble.append(p.mediaId?queueMedia(p):messagePayload(p));const count=document.createElement('small');count.className='count';count.textContent=`${Math.max(0,Math.ceil((p.viewUntil-Date.now())/1000))} 秒后结束展示`;bubble.append(count);}
     else {const button=document.createElement('button');button.className='tapburn';button.dataset.messageOpen=m.id;button.textContent=`🔥 ${m.viewUntil?'继续查看':'点击查看'}（${m.secs} 秒）`;bubble.append(button);}
-   }else{if(!p){try{p=await call('message-open',{id:m.id});if(identity()!==who)return;opened.set(m.id,p);}catch{p={text:'消息暂时不可用，稍后重试'};}}bubble.append(p.mediaId?mediaNode(p):messagePayload(p));}
+   }else{if(!p){try{p=await call('message-open',{id:m.id});if(identity()!==who)return;opened.set(m.id,p);}catch{p={text:'消息暂时不可用，稍后重试'};}}bubble.append(p.mediaId?queueMedia(p):messagePayload(p));}
    const time=document.createElement('small');time.className='muted';time.textContent=new Date(m.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});row.append(bubble,time);rows.push(row);
   }
   if(rev!==revision)return;
@@ -66,7 +68,7 @@ export async function initWalletChat(root,hooks){
   const openMenus=[...pane.querySelectorAll('.head-actions details[open]')].map(d=>d.className);
   const expiryOpen=pane.dataset.conv===c.id&&pane.querySelector('.expiry-control')?.open;pane.dataset.conv=c.id;
   pane.innerHTML=chatHeader({name:label(c),uid:c.type==='dm'?uidOf(c.members.find(a=>a!==who)||who):'',group:c.type==='group',members:c.members.length,local:false,settings:privacyControls(c)})+`<div id="chat-list" class="chat-list"></div><form id="chat-form" class="chat-input"><input id="chat-text" maxlength="500" placeholder="发送消息…" autocomplete="off"><label class="secondary free-image-button" for="chat-file">${icon('plus')}<span>${largeMediaEnabled()?'附件':'图片'}</span></label><input class="sr-only" type="file" id="chat-file" accept="${mediaAccept()}">${expiryControl([5,10,30,60])}<button id="chat-paid" type="button" class="secondary chat-paid">${icon('lock')}<span>付费图片</span></button><button type="submit" class="primary">发送</button><span class="draft-image-name muted">${esc(draft.file?.name||'')}</span><button class="text-button ${draft.file?'':'hidden'}" id="remove-chat-file" type="button">${largeMediaEnabled()?'移除文件':'移除图片'}</button><span id="chat-error" class="error" role="alert"></span></form>`;
-  pane.querySelector('#chat-list').replaceChildren(...rows);for(const name of openMenus){const menu=pane.querySelector('.'+name);if(menu)menu.open=true;}
+  pane.querySelector('#chat-list').replaceChildren(...rows);for(const[placeholder,p]of mediaMounts)placeholder.replaceWith(mediaNode(p));for(const name of openMenus){const menu=pane.querySelector('.'+name);if(menu)menu.open=true;}
   pane.querySelector('#chat-error').textContent=draft.error||'';
   const text=pane.querySelector('#chat-text'),burn=pane.querySelector('#chat-burn'),secs=pane.querySelector('#chat-secs');text.value=draft.text;burn.checked=draft.burn;secs.value=draft.secs;pane.querySelector('.expiry-control').open=!!expiryOpen;
   const save=()=>{draft.text=text.value;draft.burn=burn.checked;draft.secs=secs.value;drafts.set(c.id,draft);};text.oninput=burn.onchange=secs.onchange=save;
@@ -80,7 +82,7 @@ export async function initWalletChat(root,hooks){
   };
   if(active){text.focus();text.setSelectionRange(selection,selection);}const list=pane.querySelector('#chat-list');list.scrollTop=keepScroll?scrollTop:list.scrollHeight;
  }
- function mediaNode(p){if(p._node)return p._node;const host=document.createElement('div');p._node=host;host.className='tr-media';host.textContent='正在打开加密媒体…';playAuthorizedMedia(host,p.mediaId).then(play=>{if(!host.isConnected){play.close();return;}host.firstChild?.nodeType===3&&(host.firstChild.textContent='');p._close=play.close;}).catch(e=>{host.textContent=e.message||'无法播放';});return host;}
+ function mediaNode(p){if(p._node)return p._node;const host=document.createElement('div');p._node=host;host.className='tr-media';host.textContent='正在打开加密媒体…';playAuthorizedMedia(host,p.mediaId).then(play=>{if(p._node!==host||!host.isConnected){play.close();if(p._node===host)p._node=null;return;}host.firstChild?.nodeType===3&&(host.firstChild.textContent='');p._close=play.close;}).catch(e=>{host.textContent=e.message||'无法播放';});return host;}
  window.addEventListener('snapvault:privacy-ready',()=>render().catch(tell));
  window.addEventListener('snapvault:chat-view',()=>render().catch(tell));
  window.addEventListener('snapvault:change',()=>{render().catch(tell);if(friendOpen&&!root.querySelector('#xc-frbox').contains(document.activeElement))renderFriends();});window.addEventListener('snapvault:identity',()=>render().catch(tell));

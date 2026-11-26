@@ -9,7 +9,7 @@ const SIZE=200*1048576-8192,STEP=1048576;
 const folder=join(homedir(),'Library','Application Support','SnapVault','secrets');
 const dir=join(folder,'large-check-20261126-v1'),journal=join(dir,'resume.json'),sourceFile=join(dir,'synthetic.bin');
 const log=(x)=>console.log(JSON.stringify(x));
-const codeOf=(e)=>/^[a-z0-9-]{1,64}$/.test(e?.code)?e.code:'test-failed';
+const codeOf=(e)=>/^[a-z0-9-]{1,48}$/.test(e?.code)?e.code:(/^[a-z0-9-]{1,48}$/.test(e?.message)?e.message:'test-failed');
 const b64=(x)=>Buffer.from(x).toString('base64');
 const un64=(x)=>new Uint8Array(Buffer.from(x,'base64'));
 let stage='setup',plan,timer;
@@ -20,11 +20,18 @@ try{
   const devKey=/^TAPERELAY_KEY=(trk1_[A-Za-z0-9_-]+)\s*$/m.exec(readFileSync(join(folder,'taperelay.env'),'utf8'))?.[1];
   const auth=developerKeyAuth(devKey),description=describeDeveloperKey(devKey),servers=serversOfKey(devKey);
   if(description.account!=='1408.2.265.tape'||servers.length!==3||['relay1.taperelay.com:4246','relay4.taperelay.com:4246','relay5.taperelay.com:4246'].some(s=>!servers.includes(s)))throw Error('unexpected-circuit-or-nodes');
+  const transport=process.argv.includes('--standard-https')?servers.map(s=>s.replace(/:\d+$/,':443')):servers;
+  if(transport.some(s=>!description.servers.includes(s)))throw Error('transport-alias-not-authorized');
+  const logicalServer=s=>servers.find(p=>p.split(':')[0]===s.split(':')[0]);
   const secret=readFileSync(join(folder,'taperelay-self-secret'),'utf8').trim();
   if(!/^[a-f0-9]{64}$/.test(secret))throw Error('persistent-secret-format');
   const self={secretKey:Buffer.from(secret,'hex')};self.publicKey=publicKeyOf(self.secretKey);
   const client=createClient({timeoutMs:60000});
-  const usage=await Promise.all(servers.map(async server=>({server,...(await client.request(server,{path:'/v1/usage/'+auth.account,auth})).json})));
+  for(let i=0;i<transport.length;i++){
+    const info=await client.info(transport[i]);
+    if(!info.servers?.includes(servers[i])||!info.servers.includes(transport[i]))throw Error('node-alias-information-mismatch');
+  }
+  const usage=await Promise.all(transport.map(async server=>({server,...(await client.request(server,{path:'/v1/usage/'+auth.account,auth})).json})));
   for(const u of usage)if(u.quota?.storageBytes-u.storedBytes<SIZE*2+STEP)throw Error('insufficient-existing-quota');
   log({stage:'existing-free-quota-checked',bytes:SIZE,productionEnabled:false,paymentTransactions:0,usage:usage.map(u=>({server:u.server,storedBytes:u.storedBytes,quotaBytes:u.quota.storageBytes}))});
   if(!existsSync(dir))mkdirSync(dir,{mode:0o700});
@@ -64,7 +71,7 @@ try{
   if(process.argv.includes('--prepare-interrupt')){
     if(record.interruptionObserved)throw Error('interruption-already-tested-use-resume');
     stage='intentional-interruption';const abort=new AbortController();
-    const partial=await uploadToServers(client,servers,auth,null,{plan,signal:abort.signal,retryMs:[],onProgress:x=>{progress.set(x.server,x);if(x.done>=3)abort.abort();}});
+    const partial=await uploadToServers(client,transport,auth,null,{plan,signal:abort.signal,retryMs:[],onProgress:x=>{progress.set(x.server,x);if(x.done>=3)abort.abort();}});
     const final=await partial.settled;
     if(partial.stored||!abort.signal.aborted)throw Error('interruption-not-observed');
     record.interruptionObserved=true;record.interruptedAt=new Date().toISOString();save(record);
@@ -72,21 +79,26 @@ try{
   }else{
     if(!record.interruptionObserved)throw Error('interruption-must-be-verified-first');
     stage='resuming-real-nodes';
-    const result=await uploadToServers(client,servers,auth,null,{plan,retryMs:[1000,5000],onProgress:x=>{progress.set(x.server,x);if(x.done%25===0||x.done===x.total)log({stage:'upload-progress',...x});}});
+    const result=await uploadToServers(client,transport,auth,null,{plan,retryMs:[1000,5000],onProgress:x=>{progress.set(x.server,x);if(x.done%25===0||x.done===x.total)log({stage:'upload-progress',...x});}});
     const final=await result.settled;
     record.uploadedNodes=final.ok;record.lastFailures=final.failed.map(x=>({server:x.server,code:x.code}));save(record);
     log({stage:'upload-result',stored:final.ok.length>=2,replicas:final.ok.length,ok:final.ok,failed:record.lastFailures});
     const opened=openEnvelope(plan.envelope.bytes,[self]);
     for(const server of final.ok){
-      if(record.verifiedNodes.includes(server))continue;
+      if(record.verifiedNodes.includes(logicalServer(server)))continue;
       stage='decrypt-and-hash-'+server;const reader=await openEncryptedFileWithKey(client,[server],plan.envelope.sha256,opened.fileKey);
       const hash=createHash('sha256');
-      try{for(let at=0;at<SIZE;at+=STEP){hash.update(await reader.read(at,Math.min(SIZE,at+STEP)));progress.set(server,{server,readBytes:Math.min(SIZE,at+STEP),totalBytes:SIZE});}}finally{reader.close();}
+      try{for(let at=0;at<SIZE;at+=4*STEP){
+        const offsets=Array.from({length:Math.min(4,Math.ceil((SIZE-at)/STEP))},(_,i)=>at+i*STEP);
+        const parts=await Promise.all(offsets.map(a=>reader.read(a,Math.min(SIZE,a+STEP))));
+        for(const bytes of parts)hash.update(bytes);
+        progress.set(server,{server,readBytes:Math.min(SIZE,at+4*STEP),totalBytes:SIZE});
+      }}finally{reader.close();}
       if(hash.digest('hex')!==record.sourceSha)throw Error('decrypted-hash-mismatch');
-      record.verifiedNodes.push(server);save(record);log({stage:'node-decryption-verified',server,bytes:SIZE,sha256Matched:true});
+      record.verifiedNodes.push(logicalServer(server));save(record);log({stage:'node-decryption-verified',server,logicalNode:logicalServer(server),bytes:SIZE,sha256Matched:true});
     }
     opened.fileKey.fill(0);self.secretKey.fill(0);
-    const passed=record.verifiedNodes.length===3&&final.ok.length===3;
+    const passed=servers.every(s=>record.verifiedNodes.includes(s))&&final.ok.length===3;
     if(passed){record.completedAt=new Date().toISOString();save(record);}
     log({stage:'large-transfer-test-result',passed,bytes:SIZE,realNodesVerified:record.verifiedNodes,interruptionObserved:true,processRestartResume:true,browserTested:false,phoneTested:false});
     if(!passed)process.exitCode=1;

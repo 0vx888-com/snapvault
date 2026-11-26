@@ -6,6 +6,8 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {WalletService} from '../server/wallet-service.mjs';
 import {DEFAULT_USER_QUOTA} from '../server/taperelay-media.mjs';
+import {installTapeRelayMedia} from '../server/taperelay-media.mjs';
+import {createHash} from 'node:crypto';
 import {
   planEncryptedFile,
   uploadToServers,
@@ -124,4 +126,39 @@ test('live _loadObject reads official getObject and never writeFile to the data 
   assert.match(fn, /client\.getObject\(server, sha\)/);
   assert.doesNotMatch(fn, /writeFile|mkdirSync|this\.dir/);
   assert.match(fn, /objects\.get\(sha\)/);
+});
+
+test('live envelope lookup races verified replicas and cancels a stalled first node', async () => {
+  class Service {}
+  installTapeRelayMedia(Service);
+  const service = new Service();
+  service.tapeRelay = {settings: {mode: 'live', servers: ['slow.example:4246', 'bad.example:4246', 'fast.example:4246']}};
+  const bytes = new Uint8Array([3, 5, 8, 13]);
+  const sha = createHash('sha256').update(bytes).digest('hex');
+  const originalFetch = globalThis.fetch;
+  let cancelled = false, deadline;
+  globalThis.fetch = (url, init) => {
+    if (url.includes('slow.example')) return new Promise((_resolve, reject) => {
+      init.signal.addEventListener('abort', () => { cancelled = true; reject(Error('aborted')); }, {once: true});
+    });
+    return Promise.resolve(new Response(url.includes('bad.example') ? new Uint8Array([0]) : bytes, {status: 200}));
+  };
+  try {
+    const found = await Promise.race([service._loadObject(sha), new Promise((_resolve, reject) => {
+      deadline = setTimeout(() => reject(Error('slow replica blocked a valid replica')), 1000);
+    })]);
+    assert.deepEqual(found, bytes);
+    assert.equal(cancelled, true);
+  } finally { clearTimeout(deadline); globalThis.fetch = originalFetch; }
+});
+
+test('live envelope lookup still fails closed when every replica returns corrupt bytes', async () => {
+  class Service {}
+  installTapeRelayMedia(Service);
+  const service = new Service();
+  service.tapeRelay = {settings: {mode: 'live', servers: ['bad.example:4246']}};
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(new Uint8Array([1]), {status: 200});
+  try { assert.equal(await service._loadObject('00'.repeat(32)), null); }
+  finally { globalThis.fetch = originalFetch; }
 });

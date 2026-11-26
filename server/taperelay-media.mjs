@@ -48,6 +48,15 @@ function selfSecretBytes(value) {
   return bytes.length === 32 && bytes.toString('base64') === value ? bytes : null;
 }
 
+function httpsTransports(servers, parsedKey) {
+  const authorized = new Set(parsedKey?.session?.delegation?.delegation?.servers || []);
+  return servers.map((server) => {
+    const alias = server.replace(/:\d+$/, ':443');
+    // Same hostname only, and only when the holder explicitly signed the alias.
+    return authorized.has(alias) ? alias : server;
+  });
+}
+
 export const DEFAULT_USER_QUOTA = 1024 * 1024 * 1024;
 export function objectBudget(size) {
   const layout = layoutOf(size, ENCRYPTED_CHUNK);
@@ -93,6 +102,7 @@ export function loadMediaSettings(env = process.env, overrides = {}) {
     else if (requestedMode === 'live' && !liveConfigured) mode = 'off';
     else mode = 'mock';
   }
+  const transportServers = mode === 'live' ? httpsTransports(servers, parsedKey) : ['mock.snapvault.local:4246'];
   return {
     enabled: mode !== 'off',
     mode,
@@ -100,6 +110,8 @@ export function loadMediaSettings(env = process.env, overrides = {}) {
     userQuota,
     circuit: circuit || null,
     servers: mode === 'live' ? servers : ['mock.snapvault.local:4246'],
+    transportServers,
+    signerServers: mode === 'live' ? [...new Set([...servers, ...transportServers])] : transportServers,
     liveConfigured,
     liveError,
     parsedKey,
@@ -171,7 +183,7 @@ export function installTapeRelayMedia(Service) {
         this.tapeRelay.signer = createRemoteSigner({
           auth: developerKeyAuth(settings._devKey),
           account: settings.circuit,
-          servers: settings.servers,
+          servers: settings.signerServers,
         });
       }
     },
@@ -197,7 +209,8 @@ export function installTapeRelayMedia(Service) {
         types: MEDIA_TYPES,
         scenes: SCENES,
         circuit: s.enabled ? s.circuit : null,
-        servers: s.enabled ? s.servers : [],
+        servers: s.enabled ? (s.transportServers || s.servers) : [],
+        primaryServers: s.enabled ? s.servers : [],
         selfKey: s.enabled && this.tapeRelay?.keyPair ? Buffer.from(this.tapeRelay.keyPair.publicKey).toString('base64url') : null,
         signPath: '/api/wallet/media-sign',
         testedOnPhones: false,
@@ -376,7 +389,7 @@ export function installTapeRelayMedia(Service) {
         return {
           mediaId: media.id,
           envelopeSha: media.envelopeSha,
-          servers: this.tapeRelay.settings.servers,
+          servers: this.tapeRelay.settings.transportServers || this.tapeRelay.settings.servers,
           manifest: {size: opened.manifest.size, contentType: opened.manifest.contentType, name: opened.manifest.name},
           fileKey,
           viewUntil: access.viewUntil,
@@ -458,11 +471,17 @@ export function installTapeRelayMedia(Service) {
         return buf ? new Uint8Array(buf) : null;
       }
       const {createClient} = await import('../vendor/taperelay-client/src/taperelay.mjs');
-      const client = createClient();
-      for (const server of this.tapeRelay.settings.servers) {
-        try { return await client.getObject(server, sha); } catch { /* try next official node */ }
-      }
-      return null;
+      const stop = new AbortController();
+      const client = createClient({fetch: (url, init) => globalThis.fetch(url, {...init,
+        signal: AbortSignal.any([init.signal, stop.signal]),
+      })});
+      try {
+        // The official client verifies each object's hash. A slow first replica
+        // must not hold up authorization while another valid replica is ready.
+        const servers = this.tapeRelay.settings.transportServers || this.tapeRelay.settings.servers;
+        return await Promise.any(servers.map((server) => client.getObject(server, sha)));
+      } catch { return null; }
+      finally { stop.abort(); }
     },
 
     _looksLikeSecret(value) {
