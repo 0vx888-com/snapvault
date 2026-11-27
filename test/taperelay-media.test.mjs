@@ -223,12 +223,20 @@ test('Stories, paid unlock and chat all reuse the same encrypted media base with
     f.s.confirmed = async () => false;
     f.s.vault.accessUntil = async () => 0n;
     await assert.rejects(f.s.handle('media-key', {mediaId: paidUp.committed.mediaId}, 'bob', origin), /订单|过期|确认/);
+    const correctProduct = f.s.product;
+    f.s.product = async () => ({p: {creator: alice, mediaId: 'different-media'}, c: {}});
+    await assert.rejects(f.s.handle('media-key', {mediaId: paidUp.committed.mediaId}, 'alice', origin), /作品媒体记录不符/);
+    f.s.product = correctProduct;
     const preview = await f.s.handle('media-key', {mediaId: paidUp.committed.mediaId}, 'alice', origin);
     assert.equal(preview.preview, true);
     f.s.confirmed = async () => true;
     f.s.vault.accessUntil = async () => BigInt(Math.floor(Date.now() / 1000) + 3600);
     const buyer = await f.s.handle('media-key', {mediaId: paidUp.committed.mediaId}, 'bob', origin);
     assert.ok(buyer.fileKey);
+    let confirmationReads = 0;
+    f.s.confirmed = async () => ++confirmationReads === 1;
+    await assert.rejects(f.s.handle('media-key', {mediaId: paidUp.committed.mediaId}, 'bob', origin), /订单|过期|确认/);
+    f.s.confirmed = async () => true;
     assert.notEqual(buyer.fileKey, preview.fileKey + 'nope');
     // Arbitrary additional buyers still go through the key server; they are not envelope recipients.
     f.s.sessions.set('buyer20', {account: '0x' + 'aa'.repeat(20), origin, until: Date.now() + 60_000});
@@ -272,7 +280,7 @@ test('PDF/ZIP/binary attachments keep chat and paid access checks; Story refuses
     }
     const paid = await uploadOnce(f.s, 'alice', {file: new Uint8Array(1000).fill(9), scene: 'paid', mime: 'application/octet-stream', scope: 'public'});
     const media = f.s.state.mediaFiles[paid.committed.mediaId]; media.linked = true; media.contentId = '700';
-    f.s.product = async () => ({p: {creator: alice, burn: false, secs: 30}, c: {}});
+    f.s.product = async () => ({p: {creator: alice, burn: false, secs: 30, mediaId: media.id}, c: {}});
     f.s.vault.accessUntil = async () => BigInt(Math.floor(Date.now() / 1000) + 3600);
     f.s.confirmed = async () => false;
     await assert.rejects(f.s.handle('media-key', {mediaId: media.id}, 'bob', origin), /订单/);

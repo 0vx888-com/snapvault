@@ -384,6 +384,10 @@ export function installTapeRelayMedia(Service) {
       try { opened = openEnvelope(new Uint8Array(envelope), [this.tapeRelay.keyPair]); }
       catch { fail('无法打开信封', 503); }
       try {
+        // Node reads may outlast a viewing grant or an on-chain order.
+        const current = await this.authorizeMediaKey(media, who);
+        const deadline = Math.min(access.viewUntil ?? Infinity, current.viewUntil ?? Infinity);
+        if (deadline <= Date.now()) fail('查看权限已过期', 410);
         const fileKey = Buffer.from(opened.fileKey).toString('base64url');
         opened.fileKey.fill(0);
         return {
@@ -392,7 +396,7 @@ export function installTapeRelayMedia(Service) {
           servers: this.tapeRelay.settings.transportServers || this.tapeRelay.settings.servers,
           manifest: {size: opened.manifest.size, contentType: opened.manifest.contentType, name: opened.manifest.name},
           fileKey,
-          viewUntil: access.viewUntil,
+          viewUntil: Number.isFinite(deadline) ? deadline : null,
           preview: access.preview === true,
           mode: this.tapeRelay.settings.mode,
         };
@@ -417,6 +421,7 @@ export function installTapeRelayMedia(Service) {
     async _authorizePaidMedia(media, who) {
       if (!media.contentId) fail('作品尚未上架', 409);
       const {p, c} = await this.product(String(media.contentId), who);
+      if (p.mediaId !== media.id || !sameAddr(p.creator, media.creator)) fail('作品媒体记录不符', 409);
       const preview = sameAddr(p.creator, who);
       const accessUntil = preview ? Date.now() + 86400000 : Number(await this.vault.accessUntil(media.contentId, who)) * 1000;
       if (!preview && (!accessUntil || accessUntil <= Date.now() || !await this.confirmed(media.contentId, who))) fail('订单尚未确认或已过期', 403);
