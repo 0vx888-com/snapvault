@@ -1,0 +1,29 @@
+name: Media permissions
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  media-tests:
+    name: Friend and paid media permissions
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/config/wallet.json
+            !/deployment/recipient-mainnet-key-state.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Run media, access control and backup regression tests
+        run: node --test test/taperelay*.test.mjs test/story-backup.test.mjs test/social-media.test.mjs

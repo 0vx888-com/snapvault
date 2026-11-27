@@ -1,0 +1,22 @@
+# Copy and fill locally. Never commit a real TAPERELAY_DEV_KEY or TAPERELAY_SELF_SECRET.
+# Default is off. Mock mode does not talk to official nodes.
+
+TAPERELAY_MEDIA_ENABLED=0
+# mock | live
+TAPERELAY_MEDIA_MODE=mock
+# 200 MiB default. Configurable. Not real-device tested.
+TAPERELAY_MEDIA_MAX_BYTES=209715200
+
+# Required only for live:
+# TAPERELAY_DEV_KEY=trk1_...
+# TAPERELAY_CIRCUIT=1.2.0
+# TAPERELAY_SERVERS=relay1.taperelay.com:4246,relay2.taperelay.com:4246,relay3.taperelay.com:4246
+# TAPERELAY_SELF_SECRET=
+
+# Optional account quota, default 1 GiB
+# TAPERELAY_MEDIA_USER_QUOTA_BYTES=1073741824
+
+# Official console downloads TAPERELAY_KEY=trk1_...
+# Set that value on the server as TAPERELAY_DEV_KEY only. Never commit it.
+# Generate TAPERELAY_SELF_SECRET once (32-byte hex or base64) and keep it stable
+# across restarts, or existing envelopes cannot be opened.

@@ -1,0 +1,19 @@
+{
+  "description": "随协议名称改变的常量（规范的常量表：文件格式 §2、TapeRelay §2、TapeStore §1；I-035、D-052、D-530）。协议名称为 TapeRelay（D-070、D-071；这些常量 D-081 定下，以后不再改）；项目名 2026-10-17 起也是 TapeRelay（D-305，原名 TapeStore）。这里、那张表和规范正文里直接写出这些值的地方必须一致；spec/check-openapi.mjs 核对这里与那张表一致。测试向量脚本从这里取值。",
+  "eip712DomainName": "TapeRelay",
+  "protocolId": "taperelay",
+  "discoveryPath": ".well-known/taperelay.json",
+  "directoryPath": ".well-known/taperelay/directory",
+  "envelopeMagic": "TREN",
+  "keyBackupMagic": "TRKB",
+  "labels": {
+    "chunk": "TapeRelay/v1/chunk",
+    "index": "TapeRelay/v1/index",
+    "commit": "TapeRelay/v1/commit",
+    "pair": "TapeRelay/v1/pair"
+  },
+  "manifestContentType": "application/vnd.taperelay.manifest+json",
+  "directoryContentType": "application/vnd.taperelay.directory+json",
+  "siteContentType": "application/vnd.taperelay.site+json",
+  "headerPrefix": "TR-"
+}

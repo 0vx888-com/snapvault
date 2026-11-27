@@ -4,9 +4,10 @@ import {icon} from './ui-icons.js';
 import {setupChatUI,openChatPane,filterConversations,chatHeader,expiryControl} from './chat-ui.js';
 import {wallet,call,walletAction,fetchContent,finishContent} from './wallet.js';
 import {identity,profile,uidOf,escapeHtml as esc} from './store.js';
+import {usesLargeMediaPath,uploadEncryptedMedia,playAuthorizedMedia,mediaAccept,largeMediaEnabled,cancelActiveUpload} from './taperelay-media.js';
 export async function initWalletChat(root,hooks){
  let cur=sessionStorage.getItem('sv:wallet-conv'),me=identity(),revision=0,friendOpen=false,newOpen=false;
- const drafts=new Map(),opened=new Map(),deadlines=new Map();
+ const drafts=new Map(),opened=new Map(),deadlines=new Map();let uploadAbort=null;
  const tell=e=>hooks.notify?.(e.message||String(e));
  const label=c=>c.type==='dm'?profile(c.members.find(a=>a!==identity())||identity()).name:c.name;
  const convs=()=>wallet.data.convs||[],messages=()=>wallet.data.messages||[];
@@ -34,19 +35,22 @@ export async function initWalletChat(root,hooks){
   opened.set(id,data);if(data.viewUntil)deadlines.set(id,data.viewUntil);await render();
  }
  async function render(){
-  const rev=++revision,who=identity();if(me!==who){me=who;cur=null;opened.clear();deadlines.clear();drafts.clear();root.querySelector('#xc-frbox').classList.add('hidden');root.querySelector('#xc-newbox').classList.add('hidden');friendOpen=newOpen=false;}
+  const rev=++revision,who=identity();if(me!==who){me=who;cur=null;uploadAbort?.abort();uploadAbort=null;for(const p of opened.values())p._close?.();opened.clear();deadlines.clear();drafts.clear();root.querySelector('#xc-frbox').classList.add('hidden');root.querySelector('#xc-newbox').classList.add('hidden');friendOpen=newOpen=false;}
+  if(uploadAbort)return;
   root.querySelector('#wallet-chat-me').textContent=who?`${profile(who).name} · ${who.slice(0,6)}…${who.slice(-4)}`:'连接钱包后开始聊天';
   root.querySelector('#xc-list').innerHTML=convs().map(c=>{const m=messages().filter(m=>m.conv===c.id).at(-1);return `<div class="xc-item ${c.id===cur?'on':''}" role="button" tabindex="0" data-conv="${esc(c.id)}" data-search="${esc(label(c)+' '+(c.type==='dm'?uidOf(c.members.find(a=>a!==who)||who):''))}"><div class="xc-av">${c.type==='dm'?esc(label(c).slice(0,1)):'群'}</div><div class="xc-mid"><div class="xc-row"><b>${esc(label(c))}</b></div><div class="xc-prev">${m?(m.kind==='privacy-notice'?'设备截图提醒':m.kind==='paid-image'?'付费图片':m.burn?'阅后即焚消息':'新消息 / 图片'):'打个招呼吧'}</div></div></div>`;}).join('');
   filterConversations(root);
   const pane=root.querySelector('#xc-pane'),c=convs().find(c=>c.id===cur);
+  if(pane.dataset.conv&&pane.dataset.conv!==c?.id){for(const p of opened.values()){p._close?.();p._close=null;p._node=null;}pane.dataset.conv=c?.id||'';}
   if(!c){chatPrivacyContext(null);pane.innerHTML=`<div class="xc-empty"><div class="empty-tape" aria-hidden="true">◉—◉</div><b>${who?'还没打开会话':'连接钱包后开始聊天'}</b><p class="muted">免费私聊、群聊，支持文字、图片和自设阅后即焚。<br>${who?'点击「添加好友」，输入对方的 UID 或钱包地址。':'点击右上角连接钱包。登录签名不会支付费用。'}</p></div>`;return;}
   if(!document.querySelector('#viewer:not(.hidden),#social-viewer[open]'))chatPrivacyContext(document.body.dataset.page==='chat'&&(!matchMedia('(max-width:760px)').matches||root.querySelector('.xchat').classList.contains('conversation-open'))?c:null);
   const old=pane.querySelector('#chat-text'),draft=drafts.get(c.id)||{text:'',burn:false,secs:'10',shot:'allow',file:null};
   const active=old&&document.activeElement===old,selection=active?old.selectionStart:null;
-  const rows=[];
+  const rows=[],mediaMounts=[];
+  const queueMedia=p=>{const placeholder=document.createElement('div');mediaMounts.push([placeholder,p]);return placeholder;};
   for(const m of messages().filter(m=>m.conv===c.id)){
    const mine=m.from===who;if(m.kind==='privacy-notice'){const row=document.createElement('p');row.className='privacy-notice';row.textContent=profile(m.from).name+' 的设备报告了一次截图';rows.push(row);continue;}if(m.kind==='paid-image'){const paid=document.createElement('div');paid.className='msg paid-message'+(mine?' me':'');paid.innerHTML=hooks.renderPaidCard(m.contentId,who,'chat');hydrateSafeImages(paid);rows.push(paid);continue;}
-   let p=opened.get(m.id);if(p?.viewUntil&&p.viewUntil<=Date.now()){finishContent(p.viewRef);opened.delete(m.id);p=null;}
+   let p=opened.get(m.id);if(p?.viewUntil&&p.viewUntil<=Date.now()){finishContent(p.viewRef);p._close?.();opened.delete(m.id);p=null;}
    const row=document.createElement('div');row.className='msg'+(mine?' me':'');
    if(c.type==='group'){const name=document.createElement('small');name.className='muted';name.textContent=profile(m.from).name;row.append(name);}
    const bubble=document.createElement('div');bubble.className='bubble'+(m.shot==='forbid'?' noshot':'');
@@ -54,32 +58,34 @@ export async function initWalletChat(root,hooks){
    if(m.burn){
     if(mine)note(`阅后即焚 · ${m.secs} 秒`);
     else if(m.expired||(deadlines.has(m.id)&&deadlines.get(m.id)<=Date.now())||(m.viewUntil&&m.viewUntil<=Date.now()))note('🔥 已焚毁');
-    else if(p){bubble.append(messagePayload(p));const count=document.createElement('small');count.className='count';count.textContent=`${Math.max(0,Math.ceil((p.viewUntil-Date.now())/1000))} 秒后结束展示`;bubble.append(count);}
+    else if(p){bubble.append(p.mediaId?queueMedia(p):messagePayload(p));const count=document.createElement('small');count.className='count';count.textContent=`${Math.max(0,Math.ceil((p.viewUntil-Date.now())/1000))} 秒后结束展示`;bubble.append(count);}
     else {const button=document.createElement('button');button.className='tapburn';button.dataset.messageOpen=m.id;button.textContent=`🔥 ${m.viewUntil?'继续查看':'点击查看'}（${m.secs} 秒）`;bubble.append(button);}
-   }else{if(!p){try{p=await call('message-open',{id:m.id});if(identity()!==who)return;opened.set(m.id,p);}catch{p={text:'消息暂时不可用，稍后重试'};}}bubble.append(messagePayload(p));}
+   }else{if(!p){try{p=await call('message-open',{id:m.id});if(identity()!==who)return;opened.set(m.id,p);}catch{p={text:'消息暂时不可用，稍后重试'};}}bubble.append(p.mediaId?queueMedia(p):messagePayload(p));}
    const time=document.createElement('small');time.className='muted';time.textContent=new Date(m.ts).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});row.append(bubble,time);rows.push(row);
   }
   if(rev!==revision)return;
   const previousList=pane.querySelector('#chat-list'),scrollTop=previousList?.scrollTop||0,keepScroll=previousList&&previousList.scrollHeight-previousList.scrollTop-previousList.clientHeight>40;
   const openMenus=[...pane.querySelectorAll('.head-actions details[open]')].map(d=>d.className);
   const expiryOpen=pane.dataset.conv===c.id&&pane.querySelector('.expiry-control')?.open;pane.dataset.conv=c.id;
-  pane.innerHTML=chatHeader({name:label(c),uid:c.type==='dm'?uidOf(c.members.find(a=>a!==who)||who):'',group:c.type==='group',members:c.members.length,local:false,settings:privacyControls(c)})+`<div id="chat-list" class="chat-list"></div><form id="chat-form" class="chat-input"><input id="chat-text" maxlength="500" placeholder="发送消息…" autocomplete="off"><label class="secondary free-image-button" for="chat-file">${icon('plus')}<span>图片</span></label><input class="sr-only" type="file" id="chat-file" accept="image/png,image/jpeg,image/webp,image/gif">${expiryControl([5,10,30,60])}<button id="chat-paid" type="button" class="secondary chat-paid">${icon('lock')}<span>付费图片</span></button><button type="submit" class="primary">发送</button><span class="draft-image-name muted">${esc(draft.file?.name||'')}</span><button class="text-button ${draft.file?'':'hidden'}" id="remove-chat-file" type="button">移除图片</button><span id="chat-error" class="error" role="alert"></span></form>`;
-  pane.querySelector('#chat-list').replaceChildren(...rows);for(const name of openMenus){const menu=pane.querySelector('.'+name);if(menu)menu.open=true;}
+  pane.innerHTML=chatHeader({name:label(c),uid:c.type==='dm'?uidOf(c.members.find(a=>a!==who)||who):'',group:c.type==='group',members:c.members.length,local:false,settings:privacyControls(c)})+`<div id="chat-list" class="chat-list"></div><form id="chat-form" class="chat-input"><input id="chat-text" maxlength="500" placeholder="发送消息…" autocomplete="off"><label class="secondary free-image-button" for="chat-file">${icon('plus')}<span>${largeMediaEnabled()?'附件':'图片'}</span></label><input class="sr-only" type="file" id="chat-file" accept="${mediaAccept()}">${expiryControl([5,10,30,60])}<button id="chat-paid" type="button" class="secondary chat-paid">${icon('lock')}<span>付费图片</span></button><button type="submit" class="primary">发送</button><span class="draft-image-name muted">${esc(draft.file?.name||'')}</span><button class="text-button ${draft.file?'':'hidden'}" id="remove-chat-file" type="button">${largeMediaEnabled()?'移除文件':'移除图片'}</button><span id="chat-error" class="error" role="alert"></span></form>`;
+  pane.querySelector('#chat-list').replaceChildren(...rows);for(const[placeholder,p]of mediaMounts)placeholder.replaceWith(mediaNode(p));for(const name of openMenus){const menu=pane.querySelector('.'+name);if(menu)menu.open=true;}
+  pane.querySelector('#chat-error').textContent=draft.error||'';
   const text=pane.querySelector('#chat-text'),burn=pane.querySelector('#chat-burn'),secs=pane.querySelector('#chat-secs');text.value=draft.text;burn.checked=draft.burn;secs.value=draft.secs;pane.querySelector('.expiry-control').open=!!expiryOpen;
   const save=()=>{draft.text=text.value;draft.burn=burn.checked;draft.secs=secs.value;drafts.set(c.id,draft);};text.oninput=burn.onchange=secs.onchange=save;
-  pane.querySelector('#chat-file').onchange=e=>{draft.file=e.target.files[0];save();render();};pane.querySelector('#remove-chat-file').onclick=()=>{draft.file=null;save();render();};
+  pane.querySelector('#chat-file').onchange=e=>{draft.file=e.target.files[0];draft.error='';save();render();};pane.querySelector('#remove-chat-file').onclick=()=>{uploadAbort?.abort();cancelActiveUpload();draft.file=null;draft.error='';save();render();};
   pane.querySelector('#chat-paid').onclick=()=>hooks.compose({...c,label:label(c)});
   pane.querySelectorAll('[data-message-open]').forEach(b=>b.onclick=()=>openMessage(b.dataset.messageOpen).catch(tell));
-  pane.querySelector('#chat-form').onsubmit=async e=>{e.preventDefault();save();const submit=pane.querySelector('button[type=submit]');submit.disabled=true;
-   try{let image,mime;if(draft.file){if(draft.file.size>2*1024*1024)throw Error('请选择 2 MB 以内的图片');mime=draft.file.type;image=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(draft.file);});}
+  pane.querySelector('#chat-form').onsubmit=async e=>{e.preventDefault();save();draft.error='';const submit=pane.querySelector('button[type=submit]');submit.disabled=true;
+   try{let image,mime;if(draft.file){if(usesLargeMediaPath(draft.file)){const ac=new AbortController();uploadAbort=ac;const cancel=pane.querySelector('#remove-chat-file');if(cancel)cancel.textContent='取消上传';const err=pane.querySelector('#chat-error');if(err){err.textContent='正在分块加密上传…';}const committed=await uploadEncryptedMedia({file:draft.file,scene:'chat',scope:c.type,convId:c.id,signal:ac.signal,onProgress:x=>{if(err)err.textContent='已上传分块 '+x.done+' / '+x.total;}});await walletAction('send',{conv:c.id,text:draft.text,mediaId:committed.mediaId,burn:draft.burn,secs:Number(draft.secs),shot:draft.shot});draft.text='';draft.file=null;drafts.set(c.id,draft);uploadAbort=null;await render();return;}if(draft.file.size>2*1024*1024)throw Error('请选择 2 MB 以内的图片');mime=draft.file.type;image=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.onerror=reject;r.readAsDataURL(draft.file);});}
     await walletAction('send',{conv:c.id,text:draft.text,image,mime,burn:draft.burn,secs:Number(draft.secs),shot:draft.shot});draft.text='';draft.file=null;drafts.set(c.id,draft);await render();
-   }catch(e){if(pane.querySelector('#chat-error'))pane.querySelector('#chat-error').textContent=e.message;}finally{if(submit.isConnected)submit.disabled=false;}
+   }catch(e){draft.error=e.message;drafts.set(c.id,draft);if(pane.querySelector('#chat-error'))pane.querySelector('#chat-error').textContent=e.message;}finally{uploadAbort=null;const cancel=pane.querySelector('#remove-chat-file');if(cancel)cancel.textContent='移除文件';if(submit.isConnected)submit.disabled=false;}
   };
   if(active){text.focus();text.setSelectionRange(selection,selection);}const list=pane.querySelector('#chat-list');list.scrollTop=keepScroll?scrollTop:list.scrollHeight;
  }
+ function mediaNode(p){if(p._node)return p._node;const host=document.createElement('div');p._node=host;host.className='tr-media';host.textContent='正在打开加密媒体…';playAuthorizedMedia(host,p.mediaId).then(play=>{if(p._node!==host||!host.isConnected){play.close();if(p._node===host)p._node=null;return;}host.firstChild?.nodeType===3&&(host.firstChild.textContent='');p._close=play.close;}).catch(e=>{host.textContent=e.message||'无法播放';});return host;}
  window.addEventListener('snapvault:privacy-ready',()=>render().catch(tell));
  window.addEventListener('snapvault:chat-view',()=>render().catch(tell));
  window.addEventListener('snapvault:change',()=>{render().catch(tell);if(friendOpen&&!root.querySelector('#xc-frbox').contains(document.activeElement))renderFriends();});window.addEventListener('snapvault:identity',()=>render().catch(tell));
- const expiry=setInterval(()=>{let expired=false;for(const[id,p]of opened)if(p.viewUntil&&p.viewUntil<=Date.now()){finishContent(p.viewRef);opened.delete(id);expired=true;}if(expired||[...opened.values()].some(p=>p.viewUntil))render().catch(tell);},500);window.addEventListener('pagehide',()=>{for(const p of opened.values())finishContent(p.viewRef);clearInterval(expiry);},{once:true});
+ const expiry=setInterval(()=>{let expired=false;for(const[id,p]of opened)if(p.viewUntil&&p.viewUntil<=Date.now()){finishContent(p.viewRef);p._close?.();opened.delete(id);expired=true;}if(expired||[...opened.values()].some(p=>p.viewUntil))render().catch(tell);},500);window.addEventListener('pagehide',()=>{uploadAbort?.abort();for(const p of opened.values()){finishContent(p.viewRef);p._close?.();}clearInterval(expiry);},{once:true});
  await render();return {conversations:()=>convs().map(c=>({...c,label:label(c)})),openWith:async address=>{let c=convs().find(c=>c.type==='dm'&&c.members.includes(address));if(!c)c=await walletAction('conversation',{members:[address]});openChatPane(root);cur=c.id;sessionStorage.setItem('sv:wallet-conv',cur);await render();},sendPaidCard:async(id,conv)=>{await walletAction('send',{conv,kind:'paid-image',contentId:String(id)});cur=conv;sessionStorage.setItem('sv:wallet-conv',cur);await render();}};
 }

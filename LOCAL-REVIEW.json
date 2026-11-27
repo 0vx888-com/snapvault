@@ -1,0 +1,14 @@
+{
+  "candidate": "TapeRelay media 2026-11-26 local review",
+  "base_commit": "18fdb4f60c6ca712de64974ea68aef82ea39a6aa",
+  "source_archive_commit_claim": "83f93e9b94b0e98dbcb7b9895f6d3936f21d71e9",
+  "source_archive_sha256": "bf37e161a04113d986faacac1a65d4b96913dbcf6da8bbc0b051ff6234d31a3c",
+  "original_five_commit_objects_available": false,
+  "imports_source_snapshot_then_local_fixes": true,
+  "published": false,
+  "production_feature_enabled": false,
+  "live_large_test": "Three replicas uploaded after process restart. Full readback incomplete: unreachable during relay1 read.",
+  "credentials_in_source": false,
+  "upstream_SHA256SUMS_scope": "Original supplied source snapshot only; local changes have separate LOCAL-SHA256SUMS.",
+  "local_tests_passed": 53
+}

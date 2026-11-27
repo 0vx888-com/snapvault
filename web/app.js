@@ -1,5 +1,6 @@
 import {initScreenPrivacy,setPrivacyContext} from './screen-privacy.js';
-import {initSocial,publishSocial,socialMode,renderSocial} from './social.js';
+import {initSocial,publishSocial,socialMode,renderSocial,loadSocial} from './social.js';
+import {largeMediaEnabled,usesLargeMediaPath,uploadEncryptedMedia,playAuthorizedMedia,mediaAccept,mediaHelp,cancelActiveUpload,analyticsSafeDetail} from './taperelay-media.js';
 import {initProductUI} from './product-ui.js';
 import {icon} from './ui-icons.js';
 import {initPublishComposer,syncPublishComposer} from './publish-ui.js';
@@ -29,6 +30,7 @@ function go(page) {
   const route=new URL(location.href);route.searchParams.set('view',({fan:'discover',chat:'messages',creator:'publish'})[page]);history.replaceState(null,'',route.pathname+route.search+route.hash);
   $('#workspace-title').textContent=({fan:'发现',chat:'消息',creator:'发布'})[page];
   if(page==='chat')window.dispatchEvent(new Event('snapvault:chat-view'));
+  if(page==='fan')loadSocial().catch(e=>toast(e.message));
   document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===page?'page':'false'));
   window.scrollTo({top:0,behavior:'instant'});document.querySelector('main').scrollTo({top:0,behavior:'instant'});
 }
@@ -118,17 +120,22 @@ async function publish(e) {
   const creator = identity();
   try {
     if(wallet.enabled&&!creator)throw Error('请先连接钱包并签名登录');
-    const file = $('#file').files[0]; if (!file) throw new Error('请选择图片');
+    const file = $('#file').files[0]; if (!file) throw new Error('请选择要分享的文件');
+    if (usesLargeMediaPath(file)) { if(file.size>(wallet.config?.taperelayMedia?.maxBytes||209715200))throw Error('文件超过当前大小上限'); }
+    else {
     if (!['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(file.type)) throw new Error('请选择 PNG、JPEG、WebP 或 GIF 图片');
-    if (file.size > 2 * 1024 * 1024) throw new Error('本地演示请使用 2 MB 以内的图片');
+    if (file.size > 2 * 1024 * 1024) throw new Error(largeMediaEnabled()?'请使用支持的图片或视频格式':'本地演示请使用 2 MB 以内的图片');
+    }
     if(socialMode()){const result=await publishSocial({file,title:$('#title').value.trim(),target:$('#publish-target').value});$('#file').value='';$('#title').value='';go('fan');if(!result.story){feed='latest';document.querySelectorAll('[data-feed]').forEach(b=>b.classList.toggle('on',b.dataset.feed===feed));}render();toast(result.story?'Story 已发布，24 小时后过期':'免费图片已发布，无需付款');return;}
     const title = $('#title').value.trim(), price = Number($('#price').value), secs = Number($('#secs').value), max = Number($('#max').value);
     if (!title || !Number.isFinite(price) || price <= 0 || !Number.isInteger(secs) || secs < 3 || secs > 3600 || !Number.isInteger(max) || max < 0 || max > 1_000_000) throw new Error('请检查标题、价格、时长和限量');
     const target = $('#publish-target').value, conv = target === 'public' ? null : chat.conversations().find(c => c.id === target);
     if (target !== 'public' && !conv) throw new Error('当前身份不在这个会话中');
     if(wallet.enabled||local.enabled){
-      $('#log').textContent='正在加密上传并提交'+activeNetworkName()+'上架交易…';
-      const result=await (wallet.enabled?publishWallet:body=>localCall('publish',body))({who:creator,image:b64(await file.arrayBuffer()),meta:{title,price,secs,max,mime:file.type,scope:conv?conv.type:'public',convId:conv?.id||null,audience:conv?[...conv.members]:[],burn:$('#content-burn').checked}});
+      $('#log').textContent=usesLargeMediaPath(file)?'正在分块加密上传（可中断后继续）…':'正在加密上传并提交'+activeNetworkName()+'上架交易…';
+      let mediaId;
+      if(usesLargeMediaPath(file)){if(!wallet.enabled)throw Error('大文件和视频需要连接钱包后的服务端签名上传');const ac=new AbortController();bindMediaCancel(ac);try{const committed=await uploadEncryptedMedia({file,scene:'paid',scope:conv?conv.type:'public',convId:conv?.id||null,title,signal:ac.signal,onProgress:x=>{$('#log').textContent='已上传分块 '+x.done+' / '+x.total+(x.done<x.total?'（可取消，同文件可续传）':'');}});mediaId=committed.mediaId;}finally{bindMediaCancel(null);}}
+      const result=await (wallet.enabled?publishWallet:body=>localCall('publish',body))({who:creator,image:mediaId?undefined:b64(await file.arrayBuffer()),mediaId,meta:{title,price,secs,max,mime:file.type,scope:conv?conv.type:'public',convId:conv?.id||null,audience:conv?[...conv.members]:[],burn:$('#content-burn').checked}});
       if(identity()!==creator)throw Error('身份已变化，上架已提交，请切回原身份查看');
       if(wallet.enabled)await walletRefresh();else await localRefresh(creator);const product=result.product;
       $('#log').textContent=(wallet.config?.mainnet?'上架成功 #':'测试上架成功 #')+product.id+'\n'+product.publishTx+(wallet.config?.mainnet?'\n密文由服务保存，密钥按链上订单交付。本次为真实 OKB 交易。':'\n密文由测试服务保存，密钥按链上订单交付。仅使用测试币，未使用真钱。');
@@ -176,14 +183,32 @@ async function confirmPurchase() {
 }
 function closeViewer() {
  setPrivacyContext(null);
-  viewTask++; if (viewing) { clearInterval(viewing.timer); finishContent(viewing.ref);URL.revokeObjectURL(viewing.url); viewing = null; }
-  $('#vimg').removeAttribute('src'); $('#wm').textContent = ''; $('#viewer').classList.add('hidden'); window.dispatchEvent(new Event('snapvault:change')); render();
+  viewTask++; if (viewing) { clearInterval(viewing.timer); finishContent(viewing.ref);if(viewing.url)URL.revokeObjectURL(viewing.url);viewing.close?.(); viewing = null; }
+  $('#vimg').removeAttribute('src'); $('#vvideo')?.removeAttribute('src'); $('#vvideo')?.classList.add('hidden'); $('#vimg')?.classList.remove('hidden'); $('#wm').textContent = ''; $('#viewer').classList.add('hidden'); window.dispatchEvent(new Event('snapvault:change')); render();
 }
 async function view(id) {
   const c = content(id), who = identity(), task = ++viewTask;
   if (!eligible(c, who)) throw new Error('当前身份没有查看权限');
   if (who !== c.creator && !order(id, who)) throw new Error('请先购买');
   if (orderState(c, who) === 'expired') throw new Error('本次查看权限已结束');
+  if(wallet.enabled){
+    const opened=await openWallet(id);
+    if(opened.mediaId){
+      if(task!==viewTask||identity()!==who)return;
+      if(viewing){clearInterval(viewing.timer);finishContent(viewing.ref);if(viewing.url)URL.revokeObjectURL(viewing.url);viewing.close?.();}
+      const playback=await playAuthorizedMedia($('#vvideo')||$('#viewer'),opened.mediaId);
+      if(task!==viewTask){playback.close();return;}
+      $('#vimg').classList.toggle('hidden',playback.element.tagName!=='IMG');$('#vvideo')?.classList.toggle('hidden',playback.element.tagName!=='VIDEO');
+      viewing={url:playback.url,who,id,ref:opened.viewRef,close:playback.close};
+      $('#view-title').textContent=c.title+(opened.preview?' · 作者预览':'');
+      $('#wm').innerHTML=Array.from({length:20},()=>`<span>${esc(profile(who).name)} · ${uidOf(who)}</span>`).join('');
+      $('#viewer').classList.remove('hidden');setPrivacyContext({kind:'content',id:String(id),enabled:true});
+      const o=opened;
+      const tick=()=>{const left=o.viewUntil?Math.max(0,Math.ceil((o.viewUntil-Date.now())/1000)):null;$('#count').textContent=left===null?'已解锁 · 关闭即可返回聊天':`${left} 秒后结束展示`;$('#prog').style.width=(left===null?100:Math.min(100,left/c.secs*100))+'%';if(left===0||(!o.preview&&Date.now()>=o.accessUntil))closeViewer();};
+      viewing.timer=setInterval(tick,250);tick();
+      return;
+    }
+  }
   let blob,keyBytes,opened;
   if(wallet.enabled||local.enabled){
     opened=wallet.enabled?await openWallet(id):await localCall('open',{who,id});
@@ -292,8 +317,8 @@ $('#account-network').onclick=()=>{$('#account-dialog').close();$('#wallet-netwo
 $('#account-purchases').onclick=()=>{$('#account-dialog').close();showReceived();};
 document.querySelectorAll('.logo,.mobile-logo').forEach(a=>a.onclick=e=>{e.preventDefault();go('fan');});
 let uploadURL=null;
-function resetUploadPreview(){if(uploadURL){URL.revokeObjectURL(uploadURL);uploadURL=null;}$('#upload-preview').classList.add('hidden');$('#upload-preview img').removeAttribute('src');$('.upload-field').classList.remove('has-file');$('#upload-description').textContent='选一张要分享的图片';}
-$('#file').onchange=()=>{resetUploadPreview();const file=$('#file').files[0];if(!file)return;if(!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)||file.size>2*1024*1024){$('#file').value='';return toast('请选择 2 MB 以内的 PNG、JPEG、WebP 或 GIF 图片');}uploadURL=URL.createObjectURL(file);$('#upload-preview img').src=uploadURL;$('#upload-preview').classList.remove('hidden');$('.upload-field').classList.add('has-file');$('#upload-description').textContent=file.name;};
+function resetUploadPreview(){if(uploadURL){URL.revokeObjectURL(uploadURL);uploadURL=null;}$('#upload-preview').classList.add('hidden');$('#upload-preview img').removeAttribute('src');const pv=$('#upload-preview video');if(pv){pv.removeAttribute('src');pv.classList.add('hidden');pv.load?.();}$('.upload-field').classList.remove('has-file');$('#upload-description').textContent=largeMediaEnabled()?'选择要分享的图片、视频或文件':'选一张要分享的图片';}
+$('#file').onchange=()=>{resetUploadPreview();const file=$('#file').files[0];if(!file)return;const ok=usesLargeMediaPath(file)||(['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)&&file.size<=2*1024*1024);if(!ok){$('#file').value='';return toast(largeMediaEnabled()?'请选择支持的图片或视频，并小于当前上限':'请选择 2 MB 以内的 PNG、JPEG、WebP 或 GIF 图片');}uploadURL=URL.createObjectURL(file);const img=$('#upload-preview img'),vid=$('#upload-preview video');if(file.type.startsWith('video/')){if(vid){vid.src=uploadURL;vid.classList.remove('hidden');}if(img)img.classList.add('hidden');}else{if(img){if(file.type.startsWith('image/')){img.src=uploadURL;img.classList.remove('hidden');}else img.classList.add('hidden');}if(vid)vid.classList.add('hidden');}$('#upload-preview').classList.remove('hidden');$('.upload-field').classList.add('has-file');$('#upload-description').textContent=file.name;};
 $('#clear-upload').onclick=()=>{$('#file').value='';resetUploadPreview();syncPublishComposer();$('#file').click();};
 
 $('#identity').onchange = e => setIdentity(e.target.value);
@@ -370,6 +395,13 @@ initProductUI();
 initScreenPrivacy({notify:toast});
 window.addEventListener('pagehide',()=>{if(viewing)finishContent(viewing.ref);});
 
-initSocial({friends:()=>Friends.all(),following:follows,conversations:()=>chat?.conversations()||[],targets:renderTargets,composer:syncPublishComposer,notify:toast});
+function bindMediaCancel(ac){let btn=$('#cancel-media-upload');if(!btn){btn=document.createElement('button');btn.id='cancel-media-upload';btn.type='button';btn.className='text-button';btn.textContent='取消上传';$('#log')?.after(btn);}btn.hidden=!ac;btn.onclick=ac?()=>{ac.abort();cancelActiveUpload();$('#log').textContent='已取消，同一文件可再次选择后继续';}:null;}
+initSocial({friends:()=>Friends.all(),following:follows,conversations:()=>chat?.conversations()||[],targets:renderTargets,composer:syncPublishComposer,notify:toast,onMediaProgress:x=>{$('#log').textContent='已上传分块 '+x.done+' / '+x.total;},onMediaUploadStart:ac=>{$('#log').textContent='正在分块加密上传（可取消，同文件可续传）…';bindMediaCancel(ac);}});
+if(typeof gtag==='function'){const raw=gtag;window.gtag=function(){const args=[...arguments];if(args[0]==='event'&&args[2])args[2]=analyticsSafeDetail(args[2]);return raw.apply(this,args);};}
+
 
 if(wallet.config?.testMode){document.body.classList.add("local-device-test");document.querySelector("#mode").textContent="本地真机测试 · 不付款";document.querySelector("#connect").textContent="切换测试身份";document.querySelector("#connect").onclick=()=>location.assign("/test-login");document.querySelector("#post-access").value="free";document.querySelector("#post-access option[value=paid]").disabled=true;renderTargets();syncPublishComposer();}
+
+function syncLargeMediaUi(){const input=$('#file');if(!input)return;input.accept=mediaAccept();const help=$('#publish-file-meta');const tip=document.querySelector('.upload-zone small');if(tip&&largeMediaEnabled())tip.textContent='点击选择，或将文件拖到这里';}
+window.addEventListener('snapvault:change',syncLargeMediaUi);
+syncLargeMediaUi();

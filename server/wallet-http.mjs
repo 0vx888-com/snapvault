@@ -5,7 +5,7 @@ import {resolve,extname,sep} from 'node:path';
 import {isIP} from 'node:net';
 import {APP_FILES} from '../scripts/app-files.mjs';
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.txt':'text/plain; charset=utf-8','.xml':'application/xml; charset=utf-8'};
-export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedProxy=false,staticDir=null,requireClientVersion=service.policy?.mainnet===true}){
+export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedProxy=false,staticDir=null,requireClientVersion=service.policy?.mainnet===true,extraStatic=null,rewriteStatic=null}){
  const origin=`http://127.0.0.1:${port}`;
  const tapeRoot=resolve(root,'public/tapesend'),tapeManifestPath=resolve(tapeRoot,'manifest.json'),tapeFiles=existsSync(tapeManifestPath)?JSON.parse(readFileSync(tapeManifestPath,'utf8')):{};
  const server=createServer(async(req,res)=>{
@@ -29,6 +29,14 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedPr
    }
    if(url.pathname==='/app-config.json'&&req.method==='GET'){const c=await service.config();return send(200,{mode:'wallet',apiBase:'',allowedChainIds:[c.chainId],allowMainnet:c.chainId===196&&c.mainnet===true});}
    if(url.pathname==='/api/wallet/config'&&req.method==='GET')return send(200,await service.config());
+   if(url.pathname==='/api/wallet/media-status'&&req.method==='GET')return send(200,service.mediaStatus());
+   if(url.pathname.startsWith('/tr-mock/')&&service.mediaEnabled?.()&&service.tapeRelay?.settings?.mode==='mock'){
+    if(!['GET','HEAD','POST'].includes(req.method))return send(405,{error:'方法不允许'});
+    const chunks=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>1_100_000)throw Error('对象超过 1 MiB');chunks.push(chunk);}
+    const r=await service.tapeRelay.relay.handle('https://mock.snapvault.local'+url.pathname.slice('/tr-mock'.length)+url.search,{method:req.method,body:Buffer.concat(chunks),headers:req.headers});
+    const bytes=r.body?Buffer.from(await r.arrayBuffer()):Buffer.alloc(0);
+    const hdrs={...headers};for(const [k,v] of r.headers)hdrs[k]=v;res.writeHead(r.status,hdrs);return res.end(bytes);
+   }
    if(requireClientVersion&&url.pathname.startsWith('/api/wallet/')&&!url.pathname.startsWith('/api/wallet/blob/'))requireVersion(req.headers);
    if(url.pathname.startsWith('/api/wallet/access/')&&req.method==='GET'){const who=service.auth(req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin||req.headers['x-snapvault-origin']).account;const result=await service.serial(async()=>{await service.flushViewLedger?.();const result=service.consumeView(url.pathname.split('/').at(-1),who);await service.flushViewLedger?.();return result;});res.writeHead(200,{...headers,'Content-Type':result.mime});return res.end(result.bytes);}
    if(url.pathname.startsWith('/api/wallet/blob/')&&req.method==='GET'){
@@ -55,9 +63,11 @@ export function walletHttp({service,root,port,rpc=null,allowedHosts=[],trustedPr
     await service.flushViewLedger?.();const result=await service.handle(action,b,req.headers.authorization?.replace(/^Bearer /,''),suppliedOrigin);await service.flushViewLedger?.();return send(200,result);
    }
    if(req.method!=='GET')return send(405,{error:'仅支持 GET'});
-   const requested=decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname);if(!APP_FILES.includes(requested.slice(1))&&!['/app-config.json','/deweb-manifest.json'].includes(requested))return send(404,{error:'页面不存在'});
+   const requested=decodeURIComponent(url.pathname==='/'?'/index.html':url.pathname);
+   if(extraStatic&&Object.hasOwn(extraStatic,requested)){const extra=extraStatic[requested];res.writeHead(200,{...headers,'Content-Type':extra.type||'application/octet-stream'});return res.end(extra.body);}
+   if(!APP_FILES.includes(requested.slice(1))&&!['/app-config.json','/deweb-manifest.json'].includes(requested))return send(404,{error:'页面不存在'});
    const web=resolve(staticDir||resolve(root,'web')),file=resolve(web,'.'+requested);if(!file.startsWith(web+sep))throw Error('路径无效');
-   const bytes=readFileSync(file);res.writeHead(200,{...headers,'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(bytes);
+   let bytes=readFileSync(file);if(rewriteStatic)bytes=rewriteStatic(requested,bytes);res.writeHead(200,{...headers,'Content-Type':mime[extname(file)]||'application/octet-stream'});res.end(bytes);
   }catch(e){if(res.headersSent){res.destroy();return;}send(e.status||400,{error:e.message});}
  });
  server.requestTimeout=20000;server.headersTimeout=10000;

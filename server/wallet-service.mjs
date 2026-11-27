@@ -1,6 +1,8 @@
 import {collectStoryFiles} from './story-backup.mjs';
 import {installScreenPrivacy} from './screen-privacy.mjs';
 import {installSocialMedia} from './social-media.mjs';
+import {installTapeRelayMedia} from './taperelay-media.mjs';
+import {acceptedFriends,listHasAddr,sameAddr} from './addr.mjs';
 import {backupGeneration as checkedGeneration,snapshotState} from './backup-policy.mjs';
 import {S3ViewLedgerStore} from './s3-view-ledger.mjs';
 import {API_VERSION} from './release-policy.mjs';
@@ -47,7 +49,7 @@ export class WalletService {
   if(policy.mainnet&&(!this.backup||(!backupPutURL&&!backupStore)))throw Error('Mainnet requires encrypted OFF-SITE backups');
   if(tapeSend?.enabled&&sender)this.transport=new WalletTapeSend({service:this,config:tapeSend,sender});
   if(policy.mainnet&&!this.transport)throw Error('Mainnet TapeSend sender C must be configured separately');
-  const journalDir=ledgerDir||resolve(dir,'view-ledger');if(policy.mainnet&&(!ledgerDir||!ledgerKey))throw Error('Independent persistent view ledger directory/key required');if(policy.mainnet&&(secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY').equals(this.master)||secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY').equals(secretKey(backupKey,'SNAPVAULT_BACKUP_KEY'))))throw Error('View ledger key must differ from master and backup keys');if(policy.mainnet&&!this.state.viewLedgerRequired&&!allowViewMigration)throw Error('Explicit reviewed legacy view migration required');this.viewLedger=new ViewLedger({dir:journalDir,key:ledgerKey?secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY'):this.master,identity:this.identity,create:!this.state.viewLedgerRequired,allowRemoteInitialize:allowLedgerInitialize||allowViewMigration&&!this.state.viewLedgerRequired,remote:policy.mainnet?new S3ViewLedgerStore({client:backupStore?.client,bucket:backupStore?.bucket,key:secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY'),identity:this.identity}):undefined});if(policy.mainnet&&(!backupStore?.client||!backupStore?.bucket))throw Error('Remote view ledger requires S3 backup store');this.initViews();this.initSocial();if(backupGeneration)this.state.backupPolicyVersion=1;this.save();
+  const journalDir=ledgerDir||resolve(dir,'view-ledger');if(policy.mainnet&&(!ledgerDir||!ledgerKey))throw Error('Independent persistent view ledger directory/key required');if(policy.mainnet&&(secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY').equals(this.master)||secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY').equals(secretKey(backupKey,'SNAPVAULT_BACKUP_KEY'))))throw Error('View ledger key must differ from master and backup keys');if(policy.mainnet&&!this.state.viewLedgerRequired&&!allowViewMigration)throw Error('Explicit reviewed legacy view migration required');this.viewLedger=new ViewLedger({dir:journalDir,key:ledgerKey?secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY'):this.master,identity:this.identity,create:!this.state.viewLedgerRequired,allowRemoteInitialize:allowLedgerInitialize||allowViewMigration&&!this.state.viewLedgerRequired,remote:policy.mainnet?new S3ViewLedgerStore({client:backupStore?.client,bucket:backupStore?.bucket,key:secretKey(ledgerKey,'SNAPVAULT_VIEW_LEDGER_KEY'),identity:this.identity}):undefined});if(policy.mainnet&&(!backupStore?.client||!backupStore?.bucket))throw Error('Remote view ledger requires S3 backup store');this.initViews();this.initSocial();this.initTapeRelayMedia();if(backupGeneration)this.state.backupPolicyVersion=1;this.save();
  }
  async flushViewLedger(){try{await this.viewLedger?.syncRemote();}catch{fail('查看记录暂不可用，请稍后再试',503);}}
  async flushBackup(){if(this.backup)return (async()=>{await this.flushViewLedger();this.sweepViews();this.save();await this.flushViewLedger();const burnFiles={};for(const m of this.state.messages)if(m.burnFile&&!m.destroyedAt)burnFiles[m.id]=JSON.parse(readFileSync(resolve(this.dir,'burn',m.id+'.enc'),'utf8'));return this.backup.write({file:this.file,master:this.master,identity:this.identity,stateBytes:readFileSync(this.file),viewRecovery:{head:this.viewLedger.head(),burnFiles},storyFiles:collectStoryFiles({state:this.state,dir:this.dir,master:this.master}),fingerprint:Buffer.from(JSON.stringify(snapshotState(this.state)))});})();if(this.policy.mainnet)throw Error('Mainnet backup unavailable');}
@@ -56,7 +58,7 @@ export class WalletService {
  save(){if(this.viewLedger){const digest=businessDigest(this.state),last=this.viewLedger.rows.findLast(r=>r.event.type==='business');if(!last||last.event.digest!==digest)this.viewLedger.append({type:'business',digest});this.state.viewLedgerHead=this.viewLedger.head();}writeFileSync(this.file+'.tmp',JSON.stringify(this.seal(Buffer.from(JSON.stringify(this.state)))),{mode:0o600});renameSync(this.file+'.tmp',this.file);}
  serial(fn){const task=this.pending.catch(()=>{}).then(fn);this.pending=task;return task;}
  limit(key,max=90){const now=Date.now(),old=this.limits.get(key),v=old&&old.until>now?old:{n:0,until:now+60000};if(++v.n>max)fail('操作太频繁，请稍后再试',429);this.limits.set(key,v);if(this.limits.size>10000)for(const[k,r]of this.limits)if(r.until<now)this.limits.delete(k);}
- async config(){if(Number((await this.provider.getNetwork()).chainId)!==this.chainId)fail('RPC/config chain mismatch',503);if(!this.feeInfo||Date.now()-this.feeInfo.at>30000)this.feeInfo={at:Date.now(),bps:Number(await this.vault.feeBps())};return {apiVersion:API_VERSION,feeBps:this.feeInfo.bps,chainId:this.chainId,vault:this.vault.target,abi:this.vault.interface.fragments.map(f=>f.format('full')),containerRequired:false,freeChat:true,screenPrivacy:{version:1,nativeCaptureReports:true,webCaptureDetection:false},socialMedia:{version:1,freeImages:true,stories:true,storyHours:24,video:false},storage:'encrypted-server-files',confirmations:this.confirmations,...this.policy,paymentsEnabled:!this.policy.mainnet||this.deliveryWorkerEnabled,tapeSendEnabled:!!this.transport,tapeSendReason:this.chainId===1952?'测试网尚无官方 Hub，使用普通交付':!this.transport?'本地未配置 TapeSend':'有可用容器时优先 TapeSend，无容器时普通交付',refundPolicy:'owner-funded-full-refund'};}
+ async config(){if(Number((await this.provider.getNetwork()).chainId)!==this.chainId)fail('RPC/config chain mismatch',503);if(!this.feeInfo||Date.now()-this.feeInfo.at>30000)this.feeInfo={at:Date.now(),bps:Number(await this.vault.feeBps())};return {apiVersion:API_VERSION,feeBps:this.feeInfo.bps,chainId:this.chainId,vault:this.vault.target,abi:this.vault.interface.fragments.map(f=>f.format('full')),containerRequired:false,freeChat:true,screenPrivacy:{version:1,nativeCaptureReports:true,webCaptureDetection:false},socialMedia:{version:1,freeImages:true,stories:true,storyHours:24,video:!!this.mediaEnabled?.()},taperelayMedia:this.mediaStatus(),storage:'encrypted-server-files',confirmations:this.confirmations,...this.policy,paymentsEnabled:!this.policy.mainnet||this.deliveryWorkerEnabled,tapeSendEnabled:!!this.transport,tapeSendReason:this.chainId===1952?'测试网尚无官方 Hub，使用普通交付':!this.transport?'本地未配置 TapeSend':'有可用容器时优先 TapeSend，无容器时普通交付',refundPolicy:'owner-funded-full-refund'};}
  auth(token,origin){const s=this.sessions.get(token);if(!s||s.until<Date.now()||s.origin!==origin)fail('请连接钱包并签名登录',401);return s;}
  async challenge(b,origin){
   if(!this.origins.includes(origin))fail('网站来源不允许',403);this.limit('login:'+b.address,12);const account=address(b.address),{chainId,vault}=await this.config();
@@ -73,8 +75,8 @@ export class WalletService {
   if(!this.state.profiles[n.account]){this.state.profiles[n.account]={name:n.account.slice(0,6)+'…'+n.account.slice(-4),bio:'',av:'👤',creator:false};this.save();}
   return {token,address:n.account,keyHash:n.keyHash,expires:s.until};
  }
- member(id,who){const c=this.state.convs.find(c=>c.id===id);if(!c||!c.members.includes(who))fail('无权访问此会话',403);return c;}
- visible(p,who){return p.scope==='public'||p.creator===who||p.audience.includes(who);}
+ member(id,who){const c=this.state.convs.find(c=>c.id===id);if(!c||!listHasAddr(c.members,who))fail('无权访问此会话',403);return c;}
+ visible(p,who){return p.scope==='public'||sameAddr(p.creator,who)||listHasAddr(p.audience,who);}
  async product(id,who){const p=this.state.products[id];if(!p||!this.visible(p,who))fail('无权访问此作品',403);const c=await this.vault.contents(id);if(c.creator.toLowerCase()!==p.creator||c.blobHash!==p.hash||c.blobURI!==p.uri)fail('作品链上记录不一致',409);return {p,c};}
  async stateFor(who){
   if(who)await this.syncOrders();
@@ -83,8 +85,8 @@ export class WalletService {
    if(!who)continue;const access=Number(await this.vault.accessUntil(id,who))*1000;if(access)orders.push({contentId:id,buyer:who,creator:p.creator,accessUntil:access,viewUntil:this.state.opens[`${id}:${who}`]||null,delivery:await this.confirmed(id,who)&&((this.state.orderIndex.orders[id+':'+who]?.route!=='tapesend')||this.state.tapeJobs[this.jobRef(id,who)]?.status==='sent')?'ready':'pending',route:this.state.orderIndex.orders[id+':'+who]?.route||'ordinary',deliveryTx:this.state.tapeJobs[this.jobRef(id,who)]?.tx||null});
   }
   if(!who)return publicState(this,products);
-  const convs=this.state.convs.filter(c=>c.members.includes(who));
-  return {captureNotices:this.captureNoticesFor(who),contents:products,orders,profiles:privateProfiles(this,who,products,convs),friends:this.state.friends.filter(f=>[f.from,f.to].includes(who)),convs,messages:this.state.messages.filter(m=>convs.some(c=>c.id===m.conv)).map(({payload,burnFile,opens,...m})=>({...m,viewUntil:opens?.[who]||null,expired:!!(m.burn&&opens?.[who]&&opens[who]<=Date.now())})),chainId:(await this.config()).chainId};
+  const convs=this.state.convs.filter(c=>listHasAddr(c.members,who));
+  return {captureNotices:this.captureNoticesFor(who),contents:products,orders,profiles:privateProfiles(this,who,products,convs),friends:this.state.friends.filter(f=>listHasAddr([f.from,f.to],who)),convs,messages:this.state.messages.filter(m=>convs.some(c=>c.id===m.conv)).map(({payload,burnFile,opens,...m})=>({...m,viewUntil:opens?.[who]||null,expired:!!(m.burn&&opens?.[who]&&opens[who]<=Date.now())})),chainId:(await this.config()).chainId};
  }
  jobRef(id,buyer){return keccak256(Buffer.from(`${this.chainId}:${this.vault.target.toLowerCase()}:${id}:${buyer.toLowerCase()}`));}
  async syncOrders(force=false){if(this.scanTask)return this.scanTask;if(!force&&Date.now()-this.scanAt<5000)return;this.scanTask=this._syncOrders().then(()=>{this.scanAt=Date.now()}).finally(()=>{this.scanTask=null});return this.scanTask;}
@@ -110,16 +112,21 @@ export class WalletService {
  async deliveryRoute(who){if(this.chainId===1952)return {available:false,reason:'测试网尚无官方 TapeSend Hub，本单使用普通交付'};if(!this.transport)return {available:false,reason:'当前本地环境未配置 TapeSend，本单使用普通交付'};return this.transport.recipient(who,this.state.profiles[who]?.delivery);}
  async handle(action,b,token,origin){
   await this.config();if(action==='challenge')return this.challenge(b,origin);if(action==='login')return this.login(b,origin);
+  if(action==='media-status'){this.limit('media-status:global',120);return this.mediaStatus();}
   if(action==='social-state'&&!token){this.limit('anonymous-social:global',600);return this.serial(()=>this.socialState(null));}
   if(action==='state'&&!token){this.limit('anonymous:global',600);return this.stateFor(null);}
 
-  const s=this.auth(token,origin),who=s.account;this.limit(who);
+  const s=this.auth(token,origin),who=s.account;if(action!=='media-sign')this.limit(who);
   if(action==='privacy-setting')return this.serial(()=>this.privacySetting(b,who));
   if(action==='capture-report')return this.serial(()=>this.reportCapture(b,who));
   if(action==='social-state')return this.serial(()=>this.socialState(who));
   if(action==='social-publish')return this.serial(()=>this.publishSocial(b,who));
   if(action==='social-open')return this.serial(()=>this.openSocial(b,who));
   if(action==='social-delete')return this.serial(()=>this.deleteSocial(b,who));
+  if(action==='media-session')return this.serial(()=>this.createMediaSession(b,who));
+  if(action==='media-sign')return this.serial(()=>this.signMediaRemote(b,who));
+  if(action==='media-commit')return this.serial(()=>this.commitMedia(b,who));
+  if(action==='media-key')return this.serial(()=>this.issueMediaKey(b,who));
   if(action==='claim-open')return this.serial(()=>this.claimOpen(b,who));
   if(action==='view-finish')return this.serial(()=>this.finishView(b.ref,who));
   if(action==='logout'){this.sessions.delete(token);return {ok:true};}
@@ -132,45 +139,55 @@ export class WalletService {
   if(action==='profile'){const name=String(b.name||'').trim(),bio=String(b.bio||'').trim();if(!name||name.length>20||bio.length>100)fail('昵称或简介长度无效');this.state.profiles[who]={...this.state.profiles[who],name,bio,creator:true};this.save();return {ok:true};}
   if(action==='friend'){this.limit('lookup:'+who,20);
    const to=address(b.to);if(to===who||!this.state.profiles[to])fail('对方需要先登录 SnapVault');
-   let f=this.state.friends.find(f=>[f.from,f.to].includes(who)&&[f.from,f.to].includes(to));
-   if(b.accept){if(!f||f.to!==who||f.status!=='pending')fail('好友申请不存在');f.status='accepted';}
+   let f=this.state.friends.find(f=>listHasAddr([f.from,f.to],who)&&listHasAddr([f.from,f.to],to));
+   if(b.accept){if(!f||!sameAddr(f.to,who)||f.status!=='pending')fail('好友申请不存在');f.status='accepted';}
    else {if(f)fail('已是好友或申请处理中');this.state.friends.push({from:who,to,status:'pending',ts:Date.now()});}this.save();return {ok:true};
   }
   if(action==='conversation'){
    const members=[...new Set([who,...(Array.isArray(b.members)?b.members:[]).map(address)])];if(members.length<2||members.length>32)fail('请选择 1–31 位好友');
-   for(const peer of members.filter(a=>a!==who))if(!this.state.friends.some(f=>f.status==='accepted'&&[f.from,f.to].includes(peer)&&[f.from,f.to].includes(who)))fail('只能邀请已接受的好友');
+   for(const peer of members.filter(a=>a!==who))if(!acceptedFriends(this.state.friends,peer,who))fail('只能邀请已接受的好友');
    if(b.gated)fail('付费群会员尚未开放');
-   const existing=members.length===2&&this.state.convs.find(c=>c.type==='dm'&&c.members.length===2&&members.every(a=>c.members.includes(a)));if(existing)return existing;
+   const existing=members.length===2&&this.state.convs.find(c=>c.type==='dm'&&c.members.length===2&&members.every(a=>listHasAddr(c.members,a)));if(existing)return existing;
    const c={id:randomBytes(16).toString('hex'),type:members.length===2?'dm':'group',name:String(b.name||'新群聊').slice(0,30),members,admin:who,ts:Date.now(),shot:'allow'};this.state.convs.push(c);this.save();return c;
   }
   if(action==='send'){
    const c=this.member(b.conv,who);this.limit('send:'+who,30);if(this.state.messages.length>=20000||this.state.messages.reduce((n,m)=>n+(m.payload?.ct.length||0),0)>64*1024*1024)fail('测试服务消息容量已满，请先扩容或清理');
    let payload,kind=b.kind==='paid-image'?'paid-image':'message';
    if(kind==='paid-image'){const {p}=await this.product(String(b.contentId),who);if(p.creator!==who||(p.scope!=='public'&&p.convId!==c.id))fail('不能向此会话发送该作品',403);}
-   else {const text=String(b.text||'').trim();if(text.length>500)fail('文字超过 500 字');let image=null;if(b.image){checkedImage(b.image,b.mime);image={data:b.image,mime:b.mime};}if(!text&&!image)fail('请选择图片或输入文字');payload=this.seal(Buffer.from(JSON.stringify({text,image})));}
+   else {const text=String(b.text||'').trim();if(text.length>500)fail('文字超过 500 字');let image=null,mediaId=null;if(b.mediaId){if(!this.mediaEnabled?.())fail('大文件上传未启用',404);const media=this.linkMedia(b.mediaId,who,{scene:'chat',convId:c.id,scope:c.type});if(media.scene!=='chat'||media.convId!==c.id)fail('媒体场景不符');mediaId=media.id;}else if(b.image){checkedImage(b.image,b.mime);image={data:b.image,mime:b.mime};}if(!text&&!image&&!mediaId)fail('请选择图片或输入文字');payload=this.seal(Buffer.from(JSON.stringify({text,image,mediaId})));}
    const burn=kind==='message'&&!!b.burn,secs=Number(b.secs||10);if(burn&&(!Number.isInteger(secs)||secs<3||secs>3600))fail('展示时长应在 3–3600 秒');
-   const m={id:randomBytes(16).toString('hex'),conv:c.id,from:who,ts:Date.now(),kind,burn,secs,shot:['allow','forbid','notify'].includes(b.shot)?b.shot:'allow',opens:{},...(kind==='paid-image'?{contentId:String(b.contentId)}:{payload})};this.state.messages.push(m);if(m.burn)this.initViews({verifySnapshot:false});this.save();return {id:m.id};
+   const m={id:randomBytes(16).toString('hex'),conv:c.id,from:who,ts:Date.now(),kind,burn,secs,shot:['allow','forbid','notify'].includes(b.shot)?b.shot:'allow',opens:{},...(kind==='paid-image'?{contentId:String(b.contentId)}:{payload}),...(b.mediaId&&kind==='message'?{mediaId:b.mediaId}:{})};this.state.messages.push(m);if(m.burn)this.initViews({verifySnapshot:false});this.save();return {id:m.id};
   }
   if(action==='message-open'){
    const m=this.state.messages.find(m=>m.id===b.id);if(!m||(!m.payload&&!m.burnFile))fail('消息不存在',410);this.member(m.conv,who);
    let until=null;if(m.burn){if(who===m.from)fail('发送者不能打开限时消息');until=m.opens[who];if(until&&until<=Date.now())fail('此消息已结束展示',410);if(!until){until=Date.now()+m.secs*1000;m.opens[who]=until;this.save();}}
+   if(m.mediaId)return {mediaId:m.mediaId,viewUntil:until};
    if(m.burn)return this.serial(()=>this.grantView({who,ref:'message:'+m.id+':'+who,secs:m.secs,message:m.id,existingDeadline:until||Infinity}));
    return {...JSON.parse(this.unseal(m.payload)),viewUntil:until};
   }
   if(action==='upload'){
-   this.limit('upload:'+who,8);if(Object.keys(this.state.assets).length>=300)fail('测试存储已满');const bytes=checkedImage(b.image,b.mime),m=b.meta||{},secs=Number(m.secs),max=Number(m.max),price=parseEther(String(m.price||'0'));
+   this.limit('upload:'+who,8);if(Object.keys(this.state.assets).length>=300)fail('测试存储已满');const m=b.meta||{},secs=Number(m.secs),max=Number(m.max),price=parseEther(String(m.price||'0'));
    if(!m.title?.trim()||m.title.length>40||price<=0n||price>parseEther('100')||!Number.isInteger(secs)||secs<3||secs>3600||!Number.isInteger(max)||max<0||max>1000000||typeof m.burn!=='boolean')fail('作品参数无效');
-   const conv=m.convId?this.member(m.convId,who):null,key=randomBytes(32),iv=randomBytes(12),cipher=createCipheriv('aes-256-gcm',key,iv),ct=Buffer.concat([cipher.update(bytes),cipher.final()]),blob=Buffer.concat([iv,ct,cipher.getAuthTag()]),hash=sha256(blob);
+   const conv=m.convId?this.member(m.convId,who):null;
+   if(b.mediaId){
+    if(!this.mediaEnabled?.())fail('大文件上传未启用',404);
+    const media=this.linkMedia(b.mediaId,who,{scene:'paid',scope:conv?.type||'public',convId:conv?.id||null,title:m.title.trim()});
+    if(media.scene!=='paid')fail('媒体场景不符');
+    const hash='0x'+media.envelopeSha,uri='trmedia:'+media.id;
+    const asset={creator:who,mediaId:media.id,mime:media.mime,hash,uri,meta:{title:m.title.trim(),price:formatEther(price),token:this.policy.symbol,secs,max,burn:m.burn,scope:conv?.type||'public',convId:conv?.id||null,audience:conv?[...conv.members]:[],createdAt:Date.now()}};
+    this.state.assets[hash]=asset;this.save();return {hash,uri,price:price.toString(),secs,max,burn:m.burn,mediaId:media.id};
+   }
+   const bytes=checkedImage(b.image,b.mime),key=randomBytes(32),iv=randomBytes(12),cipher=createCipheriv('aes-256-gcm',key,iv),ct=Buffer.concat([cipher.update(bytes),cipher.final()]),blob=Buffer.concat([iv,ct,cipher.getAuthTag()]),hash=sha256(blob);
    const asset={creator:who,key:key.toString('hex'),blob:blob.toString('base64'),mime:b.mime,hash,uri:'svblob:'+hash.slice(2),meta:{title:m.title.trim(),price:formatEther(price),token:this.policy.symbol,secs,max,burn:m.burn,scope:conv?.type||'public',convId:conv?.id||null,audience:conv?[...conv.members]:[],createdAt:Date.now()}};
    this.state.assets[hash]=asset;this.save();return {hash,uri:asset.uri,price:price.toString(),secs,max,burn:m.burn};
   }
   if(action==='register')return this.serial(async()=>{
    const id=String(b.id);const c=await this.vault.contents(id),a=this.state.assets[c.blobHash];if(!a||a.creator!==who||c.creator.toLowerCase()!==who||a.uri!==c.blobURI||c.price!==parseEther(a.meta.price)||Number(c.viewSeconds)!==a.meta.secs||Number(c.maxSupply)!==a.meta.max||await this.vault.ephemeral(id)!==a.meta.burn)fail('上架记录尚未确认或与上传不符',409);
-   this.state.products[id]={...a.meta,creator:who,id,hash:a.hash,uri:a.uri,mime:a.mime,publishTx:b.transactionHash||null};this.save();return {product:this.state.products[id]};
+   this.state.products[id]={...a.meta,creator:who,id,hash:a.hash,uri:a.uri,mime:a.mime,publishTx:b.transactionHash||null,...(a.mediaId?{mediaId:a.mediaId}:{})};if(a.mediaId)this.linkMedia(a.mediaId,who,{contentId:id,scene:'paid'});this.save();return {product:this.state.products[id]};
   });
   if(action==='quote'){if(this.policy.mainnet&&!this.deliveryWorkerEnabled)fail('交付服务尚未开放，请稍后再购买',503);
    const {p,c}=await this.product(String(b.id),who);if(p.creator===who)fail('不能购买自己的作品');if(!c.active)fail('作品未上架');if(c.maxSupply&&c.sold>=c.maxSupply)fail('已售罄');
-   if(await this.vault.accessUntil(b.id,who)!==0n)fail('已有订单，请直接查看');const a=this.state.assets[c.blobHash];if(!a?.key||sha256(Buffer.from(a.blob,'base64'))!==c.blobHash)fail('内容交付尚未就绪，不发起付款',503);
+   if(await this.vault.accessUntil(b.id,who)!==0n)fail('已有订单，请直接查看');const a=this.state.assets[c.blobHash];if(a?.mediaId){if(!this.state.mediaFiles[a.mediaId])fail('内容交付尚未就绪，不发起付款',503);}else if(!a?.key||sha256(Buffer.from(a.blob,'base64'))!==c.blobHash)fail('内容交付尚未就绪，不发起付款',503);
    if((await this.vault.deliveryOperator()).toLowerCase()!==this.operator.address.toLowerCase())fail('Operator 已轮换，服务需更新配置',503);await this.flushBackup();const route=await this.deliveryRoute(who);if(route.available)return this.transport.quote(String(b.id),who,route);
    const deadline=Number((await this.provider.getBlock('latest')).timestamp)+120,d=await this.vault.directDigest(b.id,who,s.keyHash,deadline),signature=Signature.from(this.operator.signingKey.sign(d)).serialized;
    return {method:'purchaseDirect',route:'ordinary',notice:route.reason,id:String(b.id),keyHash:s.keyHash,deadline,signature,price:c.price.toString()};
@@ -180,7 +197,9 @@ export class WalletService {
    if(!preview&&(!accessUntil||accessUntil<=Date.now()||!await this.confirmed(b.id,who)))fail('订单尚未确认或已过期',403);
    if(!preview&&this.state.orderIndex.orders[String(b.id)+':'+who]?.route==='tapesend'&&this.state.tapeJobs[this.jobRef(b.id,who)]?.status!=='sent')fail('TapeSend 正在自动交付，请稍后在本站刷新查看，无需重新付款',409);
    const ref=`${b.id}:${who}`;let viewUntil=null;if(p.burn){viewUntil=preview?Date.now()+p.secs*1000:this.state.opens[ref];if(viewUntil&&viewUntil<=Date.now())fail('此作品已结束展示',410);if(!viewUntil){viewUntil=Math.min(accessUntil,Date.now()+p.secs*1000);this.state.opens[ref]=viewUntil;this.save();}}
-   await this.flushBackup();const a=this.state.assets[c.blobHash],encryptedKey=publicEncrypt({key:createPublicKey({key:s.publicKey,format:'jwk'}),padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(a.key,'hex')).toString('base64');
+   await this.flushBackup();const a=this.state.assets[c.blobHash];
+   if(a?.mediaId){if(p.mediaId!==a.mediaId&&p.mediaId)fail('作品媒体记录不符',409);const media=this.state.mediaFiles[a.mediaId];if(!media)fail('内容交付尚未就绪',503);const access=await this.authorizeMediaKey(media,who);return {mediaId:a.mediaId,mime:a.mime||media.mime,hash:p.hash,accessUntil,preview:access.preview,viewUntil:access.viewUntil};}
+   const encryptedKey=publicEncrypt({key:createPublicKey({key:s.publicKey,format:'jwk'}),padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(a.key,'hex')).toString('base64');
    return {encryptedKey,hash:p.hash,mime:a.mime,...this.grantView({who,ref:preview?ref+':preview:'+randomBytes(8).toString('hex'):ref,secs:p.secs,asset:p.hash,accessUntil,preview,existingDeadline:viewUntil||Infinity}),accessUntil,preview};
   });
   fail('接口不存在',404);
@@ -191,5 +210,6 @@ export class WalletService {
 installViewAccess(WalletService);
 
 installSocialMedia(WalletService);
+installTapeRelayMedia(WalletService);
 
 installScreenPrivacy(WalletService);
