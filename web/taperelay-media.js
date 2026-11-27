@@ -298,6 +298,50 @@ export async function uploadEncryptedMedia({file, scene, scope, convId, title, o
   }
 }
 
+function addPlaybackControls(video) {
+  video.controls = false;
+  video.playsInline = true;
+  video.setAttribute('controlslist', 'nodownload');
+  video.draggable = false;
+  const blockMenu = event => event.preventDefault();
+  video.addEventListener('contextmenu', blockMenu);
+
+  const english = document.documentElement.lang.startsWith('en');
+  const bar = document.createElement('div');
+  bar.className = 'tr-playback-controls';
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  const seek = document.createElement('input');
+  seek.type = 'range';
+  seek.min = '0';
+  seek.step = '0.1';
+  seek.setAttribute('aria-label', english ? 'Playback position' : '播放进度');
+  const time = document.createElement('span');
+  const format = seconds => Math.floor(seconds / 60) + ':' + String(Math.floor(seconds % 60)).padStart(2, '0');
+  function update() {
+    toggle.textContent = video.paused ? (english ? 'Play' : '播放') : (english ? 'Pause' : '暂停');
+    seek.disabled = !Number.isFinite(video.duration) || video.duration <= 0;
+    seek.max = seek.disabled ? '1' : String(video.duration);
+    seek.value = String(video.currentTime);
+    time.textContent = format(video.currentTime) + (seek.disabled ? '' : ' / ' + format(video.duration));
+  }
+  toggle.onclick = () => {
+    if (video.paused) video.play().catch(update);
+    else video.pause();
+  };
+  seek.oninput = () => { if (!seek.disabled) video.currentTime = Number(seek.value); };
+  const events = ['play', 'pause', 'timeupdate', 'durationchange', 'ended'];
+  for (const event of events) video.addEventListener(event, update);
+  bar.append(toggle, seek, time);
+  video.after(bar);
+  update();
+  return () => {
+    bar.remove();
+    video.removeEventListener('contextmenu', blockMenu);
+    for (const event of events) video.removeEventListener(event, update);
+  };
+}
+
 export async function playAuthorizedMedia(target, mediaId, {onStatus} = {}) {
   if (!largeMediaEnabled()) throw Error('大文件播放未启用');
   const issued = await call('media-key', {mediaId});
@@ -337,10 +381,10 @@ export async function playAuthorizedMedia(target, mediaId, {onStatus} = {}) {
   }
   const mount = target.matches?.('video,img') ? target.parentElement : target;
   const el = video ? (target.matches?.('video') ? target : mount.querySelector?.('video') || document.createElement('video')) : (target.matches?.('img') ? target : mount.querySelector?.('img') || document.createElement('img'));
-  if (video) { el.controls = true; el.playsInline = true; }
   if (!el.parentNode && mount.append) mount.append(el);
   mount.querySelector?.(video ? 'img' : 'video')?.classList?.add('hidden');
   el.classList?.remove?.('hidden');
+  const removeControls = video ? addPlaybackControls(el) : null;
   const reader = {size: opened.manifest.size, read: (a, b) => opened.read(a, b)};
   let url = null, streamed = false, stream = null;
   try {
@@ -357,8 +401,9 @@ export async function playAuthorizedMedia(target, mediaId, {onStatus} = {}) {
       url = URL.createObjectURL(new Blob([bytes], {type: mime}));
       el.src = url;
     }
-    return {url, element: el, viewUntil: issued.viewUntil, close() { stream?.close(); if (url) URL.revokeObjectURL(url); el.removeAttribute('src'); if ('srcObject' in el) el.srcObject = null; opened.close(); }};
+    return {url, element: el, viewUntil: issued.viewUntil, close() { removeControls?.(); stream?.close(); if (url) URL.revokeObjectURL(url); el.removeAttribute('src'); if ('srcObject' in el) el.srcObject = null; opened.close(); }};
   } catch (e) {
+    removeControls?.();
     stream?.close();
     if (url) URL.revokeObjectURL(url);
     opened.close();

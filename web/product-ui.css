@@ -273,3 +273,9 @@ html.static-doc .static-doc-footer a {color:#34353c;text-decoration:underline;te
   html.static-doc .static-doc-header,html.static-doc main.static-doc-main,html.static-doc .static-doc-footer {padding-left:18px;padding-right:18px}
   html.static-doc .static-copy h1 {font-size:26px}
 }
+
+.tr-playback-controls {position:relative;z-index:4;display:flex;align-items:center;gap:.6rem;padding:.4rem .6rem;background:#202020;color:white;font-size:.85rem}
+.tr-playback-controls input {flex:1;min-width:0}
+.tr-playback-controls span {white-space:nowrap}
+.story-stage>.tr-playback-controls {position:absolute;bottom:0;left:5%;right:5%}
+video:has(+ .tr-playback-controls) {-webkit-touch-callout:none}
