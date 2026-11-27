@@ -279,3 +279,4 @@ html.static-doc .static-doc-footer a {color:#34353c;text-decoration:underline;te
 .tr-playback-controls span {white-space:nowrap}
 .story-stage>.tr-playback-controls {position:absolute;bottom:0;left:5%;right:5%}
 video:has(+ .tr-playback-controls) {-webkit-touch-callout:none}
+.vwrap > video:not(.hidden) {display:block;max-width:100%;max-height:calc(80dvh - 7rem);object-fit:contain}
